@@ -1,0 +1,64 @@
+<div id="atcsticky" class="{% if section.settings.color_bg %}atc_sticky-wrapper-color {% endif %}atc_sticky-wrapper atc-sticky-style-2">
+  <div class="atc_sticky-container">
+
+    <!-- Titre, Image, Avis -->
+    <div class="atc_sticky-image one-half">
+      <div class="testi-review one-whole">
+
+        <div class="image_wrapper small--hide">
+          {% assign img_url = product.featured_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="lazyload" src="{{ product.featured_image | img_url: '300x300' }}" data-src="{{ img_url }}" data-widths="[180, 360, 590, 720, 900, 1080, 1296, 1512, 1728, 2048]" data-aspectratio="{{ product.featured_image.aspect_ratio }}" data-sizes="auto" data-media-id="{{ product.featured_image.id }}" alt="{{ product.featured_image.alt | escape }}">
+        </div>
+
+        <div class="testi-header">
+          <p class="testi-title">{{ product.title }}
+            {% if section.settings.star_rating %}
+          <span class="{% if section.settings.color_bg %}sticky-atc-stars-color {% else %}sticky-atc-stars {% endif %}">{{ section.settings.star_rating_note }} <i class="fas fa-star star_rates"></i></span>
+          {% endif %}
+          </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="atc_sticky-form one-half">
+    <form class="product-form atc_sticky-form-style add-to-cart__form" 
+          action="/cart/add" 
+          data-productid="{{product.id}}" 
+          id="AddToCartForm--{{ section.id }}" 
+          method="post" 
+          data-product-form=""> 
+      {% unless product.has_only_default_variant %}
+      <div class="small--one-whole">
+        {% if product.variants.size > 1 %}
+        <div class="product-options one-whole">
+          <select name="id" data-productid="{{product.id}}" id="product-select" 
+                  class="product-select {% if section.settings.color_bg %}select-color {% else %}select-no-color {% endif %}">
+            {% for variant in product.variants %}
+            <option {% if variant == selectedVariant %} selected="selected" {% endif %} value="{{ variant.id }}">{{ variant.title }}{% if section.settings.show_price  %} - {{ variant.price | money }}{% endif %}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% else %}
+        <input type="hidden" name="id" data-productid="{{product.id}}" class="product-select" value="{{ product.variants[0].id }}" data-variant-title="{{ product.variants[0].title }}" />
+        {% endif %}
+      </div>
+      {% else %}
+      <input type="hidden" name="id" data-productid="{{product.id}}" class="product-select" value="{{ product.variants[0].id }}" data-variant-title="{{ product.variants[0].title }}" />
+      {% endunless %}
+      <div class="small--one-whole">
+        <div class="one-whole add-to-cart">
+          <button type="submit" name="add" id="AddToCart--{{ section.id }}" {% unless product.available %}disabled="disabled"{% endunless %} class="{{ section.settings.choix_style_bouton }} {% if section.settings.effect_shaker %}effect_shaker {% endif %}add-to-cart atc_sticky-btn-atc">
+            {{ section.settings.icon_cart }}
+            {{ 'products.product.add_to_cart' | t }}{% if product.has_only_default_variant and section.settings.show_price %} - {{ product.price | money }}{% endif %}
+          </button>
+          {% if section.settings.direct_checkout %}
+          <input type="hidden" name="return_to" value="/checkout/" />
+          {% endif %}
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</div>

@@ -1,0 +1,480 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+{%- assign collection = collections[section.settings.collection] -%}
+
+<div id="bundle--{{ section.id }}"
+     style="{% if section.settings.border_top_bottom %}border-top: 1px solid {{ section.settings.color_border }};border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>
+
+  <style>
+    {% if section.settings.color_bg contains 'fix' %}
+    #bundle--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #bundle--{{ section.id }} p, #bundle--{{ section.id }} .h3, #bundle--{{ section.id }} i, #bundle--{{ section.id }} span:not(.btn__text), #bundle--{{ section.id }} .bundle-product-title {
+      color: {{ section.settings.color_text_fix }}; 
+    }
+    {% endif %}
+    #bundle--{{ section.id }} .timer_wrapper {
+      background-color: {{ section.settings.color_phrase_timer_bg }};
+    }
+    #bundle--{{ section.id }} .swiper-button-prev::after, #bundle--{{ section.id }} .swiper-button-next::after, .bundle-flex-row .bundle-product-wrapper::after, .bundle-product-offert {
+      color: {% if section.settings.color_bg contains 'shade' %}{{ settings.color_bg_linear_text }}{% endif %}{% if section.settings.color_bg contains 'fix' %}{{ section.settings.color_text_fix }}{% endif %};
+    }
+    #bundle--{{ section.id }} .swiper-scrollbar-drag {
+      background: {% if section.settings.color_bg contains 'shade' %}{{ settings.color_bg_linear_text }}{% endif %}{% if section.settings.color_bg contains 'fix' %}{{ section.settings.color_text_fix }}{% endif %};
+    }
+    #bundle--{{ section.id }} .bundle-product-offert,  #bundle--{{ section.id }} .image-offert {
+      border-color: {% if section.settings.color_bg contains 'shade' %}{{ settings.color_bg_linear_text }}{% endif %}{% if section.settings.color_bg contains 'fix' %}{{ section.settings.color_text_fix }}{% endif %};
+    }
+    #bundle--{{ section.id }} .bundle-product-offert {
+      border-color: {% if section.settings.color_bg contains 'shade' %}{{ settings.color_bg_linear_text }}{% endif %}{% if section.settings.color_bg contains 'fix' %}{{ section.settings.color_text_fix }}{% endif %};
+      background: {% if section.settings.color_bg contains 'shade' %}linear-gradient(90deg, {{ settings.color_bg_linear }} 0%, {{ settings.color_bg_linear2 }} 100%){% endif %}{% if section.settings.color_bg contains 'fix' %}{{ section.settings.color_bg_fix }}{% endif %};
+    }
+  </style>  
+
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}">
+
+    {% assign compare_price = 0 %}
+    {% assign savings = 0 %}
+    {% assign price = 0 %}
+
+    {% for product in collection.products %}
+
+    {% unless product.tags contains 'offert' %}
+    {% assign price = price | plus: product.price_min %}
+    {% endunless %}
+    {% assign compare_price = compare_price | plus: product.compare_at_price_min %}
+    {% assign savings = compare_price | minus: price %}
+
+    {% endfor %}
+
+    <form action="/cart/add" 
+          data-productid="{{product.id}}" 
+          id="AddToCartForm--{{ section.id }}" 
+          method="post" 
+          data-product-form="" 
+          enctype="multipart/form-data"
+          class="product-form atc_sticky-form-style add-to-cart__form">
+      {% include 'bundle-carousel-mob' %}
+    </form>
+
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Bundle de produits",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Bundle"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la collection"
+},
+{
+"type": "text",
+"id": "title_section",
+"label": "Titre",
+"default": "Bundle de produits - Économisez dès maintenant !"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "collection",
+"id": "collection",
+"label": {
+"da": "Kollektion",
+"de": "Kategorie",
+"en": "Collection",
+"es": "Colección",
+"fi": "Kokoelma",
+"fr": "Collection",
+"hi": "कलेक्शन",
+"it": "Collezione",
+"ja": "コレクション",
+"ko": "컬렉션",
+"nb": "Samling",
+"nl": "Collectie",
+"pt-BR": "Coleção",
+"pt-PT": "Coleção",
+"sv": "Produktserie",
+"th": "คอลเลกชัน",
+"zh-CN": "收藏",
+"zh-TW": "商品系列"
+}
+},
+{
+"type": "paragraph",
+"content": "Si vous avez une offre du type 2 achetés = 1 offert, incluez la balise 'offert' au produit qui est offert dans votre compte Shopify. Cela mettera alors en avant le produit offert dans votre offre."
+},
+{
+"type": "header",
+"content": "Paramètres du produit avec le tag 'offert'"
+},
+{
+"type": "checkbox",
+"id": "affichertexteupsell",
+"label": "Afficher la mention 'offert'",
+"default": true
+},
+{
+"type": "text",
+"id": "messagetexteupsell",
+"label": "Mention 'offert'",
+"default": "OFFERT"
+},
+{
+"type": "header",
+"content": "Prix et bouton d'ajout au panier"
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton d'ajout au panier",
+"default": "btn--1"
+},
+{
+"type": "text",
+"id": "text_btn_atc",
+"label": "Texte du bouton d'ajout au panier",
+"default": "Ajouter la sélection au panier"
+},
+{
+"type": "checkbox",
+"id": "show_savings",
+"label": "Afficher les économies",
+"default": true
+},
+{
+"type": "textarea",
+"id": "text_before_savings",
+"label": "Texte qui s'affiche avant les économies",
+"default": "Vous économisez"
+},
+{
+"type": "header",
+"content": "Timer"
+},
+{
+"type": "checkbox",
+"id": "timer_active",
+"label": "Afficher le timer",
+"default": true
+},
+{
+"type": "textarea",
+"id": "timer_phrase_before",
+"label": "Texte urgence 1",
+"default": "Attention, à la fin du compte à rebours, le prix va repasser à"
+},
+{
+"type": "checkbox",
+"id": "timer_active_price",
+"label": "Afficher le prix barré",
+"default": true
+},
+{
+"type": "textarea",
+"id": "timer_phrase_after",
+"label": "Texte urgence 2",
+"default": "alors commandez dès maintenant pour profiter de notre offre de lancement !"
+},
+{
+"type": "color",
+"id": "color_phrase_timer_bg",
+"label": "Couleur de l'arrière-plan du timer",
+"default": "#f6f6f6"
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg_select",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{
+"value": "shade",
+"label": "Dégradé"
+},
+{
+"value": "fix",
+"label": "Couleur unie"
+},
+{
+"value": "none",
+"label": "Pas de couleur"
+}
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "color",
+"id": "color_text_fix",
+"label": "Couleur du texte sur l'arrière-plan uni",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#000"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation du carousel",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "select",
+"id": "animation_text",
+"label": "Animation du formulaire d'ajout au panier",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"presets": [
+{
+"name": "Bundle de produits",
+"category": {
+"da": "Kollektion",
+"de": "Kategorie",
+"en": "Collection",
+"es": "Colección",
+"fi": "Kokoelma",
+"fr": "Collection",
+"hi": "कलेक्शन",
+"it": "Collezione",
+"ja": "コレクション",
+"ko": "컬렉션",
+"nb": "Samling",
+"nl": "Collectie",
+"pt-BR": "Coleção",
+"pt-PT": "Coleção",
+"sv": "Produktserie",
+"th": "คอลเลกชัน",
+"zh-CN": "收藏",
+"zh-TW": "商品系列"
+}
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

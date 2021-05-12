@@ -1,0 +1,437 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="featured-video--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg_select contains 'shade' %}class="wrapper-color"{% endif %}>
+
+  <style>
+    {% if section.settings.color_bg_select contains 'fix' %}
+    #featured-video--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #featured-video--{{ section.id }} .h1 {
+      color: {{ section.settings.color_text_fix }}; 
+    }
+    {% endif %}
+  </style>
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}">
+    {% if section.settings.heading != blank %}
+    <div class="section-header text-{{ section.settings.alignement_text }}">
+      <h2 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.heading }}</h2>
+    </div>
+    {% endif %}
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="grid">
+      <div class="grid__item one-whole">
+        <div class="video-wrapper{% if section.settings.image_sm_choose %} desktop_only{% endif %}">
+          {% if section.settings.video_url == blank %}
+          <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% else %}
+          {% if section.settings.video_url.type == "youtube" %}
+          <iframe src="//www.youtube.com/embed/{{ section.settings.video_url.id }}?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% if section.settings.video_url.type == "vimeo" %}
+          <iframe src="//player.vimeo.com/video/{{ section.settings.video_url.id }}?color={{ settings.color_secondary | remove: "#" }}&byline=0&portrait=0&badge=0" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% endif %}
+        </div>
+        {% if section.settings.image_sm_choose %}
+        <div class="video-wrapper mobile_only">
+          {% if section.settings.video_url_sm == blank %}
+          <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% else %}
+          {% if section.settings.video_url_sm.type == "youtube" %}
+          <iframe src="//www.youtube.com/embed/{{ section.settings.video_url_sm.id }}?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% if section.settings.video_url_sm.type == "vimeo" %}
+          <iframe src="//player.vimeo.com/video/{{ section.settings.video_url_sm.id }}?color={{ settings.color_secondary | remove: "#" }}&byline=0&portrait=0&badge=0" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": {
+"da": "Video",
+"de": "Video",
+"en": "Video",
+"es": "Video",
+"fi": "Video",
+"fr": "Vidéo",
+"hi": "वीडियो",
+"it": "Video",
+"ja": "ビデオ",
+"ko": "동영상",
+"nb": "Video",
+"nl": "Video",
+"pt-BR": "Vídeo",
+"pt-PT": "Vídeo",
+"sv": "Video",
+"th": "วิดีโอ",
+"zh-CN": "视频",
+"zh-TW": "影片"
+},
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Vidéo"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la section"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du titre",
+"default": "center",
+"options": [
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "text",
+"id": "heading",
+"label": {
+"da": "Overskrift",
+"de": "Überschrift",
+"en": "Heading",
+"es": "Título",
+"fi": "Otsake",
+"fr": "Titre",
+"hi": "शीर्षक",
+"it": "Heading",
+"ja": "見出し",
+"ko": "제목",
+"nb": "Overskrift",
+"nl": "Kop",
+"pt-BR": "Título",
+"pt-PT": "Título",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标题",
+"zh-TW": "標題"
+},
+"default": {
+"da": "Video",
+"de": "Video",
+"en": "Video",
+"es": "Video",
+"fi": "Video",
+"fr": "Vidéo",
+"hi": "वीडियो",
+"it": "Video",
+"ja": "ビデオ",
+"ko": "동영상",
+"nb": "Video",
+"nl": "Video",
+"pt-BR": "Vídeo",
+"pt-PT": "Vídeo",
+"sv": "Video",
+"th": "วิดีโอ",
+"zh-CN": "视频",
+"zh-TW": "影片"
+}
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "video_url",
+"id": "video_url",
+"label": "Lien de la vidéo",
+"accept": [
+"youtube",
+"vimeo"
+]
+},
+{
+"type": "checkbox",
+"id": "image_sm_choose",
+"label": "Afficher une vidéo différente sur mobile",
+"default": false
+},
+{
+"type": "video_url",
+"id": "video_url_sm",
+"label": "Lien de la vidéo qui va s'afficher sur mobile",
+"accept": [
+"youtube",
+"vimeo"
+]
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg_select",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de la vidéo",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"presets": [
+{
+"name": {
+"da": "Video",
+"de": "Video",
+"en": "Video",
+"es": "Video",
+"fi": "Video",
+"fr": "Vidéo",
+"hi": "वीडियो",
+"it": "Video",
+"ja": "ビデオ",
+"ko": "동영상",
+"nb": "Video",
+"nl": "Video",
+"pt-BR": "Vídeo",
+"pt-PT": "Vídeo",
+"sv": "Video",
+"th": "วิดีโอ",
+"zh-CN": "视频",
+"zh-TW": "影片"
+},
+"category": {
+"da": "Video",
+"de": "Video",
+"en": "Video",
+"es": "Video",
+"fi": "Video",
+"fr": "Vidéo",
+"hi": "वीडियो",
+"it": "Video",
+"ja": "動画",
+"ko": "동영상",
+"nb": "Video",
+"nl": "Video",
+"pt-BR": "Vídeo",
+"pt-PT": "Vídeo",
+"sv": "Video",
+"th": "วิดีโอ",
+"zh-CN": "视频",
+"zh-TW": "影片"
+}
+}
+]
+}
+{% endschema %}

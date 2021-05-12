@@ -1,0 +1,716 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="featured-row--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>
+  
+  <style>
+    {% if section.settings.color_bg contains 'fix' %}
+    #featured-row--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #featured-row--{{ section.id }} p, #featured-row--{{ section.id }} .h3, #featured-row--{{ section.id }} i, #featured-row--{{ section.id }} span {
+      color: {{ section.settings.color_text_fix }}; 
+    }
+    {% endif %}
+    #featured-row--{{ section.id }} .icons_subtext { color: {{ section.settings.color_subtext }};{% if section.settings.subtext_bolder %}font-weight: bold;{% endif %} }
+    #featured-row--{{ section.id }} strong { color: {{ section.settings.color_bold }} }
+  </style>
+  
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}{% if section.settings.no_margin %} no_margin{% endif %}">
+    <div class="page-width feature-row">
+
+      {% case section.settings.width %}
+      {% when '25%' %}
+      {%- assign block_width_image = 'small--one-whole one-quarter' -%}
+      {%- assign block_width_text = 'small--one-whole three-quarters' -%}
+      {% when '33%' %}
+      {%- assign block_width_image = 'small--one-whole one-third' -%}
+      {%- assign block_width_text = 'small--one-whole two-thirds' -%}
+      {% when '50%' %}
+      {%- assign block_width_image = 'small--one-whole one-half' -%}
+      {%- assign block_width_text = 'small--one-whole one-half' -%}
+      {% when '66%' %}
+      {%- assign block_width_image = 'small--one-whole two-thirds' -%}
+      {%- assign block_width_text = 'small--one-whole one-third' -%}
+      {% when '75%' %}
+      {%- assign block_width_image = 'small--one-whole three-quarters' -%}
+      {%- assign block_width_text = 'small--one-whole one-quarter' -%}
+      {% endcase %}
+
+      {% capture media_layout %}
+      <div class="{{ block_width_image }}">
+        {% if section.settings.image_sm_choose %}<div class="desktop_only">{% endif %}
+        {% if section.settings.image != blank %}
+        <noscript>
+          {{ section.settings.image | img_url: '600x600' | img_tag: section.settings.image.alt, 'feature-row__image-no-js' }}
+        </noscript>
+        <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="feature-row__image-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100}}%;">
+          {% assign img_url = section.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="feature-row__image lazyload"
+               src="{{ section.settings.image | img_url: '300x300' }}"
+               data-src="{{ img_url }}"
+               data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+               data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ section.settings.image.alt | escape }}">
+        </div>
+        {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+        {% if section.settings.image_sm_choose %}</div>{% endif %}
+      </div>
+      {% if section.settings.image_sm_choose %}
+      <div class="{{ block_width_image }}">
+        <div class="mobile_only">
+          {% if section.settings.image_sm != blank %}
+          <noscript>
+            {{ section.settings.image_sm | img_url: '600x600' | img_tag: section.settings.image_sm.alt, 'feature-row__image-no-js' }}
+          </noscript>
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="feature-row__image-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image_sm.aspect_ratio | times: 100}}%;">
+            {% assign img_url = section.settings.image_sm | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+            <img class="feature-row__image lazyload"
+                 src="{{ section.settings.image_sm | img_url: '300x300' }}"
+                 data-src="{{ img_url }}"
+                 data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                 data-aspectratio="{{ section.settings.image_sm.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ section.settings.image_sm.alt | escape }}">
+          </div>
+          {% else %}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      {% endcapture %}
+
+      <div class="feature-row">
+        {% if section.settings.layout == 'left' %}
+        {{ media_layout }}
+        {% endif %}
+
+        <div class="{{ block_width_text }} feature-row__text">
+          {% if section.settings.title_section != blank %}
+          <h2 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="{{ section.settings.choix_title }} h3 {% if section.settings.alignement_text == "justify" %}{% else %} text-{{ section.settings.alignement_text }}{% endif %}">{{ section.settings.title_section }}</h2>
+          {% endif %}
+          {% if section.settings.text != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="rte-setting featured-row__subtext text-{{ section.settings.alignement_text }}"><p>{{ section.settings.text }}</p></div>
+          {% endif %}
+          {% include 'featured-icons' %}
+          {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %}>
+          <a href="{{ section.settings.button_link }}" class="{{ section.settings.choix_style_bouton }}">
+            {{ section.settings.button_label }}
+          </a>
+          </div>
+          {% endif %}
+        </div>
+
+        {% if section.settings.layout == 'right' %}
+        {{ media_layout }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Image avec icônes",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Image avec icônes"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la section"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur de l'image",
+"default": "50%",
+"info": "La largeur du texte s'adaptera automatiquement.",
+"options": [
+{ "value": "25%", "label": "25%" },
+{ "value": "33%", "label": "33%" },
+{ "value": "50%", "label": "50%" },
+{ "value": "66%", "label": "66%" },
+{ "value": "75%", "label": "75%" }
+]
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},
+{
+"type": "checkbox",
+"id": "image_sm_choose",
+"label": "Afficher une image différente sur mobile",
+"default": false
+},
+{
+"type": "image_picker",
+"id": "image_sm",
+"label": "Image sur mobile",
+"info": "Fonctionne seulement si la case ci-dessus est cochée."
+},
+{
+"type": "select",
+"id": "layout",
+"label": {
+"da": "Justering af billede",
+"de": "Bildausrichtung",
+"en": "Image alignment",
+"es": "Alineación de imagen",
+"fi": "Kuvan tasaus",
+"fr": "Alignement de l'image",
+"hi": "इमेज पंक्तिबद्ध करना",
+"it": "Allineamento immagine",
+"ja": "画像アラインメント",
+"ko": "이미지 정렬",
+"nb": "Bildejustering",
+"nl": "Afbeelding uitlijnen",
+"pt-BR": "Alinhamento da imagem",
+"pt-PT": "Alinhamento da imagem",
+"sv": "Bildjustering",
+"th": "การจัดวางรูปภาพ",
+"zh-CN": "图片对齐方式",
+"zh-TW": "圖片對齊"
+},
+"default": "left",
+"options": [
+{
+"value": "left",
+"label": {
+"da": "Venstre",
+"de": "Links",
+"en": "Left",
+"es": "Izquierda",
+"fi": "Vasen",
+"fr": "Gauche",
+"hi": "बाएँ",
+"it": "Sinistra",
+"ja": "左",
+"ko": "왼쪽",
+"nb": "Venstre",
+"nl": "Links",
+"pt-BR": "Esquerda",
+"pt-PT": "Esquerda",
+"sv": "Vänster",
+"th": "ด้านซ้าย",
+"zh-CN": "左侧",
+"zh-TW": "左方"
+}
+},
+{
+"value": "right",
+"label": {
+"da": "Højre",
+"de": "Rechts",
+"en": "Right",
+"es": "Derecha",
+"fi": "Oikea",
+"fr": "Droite",
+"hi": "दाएँ",
+"it": "Destra",
+"ja": "右",
+"ko": "오른쪽",
+"nb": "Høyre",
+"nl": "Rechts",
+"pt-BR": "Direita",
+"pt-PT": "Direita",
+"sv": "Höger",
+"th": "ด้านขวา",
+"zh-CN": "右侧",
+"zh-TW": "右方"
+}
+}
+]
+},
+{
+"type": "header",
+"content": "Textes"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du texte",
+"default": "justify",
+"options": [
+{ "value": "justify", "label": "Justifié" },
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "text",
+"id": "title_section",
+"label": {
+"da": "Overskrift",
+"de": "Überschrift",
+"en": "Heading",
+"es": "Título",
+"fi": "Otsake",
+"fr": "Titre",
+"hi": "शीर्षक",
+"it": "Heading",
+"ja": "見出し",
+"ko": "제목",
+"nb": "Overskrift",
+"nl": "Kop",
+"pt-BR": "Título",
+"pt-PT": "Título",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标题",
+"zh-TW": "標題"
+},
+"default": {
+"da": "Billede med tekst",
+"de": "Bild mit Text",
+"en": "Image with text",
+"es": "Imagen con texto",
+"fi": "Kuva tekstillä",
+"fr": "Image avec texte",
+"hi": "टेक्स्ट वाली इमेज",
+"it": "Immagine con testo",
+"ja": "テキスト付き画像",
+"ko": "텍스트 포함 이미지",
+"nb": "Bilde med tekst",
+"nl": "Afbeelding met tekst",
+"pt-BR": "Imagem com texto",
+"pt-PT": "Imagem com texto",
+"sv": "Bild med text",
+"th": "รูปภาพพร้อมข้อความ",
+"zh-CN": "带文本的图片",
+"zh-TW": "附文字的圖片"
+}
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "richtext",
+"id": "text",
+"label": {
+"da": "Tekst",
+"de": "Text",
+"en": "Text",
+"es": "texto",
+"fi": "Teksti",
+"fr": "Texte",
+"hi": "टेक्स्ट",
+"it": "Testo",
+"ja": "テキスト",
+"ko": "텍스트",
+"nb": "Tekst",
+"nl": "Tekst",
+"pt-BR": "Texto",
+"pt-PT": "Texto",
+"sv": "Text",
+"th": "ข้อความ",
+"zh-CN": "文本",
+"zh-TW": "文字"
+},
+"default": "<p>Associez un texte de grande taille à une image pour mettre en relief le produit, la collection ou l'article de blog de votre choix. Ajoutez des informations sur la disponibilité ou le style. Vous pouvez même fournir un avis.</p>"
+},
+{
+"type": "text",
+"id": "button_label",
+"label": {
+"da": "Knaptekst",
+"de": "Schaltflächenbezeichnung",
+"en": "Button label",
+"es": "Etiqueta de botón",
+"fi": "Tekstipainike",
+"fr": "Texte du bouton",
+"hi": "बटन लेबल",
+"it": "Etichetta pulsante",
+"ja": "ボタンのラベル",
+"ko": "버튼 레이블",
+"nb": "Knappetikett",
+"nl": "Knoplabel",
+"pt-BR": "Etiqueta de botão",
+"pt-PT": "Etiqueta do botão",
+"sv": "Knappetikett",
+"th": "ป้ายกำกับปุ่ม",
+"zh-CN": "按钮标签",
+"zh-TW": "按鈕標籤"
+}
+},
+{
+"type": "url",
+"id": "button_link",
+"label": {
+"da": "Knaplink",
+"de": "Schaltflächenlink",
+"en": "Button link",
+"es": "Enlace de botón",
+"fi": "Painikelinkki",
+"fr": "Lien du bouton",
+"hi": "बटन लिंक",
+"it": "Link pulsante",
+"ja": "ボタンのリンク",
+"ko": "버튼 링크",
+"nb": "Kobling for knapp",
+"nl": "Knoplink",
+"pt-BR": "Link de botão",
+"pt-PT": "Ligação do botão",
+"sv": "Knapplänk",
+"th": "ลิงก์ปุ่ม",
+"zh-CN": "按钮链接",
+"zh-TW": "按鈕連結"
+}
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton",
+"default": "btn--1"
+},
+{
+"type": "color",
+"id": "color_subtext",
+"label": "Couleur des sous-titres des icônes",
+"default": "#000"
+},
+{
+"type": "checkbox",
+"id": "subtext_bolder",
+"label": "Mettre en gras les sous-titres des icônes",
+"default": true
+},
+{
+"type": "header",
+"content": "Styles du carousel"
+},
+{
+"type": "checkbox",
+"id": "active_autoplay",
+"label": "Activer les slides automatiques",
+"default": true
+},
+{
+"type":      "range",
+"id":        "speed_slider",
+"min":       500,
+"max":        5000,
+"step":       100,
+"unit":       "ms",
+"label":     "Vitesse du carousel",
+"default":   2000
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "checkbox",
+"id": "no_margin",
+"label": "Supprimer les espacements latéraux",
+"info": "Pour un rendu en mosaïque"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "color",
+"id": "color_bold",
+"label": "Couleur des textes en gras",
+"default": "#000000"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "select",
+"id": "animation_text",
+"label": "Animation du texte",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "icon",
+"name": "Icône",
+"settings": [
+{
+"type": "image_picker",
+"id": "icon",
+"label": "Icône (JPG, PNG, GIF)"
+},
+{
+"type": "text",
+"id": "iconsvg",
+"label": "Icône (SVG, recommandé)"
+},
+{
+"type": "text",
+"id": "subtext",
+"label": "Sous-titre de l'icône",
+"default": "Promouvoir un bénéfice"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Image avec icônes",
+"category": {
+"da": "Billede",
+"de": "Foto",
+"en": "Image",
+"es": "Imagen",
+"fi": "Kuva",
+"fr": "Image",
+"hi": "इमेज",
+"it": "Immagine",
+"ja": "画像",
+"ko": "이미지",
+"nb": "Bilde",
+"nl": "Afbeelding",
+"pt-BR": "Imagem",
+"pt-PT": "Imagem",
+"sv": "Bild",
+"th": "รูปภาพ",
+"zh-CN": "图片",
+"zh-TW": "圖片"
+},
+"blocks": [
+{ "type": "icon" },
+{ "type": "icon" },
+{ "type": "icon" },
+{ "type": "icon" }
+]
+}
+]
+}
+{% endschema %}

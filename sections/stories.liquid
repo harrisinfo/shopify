@@ -1,0 +1,430 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="stories--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>
+
+  <style>
+    {% if section.settings.color_bg contains 'fix' %}
+    #stories--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #stories--{{ section.id }} p, #stories--{{ section.id }} .h3, #stories--{{ section.id }} i, #stories--{{ section.id }} span {
+      color: {{ section.settings.color_text_fix }}; 
+    }
+    {% endif %}
+    #stories--{{ section.id }} .featured-row__subtext, #stories--{{ section.id }} .featured_row_list {
+      color: {{ section.settings.color_desc }};
+    }
+  </style>
+
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}{% if section.settings.no_margin %} no_margin{% endif %}">
+    <div class="page-width feature-row">
+      <div class="feature-row">
+        <div class="text-center">
+          {% if section.settings.title_section != blank %}
+          <div class="section-header">
+            <h2 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="{{ section.settings.choix_title }} section-header__title h1">{{ section.settings.title_section }}</h2>
+          </div>
+          {% endif %}
+          <div class="stories_wrapper">
+            {% for block in section.blocks %}
+            <script>
+              $(document).ready(function() {
+                $('.popup-youtube--{{ block.id }}, .popup-vimeo--{{ block.id }}').magnificPopup({
+                  type: 'iframe',
+                  mainClass: 'mfp-fade--{{ block.id }}',
+                  removalDelay: 160,
+                  preloader: false,
+                  fixedContentPos: false
+                });
+              });
+            </script>
+            <style>
+              {% if block.settings.vertical %}.mfp-fade--{{ block.id }} .mfp-iframe-holder .mfp-content { height: 100%; }{% endif %}
+            </style>
+            <div class="story--{{ block.id }} story_wrapper">
+              {% if block.settings.type_video == 'ytb' %}
+              <a class="popup-youtube popup-youtube--{{ block.id }} story-link story_link--{{ block.id }}" href="{{ block.settings.url_video }}">
+                <img src="{{ block.settings.img | img_url: '100x' }}" class="story_img">
+              </a>
+              {% else %}
+              <a class="popup-vimeo popup-vimeo--{{ block.id }} story-link story_link--{{ block.id }}" href="{{ block.settings.url_video }}">
+                <img src="{{ block.settings.img | img_url: '100x' }}" class="story_img">
+              </a>
+              {% endif %}
+              <p>{{ block.settings.name }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+{% schema %}
+{
+"name": "Stories",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Stories"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "text",
+"id": "title_section",
+"label": {
+"da": "Overskrift",
+"de": "Überschrift",
+"en": "Heading",
+"es": "Título",
+"fi": "Otsake",
+"fr": "Titre",
+"hi": "शीर्षक",
+"it": "Heading",
+"ja": "見出し",
+"ko": "제목",
+"nb": "Overskrift",
+"nl": "Kop",
+"pt-BR": "Título",
+"pt-PT": "Título",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标题",
+"zh-TW": "標題"
+},
+"default": "Ils parlent de nous"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--2",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "checkbox",
+"id": "no_margin",
+"label": "Supprimer les espacements latéraux",
+"info": "Pour un rendu en mosaïque"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "select",
+"id": "animation_text",
+"label": "Animation du texte",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "story",
+"name": "Story",
+"settings": [
+{
+"type": "header",
+"content": "Affichage de la story"
+},
+{
+"type": "image_picker",
+"id": "img",
+"label": "Image",
+"info": "Mettez la photo de profil de l'influenceur."
+},
+{
+"type": "text",
+"id": "name",
+"label": "Nom de l'influenceur",
+"default": "Kylie Jenner"
+},
+{
+"type": "header",
+"content": "Réglages de la story"
+},
+{
+"type": "select",
+"id": "type_video",
+"label": "Source de la vidéo",
+"default": "vimeo",
+"options": [
+{ "value": "vimeo", "label": "Vimeo" },
+{ "value": "ytb", "label": "YouTube" }
+],
+"info": "On conseille vraiment d'utiliser Vimeo."
+},
+{
+"type": "text",
+"id": "url_video",
+"label": "Lien YouTube ou Vimeo de la vidéo"
+},
+{
+"type": "checkbox",
+"id": "vertical",
+"label": "Vidéo verticale ?",
+"default": false,
+"info": "À cocher seulement si c'est une vidéo verticale."
+}
+]
+}
+],
+"presets": [
+{
+"name": "Stories",
+"category": {
+"da": "Billede",
+"de": "Foto",
+"en": "Image",
+"es": "Imagen",
+"fi": "Kuva",
+"fr": "Image",
+"hi": "इमेज",
+"it": "Immagine",
+"ja": "画像",
+"ko": "이미지",
+"nb": "Bilde",
+"nl": "Afbeelding",
+"pt-BR": "Imagem",
+"pt-PT": "Imagem",
+"sv": "Bild",
+"th": "รูปภาพ",
+"zh-CN": "图片",
+"zh-TW": "圖片"
+},
+"blocks":[
+{
+"type": "story"
+},
+{
+"type": "story"
+},
+{
+"type": "story"
+}
+]
+}
+]
+}
+{% endschema %}

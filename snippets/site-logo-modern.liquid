@@ -1,0 +1,49 @@
+{% comment %}
+Use the uploaded logo from theme settings if enabled.
+Site name gets precedence with H1 tag on homepage, div on other pages.
+{% endcomment %}
+{% if request.page_type == 'index' %}
+<h1 class="site-header__logo" itemscope itemtype="http://schema.org/Organization">
+  {% else %}
+  <div class="h1 site-header__logo" itemscope itemtype="http://schema.org/Organization">
+    {% endif %}
+
+    <a href="{{ routes.root_url }}" itemprop="url" class="site-header__logo-link {% if settings.menu_transparent and request.page_type == "index" %}logo-no-transparency-desktop {% endif %}desktop_only">
+      {% if section.settings.logo_letters %}
+      {{ shop.name }}
+      {% else %}
+      <img class="site-header__logo-image" src="{% if section.settings.logo_svg == blank %}{{ section.settings.logo | img_url: 'x300' }}{% else %}{{ section.settings.logo_svg }}{% endif %}" alt="{{ section.settings.logo.alt | default: shop.name }}" itemprop="logo">
+      {% endif %}
+    </a>
+
+    <a href="{{ routes.root_url }}" itemprop="url" class="site-header__logo-link {% if settings.menu_transparent and request.page_type == "index" %}logo-no-transparency-mobile {% endif %}mobile_only">
+      {% if section.settings.logo_letters %}
+      {{ shop.name }}
+      {% else %}
+      <img class="site-header__logo-image" src="{% if section.settings.logo_svg_sm == blank %}{{ section.settings.logo_sm | img_url: 'x300' }}{% else %}{{ section.settings.logo_svg_sm }}{% endif %}" alt="{{ section.settings.logo_sm.alt | default: shop.name }}" itemprop="logo">
+      {% endif %}
+    </a>
+    
+    {% if settings.menu_transparent and request.page_type == "index" %}
+    <a href="{{ routes.root_url }}" itemprop="url" class="site-header__logo-link logo-transparent-desktop desktop_only">
+      {% if section.settings.logo_letters %}
+      {{ shop.name }}
+      {% else %}
+      <img class="site-header__logo-image" src="{% if section.settings.logo_svg == blank %}{{ section.settings.logo_transparent | img_url: 'x300' }}{% else %}{{ section.settings.logo_transparent_svg }}{% endif %}" alt="{{ section.settings.logo_transparent.alt | default: shop.name }}" itemprop="logo">
+      {% endif %}
+    </a>
+
+    <a href="{{ routes.root_url }}" itemprop="url" class="site-header__logo-link logo-transparent-mobile mobile_only">
+      {% if section.settings.logo_letters %}
+      {{ shop.name }}
+      {% else %}
+      <img class="site-header__logo-image" src="{% if section.settings.logo_svg_sm == blank %}{{ section.settings.logo_transparent_sm | img_url: 'x300' }}{% else %}{{ section.settings.logo_transparent_svg_sm }}{% endif %}" alt="{{ section.settings.logo_transparent_sm.alt | default: shop.name }}" itemprop="logo">
+      {% endif %}
+    </a>
+    {% endif %}
+
+    {% if request.page_type == 'index' %}
+    </h1>
+  {% else %}
+  </div>
+{% endif %}

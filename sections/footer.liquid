@@ -1,0 +1,517 @@
+<footer class="site-footer small--text-center" role="contentinfo" data-section-id="{{ section.id }}" data-section-type="footer-section">
+  <div class="wrapper">
+
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="grid-uniform">
+
+      {% comment %}
+      Default to 1 footer column (copyright/powered_by/payment_types)
+      {% endcomment %}
+      {% assign num_footer_columns = 1 %}
+
+      {% for block in section.blocks %}
+      {% assign num_footer_columns = num_footer_columns | plus: 1 %}
+      {% endfor %}
+
+      {% case num_footer_columns %}
+      {% when 0 %}
+      {% when 1 %}
+      {% assign footer_column_width = '' %}
+      {% when 2 %}
+      {% assign footer_column_width = 'one-half small--one-whole' %}
+      {% when 3 %}
+      {% assign footer_column_width = 'one-third small--one-whole' %}
+      {% when 4 %}
+      {% assign footer_column_width = 'large--one-quarter medium--one-half' %}
+      {% endcase %}
+
+      {% for block in section.blocks %}
+      {% case block.type %}
+
+      {% when 'menu' %}
+
+      {% capture menu_footer %}
+      {% if linklists[block.settings.footer_link_list].links.size > 0 %}
+      <ul class="no-bullets site-footer__linklist">
+        {% for link in linklists[block.settings.footer_link_list].links %}
+        <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endcapture %}
+
+      <div class="toggle toggle_footer mobile_only">
+        <div class="toggle-title toggle-title-footer">
+          <p>
+            <span class="title-name menu_footer_title">{{ block.settings.menu_footer_title }}</span>
+          </p>
+        </div>
+        <div class="toggle-inner toggle-inner-footer">
+          {{ menu_footer }}
+        </div>
+      </div>
+
+      <div class="grid__item {{ footer_column_width }} footer_links desktop_only">
+        {% if block.settings.menu_footer_title != blank %}
+        <p class="menu_footer_title">{{ block.settings.menu_footer_title }}</p>
+        {% endif %}
+        {{ menu_footer }}
+      </div>
+
+      {% when 'social' %}
+
+      {% capture social_footer %}
+
+      <ul class="no-bullets social-icons">
+        {% if settings.social_facebook_link != blank %}
+        <li>
+          <a href="{{ settings.social_facebook_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+            <span class="icon icon-facebook" aria-hidden="true"></span>
+            Facebook
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_twitter_link != blank %}
+        <li>
+          <a href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
+            <span class="icon icon-twitter" aria-hidden="true"></span>
+            Twitter
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_pinterest_link != blank %}
+        <li>
+          <a href="{{ settings.social_pinterest_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
+            <span class="icon icon-pinterest" aria-hidden="true"></span>
+            Pinterest
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_instagram_link != blank %}
+        <li>
+          <a href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+            <span class="icon icon-instagram" aria-hidden="true"></span>
+            Instagram
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_snapchat_link != blank %}
+        <li>
+          <a href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
+            <span class="icon icon-snapchat" aria-hidden="true"></span>
+            Snapchat
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_google_plus_link != blank %}
+        <li>
+          <a href="{{ settings.social_google_plus_link | escape }}" rel="publisher" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
+            <span class="icon icon-google_plus" aria-hidden="true"></span>
+            Google Plus
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_tumblr_link != blank %}
+        <li>
+          <a href="{{ settings.social_tumblr_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
+            <span class="icon icon-tumblr" aria-hidden="true"></span>
+            Tumblr
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_youtube_link != blank %}
+        <li>
+          <a href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+            <span class="icon icon-youtube" aria-hidden="true"></span>
+            YouTube
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_vimeo_link != blank %}
+        <li>
+          <a href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+            <span class="icon icon-vimeo" aria-hidden="true"></span>
+            Vimeo
+          </a>
+        </li>
+        {% endif %}
+        {% if settings.social_fancy_link != blank %}
+        <li>
+          <a href="{{ settings.social_fancy_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
+            <span class="icon icon-fancy" aria-hidden="true"></span>
+            Fancy
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+      {% endcapture %}
+
+      <div class="toggle toggle_footer mobile_only">
+        <div class="toggle-title toggle-title-footer">
+          <p>
+            <span class="title-name menu_footer_title">{{ block.settings.menu_footer_title }}</span>
+          </p>
+        </div>
+        <div class="toggle-inner toggle-inner-footer">
+          {{ social_footer }}
+        </div>
+      </div>
+
+      <div class="grid__item {{ footer_column_width }} footer_links desktop_only">
+        {% if block.settings.menu_footer_title != blank %}
+        <p class="menu_footer_title">{{ block.settings.menu_footer_title }}</p>
+        {% endif %}
+        {{ social_footer }}
+      </div>
+
+      {% when 'newsletter' %}
+
+      {% capture nl_footer %}
+      {% form 'customer' %}
+      {{ form.errors | default_errors }}
+      {% if form.posted_successfully? %}
+      <div class="newsletter--form">
+        <div class="note form-success">{{ 'general.newsletter_form.newsletter_confirmation' | t }}</div>
+      </div>
+      {% else %}
+      <label for="Email" class="newsletter__label hidden-label">{{ 'general.newsletter_form.newsletter_email' | t }}</label>
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="newsletter--form">
+        <div class="input-group">
+          <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" name="contact[email]" id="Email" class="input-group-field newsletter__input" autocorrect="off" autocapitalize="off">
+          <span class="input-group-btn">
+            <button id="Subscribe" type="submit"
+                    class=" newsletter__submit"
+                    aria-label="{{ 'general.newsletter_form.submit' | t }}">
+              <span class="icon icon-arrow-right newsletter_icon_footer"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+      {% endif %}
+      {% endform %}
+      {% if block.settings.news_warning != blank %}
+      <p class="powered_by_badge" style="padding-top: 10px;">{{ block.settings.news_warning }}</p>
+      {% endif %}
+      {% endcapture %}
+
+      <div class="toggle toggle_footer mobile_only newsletter_footer">
+        <div class="toggle-title toggle-title-footer">
+          <p>
+            <span class="title-name menu_footer_title">{{ block.settings.menu_footer_title }}</span>
+          </p>
+        </div>
+        <div class="toggle-inner toggle-inner-footer">
+          {{ nl_footer }}
+        </div>
+      </div>
+
+      <div class="grid__item {{ footer_column_width }} newsletter_footer desktop_only">
+        {% if block.settings.menu_footer_title != blank %}
+        <p class="menu_footer_title">{{ block.settings.menu_footer_title }}</p>
+        {% endif %}
+        {{ nl_footer }}
+
+      </div>
+      
+      {% when 'contact' %}
+
+      {% capture contact_footer %}
+      <ul class="no-bullets contact_footer">
+        {% if block.settings.contact_mail != blank %}<li>{{ block.settings.icon_contact }} {{ block.settings.contact_mail }}</li>{% endif %}
+        {% if block.settings.contact_phone != blank %}<li>{{ block.settings.icon_contact2 }} {{ block.settings.contact_phone }}</li>{% endif %}
+        {% if block.settings.contact_address != blank %}<li>{{ block.settings.icon_contact3 }} {{ block.settings.contact_address }}</li>{% endif %}
+      </ul>
+      {% endcapture %}
+
+      <div class="toggle toggle_footer mobile_only">
+        <div class="toggle-title toggle-title-footer">
+          <p>
+            <span class="title-name menu_footer_title">{{ block.settings.menu_footer_title }}</span>
+          </p>
+        </div>
+        <div class="toggle-inner toggle-inner-footer">
+          {{ contact_footer }}
+        </div>
+      </div>
+
+      <div class="grid__item {{ footer_column_width }} footer_links desktop_only">
+        {% if block.settings.menu_footer_title != blank %}
+        <p class="menu_footer_title">{{ block.settings.menu_footer_title }}</p>
+        {% endif %}
+        {{ contact_footer }}
+      </div>
+
+      {% endcase %}
+      {% endfor %}
+
+      <div class="grid__item {{ footer_column_width }} {% if num_footer_columns == 1 %}text-center{% else %}large--text-right{% endif %} copy_footer">
+        {% if section.settings.show_logo_footer %}<img style="width: 100%; max-width: {{ section.settings.range_logo_footer }}px" src="{{ section.settings.logo | img_url: '400x' }}" class="footer_logo">{% endif %}
+        <p class="site-footer__copyright-content"><span class="powered_by_badge">&copy; {{ 'now' | date: '%Y' }}, {{ shop.name }}</span></p>
+        {%- if settings.payment_icons_types == "auto" -%}
+        {%- unless shop.enabled_payment_types == empty -%}
+        <span class="visually-hidden">{{ 'general.payment.method' | t }}</span>
+        <ul class="inline-list payment-icons site-footer__payment-icons">
+          {%- for type in shop.enabled_payment_types -%}
+          <li>
+            {{ type | payment_type_svg_tag: class: 'icon' }}
+          </li>
+          {%- endfor -%}
+        </ul>
+        {%- endunless -%}
+        {%- elsif settings.payment_icons_types == "manual" -%}
+		{% if settings.payment_icon_manual_svg == blank %}<img style="width: {{ settings.payment_icon_width }}px;" src="{{ settings.payment_icon_manual | img_url: "master" }}" />
+        {% else %}<img style="width: {{ settings.payment_icon_width }}px;" src="{{ settings.payment_icon_manual_svg }}" />
+        {% endif %}
+        {%- endif -%}
+        <p class="site-footer__copyright-content"><span class="powered_by_badge">{{ section.settings.powered_by }}</span></p>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+
+
+{% schema %}
+{
+"name": "Footer",
+"max_blocks": 3,
+"settings": [
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Logo du site"
+},
+{
+"type": "checkbox",
+"id": "show_logo_footer",
+"label": "Afficher le logo",
+"default": false
+},
+{
+"type": "image_picker",
+"id": "logo",
+"label": "Logo du site"
+},
+{
+"type": "range",
+"id": "range_logo_footer",
+"label": "Largeur personnalisée du logo",
+"min": 50,
+"max": 260,
+"step": 5,
+"unit": "px",
+"default": 180
+},
+{
+"type": "textarea",
+"id": "powered_by",
+"label": "Texte sous le logo",
+"default": "Conçu avec le Story Thème sur Shopify"
+},
+{
+"type": "header",
+"content": "Moyens de paiement"
+},
+{
+"type": "select",
+"id": "payment_icons_types",
+"label": "Choix des logos de paiement",
+"default": "auto",
+"options": [
+{ "value": "auto", "label": "Logos générés automatiquement" },
+{ "value": "manual", "label": "Image personnalisée" },
+{ "value": "none", "label": "Pas de logos" }
+]
+},
+{
+"type": "range",
+"id": "payment_icon_width",
+"label": "Largeur personnalisée des logos de paiement personnalisés",
+"min": 50,
+"max": 260,
+"step": 5,
+"unit": "px",
+"default": 180
+},
+{
+"type": "image_picker",
+"id": "payment_icon_manual",
+"label": "Logos de paiement personnalisé (format JPG, PNG)",
+"info": "Cette image fonctionne si le champ ci-dessous est vide et si 'Images personnalisées' est sélectionné ci-dessus."
+},
+{
+"type": "text",
+"id": "payment_icon_manual_svg",
+"label": "Logos de paiement personnalisé (format SVG, recommandé)",
+"info": "Cette image fonctionne si 'Images personnalisées' est sélectionné ci-dessus."
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation du footer",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+}
+],
+"blocks": [
+{
+"type": "menu",
+"name": "Menu",
+"settings": [
+{
+"type": "text",
+"id": "menu_footer_title",
+"label": "Titre du menu",
+"default": "Liens rapides"
+},
+{
+"type": "link_list",
+"id": "footer_link_list",
+"label": "Menu",
+"default": "footer"
+}
+]
+},
+{
+"type": "social",
+"name": "Réseaux sociaux",
+"settings": [
+{
+"type": "text",
+"id": "menu_footer_title",
+"label": "Titre de la section",
+"default": "Suivez-nous"
+},
+{
+"type": "paragraph",
+"content": "Personnalisez vos réseaux sociaux dans les paramètres généraux du thème (section Réseaux Sociaux). Chaque lien que vous remplirez s'affichera ici automatiquement."
+}
+]
+},
+{
+"type": "newsletter",
+"name": "Newsletter",
+"settings": [
+{
+"type": "text",
+"id": "menu_footer_title",
+"label": "Titre de la section",
+"default": "Rejoignez notre famille"
+},
+{
+"type": "textarea",
+"id": "news_warning",
+"label": "Phrase sous l'emplacement de la newsletter",
+"default": "Profitez de toutes les nouveautés, promotions et offres exclusives avant tout le monde."
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton",
+"default": "btn--1"
+}
+]
+},
+{
+"type": "contact",
+"name": "Contact",
+"settings": [
+{
+"type": "text",
+"id": "menu_footer_title",
+"label": "Titre de la section",
+"default": "Contactez-nous"
+},
+{
+"type": "header",
+"content": "Contact 1"
+},
+{
+"type": "select",
+"id": "icon_contact",
+"options": [
+{ "value": "", "label": "Aucune"},
+{ "value": "<i class='fas fa-envelope'></i>", "label": "Mail"},
+{ "value": "<i class='fas fa-phone'></i>", "label": "Phone"},
+{ "value": "<i class='fas fa-map-marker-alt'></i>", "label": "Adresse"}
+],
+"label": "Icône",
+"default": "<i class='fas fa-envelope'></i>"
+},
+{
+"type": "textarea",
+"id": "contact_mail",
+"label": "Information de contact 1",
+"default": "contact@nomdeboutique.com"
+},
+{
+"type": "header",
+"content": "Contact 2"
+},
+{
+"type": "select",
+"id": "icon_contact2",
+"options": [
+{ "value": "", "label": "Aucune"},
+{ "value": "<i class='fas fa-envelope'></i>", "label": "Mail"},
+{ "value": "<i class='fas fa-phone'></i>", "label": "Phone"},
+{ "value": "<i class='fas fa-map-marker-alt'></i>", "label": "Adresse"}
+],
+"label": "Icône",
+"default": "<i class='fas fa-phone'></i>"
+},
+{
+"type": "textarea",
+"id": "contact_phone",
+"label": "Information de contact 2",
+"default": "+33 1 23 45 67 89"
+},
+{
+"type": "header",
+"content": "Contact 3"
+},
+{
+"type": "select",
+"id": "icon_contact3",
+"options": [
+{ "value": "", "label": "Aucune"},
+{ "value": "<i class='fas fa-envelope'></i>", "label": "Mail"},
+{ "value": "<i class='fas fa-phone'></i>", "label": "Phone"},
+{ "value": "<i class='fas fa-map-marker-alt'></i>", "label": "Adresse"}
+],
+"label": "Icône",
+"default": "<i class='fas fa-map-marker-alt'></i>"
+},
+{
+"type": "textarea",
+"id": "contact_address",
+"label": "Information de contact 3",
+"default": "3 Rue des Bois, 75000, Paris"
+}
+]
+}
+]
+}
+{% endschema %}

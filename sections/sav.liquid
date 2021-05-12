@@ -1,0 +1,98 @@
+<div class="wrapper site_width">
+  <div class="grid">
+    <div class="grid__item text-center">
+      {% if section.settings.section_title_section != blank %}
+      <div class="section-header">
+        <h2 class="{{ section.settings.choix_title }} section-header__title h1">{{ section.settings.section_title_section }}</h2>
+      </div>
+      {% endif %}
+      {% if section.settings.text != blank %}
+      <div class="text-center subtext_faq_full_page large--two-thirds medium--two-thirds small--one-whole">
+        {{ section.settings.text }}
+      </div>
+      {% endif %}
+      <div class="sav_wrapper">
+        {% for block in section.blocks %}
+        <div class="sav_item">
+          <a href="{{ block.settings.btn_url }}" class="{{ block.settings.choix_style_bouton }}">{{ block.settings.btn_title }}</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+"name": "Contact Template",
+"settings": [
+{
+"type": "text",
+"id": "section_title_section",
+"label": "Titre de la page",
+"default": "Comment pouvons-nous vous aider ?"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--2",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "richtext",
+"id": "text",
+"label": "Description de la page",
+"default": "<p>Dans le but de vous fournir le meilleur service possible, veuillez choisir la proposition qui vous convient le mieux.</p>"
+}
+],
+"blocks":[
+{
+"type": "info",
+"name": "Informations",
+"settings": [
+{
+"type": "header",
+"content": "Boutons"
+},
+{
+"type": "text",
+"id": "btn_title",
+"label": "Texte bouton",
+"default": "Où est ma commande ?"
+},
+{
+"type": "url",
+"id": "btn_url",
+"label": "Lien bouton",
+"info": "Rediriger vers la page suivi de commande ou contact pour une meilleure expérience client."
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton",
+"default": "btn--1"
+}
+]
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+

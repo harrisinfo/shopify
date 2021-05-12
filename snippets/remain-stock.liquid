@@ -1,0 +1,96 @@
+<style>
+  .count {
+    color: {{ section.settings.color_stock_principale_count }};
+  }
+  .progressbar, .progressbar > div, .progressbar > div.less-than-ten, .progressbar.progressbar div {
+    background-color: {{ section.settings.color_stock_principale }}!important;
+  }
+</style>
+
+
+
+<script type="text/javascript">
+  function randomIntFromInterval(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min +1)) + min;
+  }
+  var total_items = {{ settings.remain_stock_base }};
+  var d = new Date();
+  var min_items_left = {{ settings.remain_stock_min }};
+  var max_items_left = {{ settings.remain_stock_max }};
+  var remaining_items = randomIntFromInterval(min_items_left, max_items_left);
+  var min_of_remaining_items = 1;
+  var decrease_after = 0.50;
+  var decrease_after_first_item = 0.10;
+  (function (remain) {
+    remain.fn.progressbar = function () {
+      var a = "<p>{{ section.settings.phrase1_stock }} <span class='count'>" + remaining_items + "</span> {{ section.settings.phrase2_stock }}</p>" + "<div class='progressbar'><div style='width:100%'></div></div>";
+      this.addClass("items-count");
+      this.html(a + this.html());
+      updateMeter(this);
+      var b = this;
+      setTimeout(function () {
+        remaining_items--;
+        if (remaining_items < min_of_remaining_items) {
+          remaining_items = randomIntFromInterval(min_items_left, max_items_left);
+        }
+        remain(".count").css("background-color", "{{ section.settings.color_stock_principale_count }}");
+                             $(".count").css("color", "#fff");
+        setTimeout(function () {
+          remain(".count").css("background-color", "transparent");
+          remain(".count").css("color", "{{ section.settings.color_stock_principale_count }}");
+                               }, 1000 * 60 * 0.03);
+          b.find(".count").text(remaining_items);
+          updateMeter(b);
+        }, 1000 * 60 * decrease_after_first_item);
+        setInterval(function () {
+          remaining_items--;
+          if (remaining_items < min_of_remaining_items) {
+            remaining_items = randomIntFromInterval(min_items_left, max_items_left);
+          }
+          remain(".count").css("background-color", "{{ section.settings.color_stock_principale_count }}");
+                               $(".count").css("color", "#fff");
+          setTimeout(function () {
+            remain(".count").css("background-color", "transparent");
+            remain(".count").css("color", "{{ section.settings.color_stock_principale_count }}");
+                                 }, 1000 * 60 * 0.03);
+            b.find(".count").text(remaining_items);
+            updateMeter(b);
+          }, 1000 * 60 * decrease_after);
+        };
+                    function updateMeter(a) {
+          var b = Math.floor((100 * remaining_items) / total_items);
+          if (remaining_items < 10) {
+            a.find(".progressbar div:first").addClass("less-than-ten");
+          }
+          a.find(".progressbar").addClass("active progress-striped");
+          setTimeout(function () {
+            myanimate(a.find(".progressbar div:first"), b);
+            a.find(".progressbar").removeClass("active progress-striped");
+          }, 1000);
+        }
+      })(jQuery);
+      function myanimate(a, b) {
+        var c = 0;
+        var d = Math.floor(parseInt(a.closest(".progressbar").css("width")));
+        var e = Math.floor((100 * parseInt(a.css("width"))) / d);
+        if (e > b) {
+          c = e;
+        }
+        function frame() {
+          if (e > b) {
+            c--;
+          } else {
+            c++;
+          }
+          a.css("width", c + "%");
+          if (c == b || c <= 0 || c >= 100) clearInterval(f);
+        }
+        var f = setInterval(frame, 20);
+      }
+      $(document).ready(function () {
+        $("#progress_bar").progressbar();
+      });
+</script>
+<div class="items-count" id="progress_bar"></div>

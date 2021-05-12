@@ -1,0 +1,59 @@
+<div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} style="margin-bottom: 0;" class="slick-testi-{{ section.id }} slick-testi-product">
+  {% for block in section.blocks %}
+  {% if block.type == 'testi' %}
+  <div class="testi-wrapper">
+    <div class="testi-container">
+      <div class="testi-image small--one-whole one-quarter">
+        {% if block.settings.image != blank %}
+        {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+        <img class="testi-image-style lazyload"
+             src="{{ block.settings.image | img_url: '300x300' }}"
+             data-src="{{ img_url }}"
+             data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+             data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+             data-sizes="auto"
+             alt="{{ block.settings.image.alt | escape }}">
+        {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+      <div class="testi-review small--one-whole three-quarters">
+        <div class="testi-header">
+          <p class="testi-name two-thirds">{{ block.settings.title }}</p>
+          <p class="testi-stars one-third"><i class="fas fa-star"></i><i class="fas fa-star"></i>{% if block.settings.star_rating == 3 %}<i class="fas fa-star"></i>{% endif %}{% if block.settings.star_rating == 4 %}<i class="fas fa-star"></i><i class="fas fa-star"></i>{% endif %}{% if block.settings.star_rating == 5 %}<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>{% endif %}
+          </p>
+        </div>
+        <div class="testi-inner">
+          <p class="testi-title">{{ block.settings.title_testi }}</p>
+          {{ block.settings.text_testi }}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endfor %}
+</div>
+<div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="slick__controls slick-slider testi-controls">
+  <button class="slick__arrow slick__arrow--previous" aria-label="{{ 'home_page.slideshow.previous_slide' | t }}" data-slick-previous-testi>
+    <span class="icon icon-slide-prev" aria-hidden="true"></span>
+  </button>
+  <div class="slick__dots-wrapper" data-slick-dots-testi></div>
+  <button class="slick__arrow slick__arrow--next" aria-label="{{ 'home_page.slideshow.next_slide' | t }}" data-slick-next-testi>
+    <span class="icon icon-slide-next" aria-hidden="true"></span>
+  </button>
+</div>
+
+<script>
+  $(document).ready(function(){
+    $('.slick-testi-{{ section.id }}').slick({
+      autoplay: true,
+      autoplaySpeed: 5000,
+      appendDots: '[data-slick-dots-testi]',
+      prevArrow: '[data-slick-previous-testi]',
+      nextArrow: '[data-slick-next-testi]',
+      dots: true,
+      infinite: true,
+      adaptiveHeight: true
+      });
+  });
+</script>

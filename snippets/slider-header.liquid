@@ -1,0 +1,24 @@
+<div class="swiper-container header_announce">
+  <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+    {% if block.type == 'benefit' %}
+    <div class="swiper-slide"><p>{{ block.settings.title }}</p></div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+<script>
+  var headerAnnounce = new Swiper('.header_announce', {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    slidesPerGroup: 1,
+    loop: true,
+    speed: 1000,
+    {% if section.settings.active_autoplay %}
+    autoplay: {
+      delay: {{ section.settings.speed_slider }},
+    },
+    {% endif %}
+    breakpoints: { 680: { slidesPerView: 2, slidesPerGroup: 2 }, 1000: { slidesPerView: 3, slidesPerGroup: 3 }},
+  });
+</script>

@@ -1,0 +1,51 @@
+<style>
+  #dyn-hero--{{ section.id }} .swiper-container {
+    width: 100%;
+    height: {{ section.settings.font_size_title | plus: 25 }}px;
+    margin: 0 auto;
+  }
+  @media screen and (max-width: 589px) { #dyn-hero--{{ section.id }} .swiper-container { height: {{ section.settings.font_size_title_sm | plus: 10 }}px; } }
+  #dyn-hero--{{ section.id }} .swiper-wrapper {
+    margin: 0;
+  }
+  #dyn-hero--{{ section.id }} .swiper-slide {
+    background: transparent;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: {{ section.settings.alignement }};
+    -ms-flex-pack: {{ section.settings.alignement }};
+    -webkit-justify-content: {{ section.settings.alignement }};
+    justify-content: {{ section.settings.alignement }};
+    -webkit-box-align: {{ section.settings.alignement }};
+    -ms-flex-align: {{ section.settings.alignement }};
+    -webkit-align-items: {{ section.settings.alignement }};
+    align-items: {{ section.settings.alignement }};
+    width: 100%;
+    margin: 0;
+  }
+</style>
+<!-- Swiper -->
+<div class="swiper-container vertical-text">
+  <ul class="swiper-wrapper">
+    {% for block in section.blocks %}
+    <li class="swiper-slide swiper-no-swiping">{{ block.settings.text }}</li>
+    {% endfor %}
+  </ul>
+</div>
+<script>
+  var verticalText = new Swiper('.vertical-text', {
+    loop: true,
+    slidesPerView:1,
+    direction: 'vertical',
+    //effect: 'flip',
+    simulateTouch: false,
+    autoHeight: false,
+    speed:1000,
+    autoplay: {
+      delay: {{ section.settings.speed_slider }},
+    }
+  });
+</script>

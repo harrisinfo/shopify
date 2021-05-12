@@ -1,0 +1,59 @@
+<div class="timer" data-link="{{ settings.redirection_link_timer_legal }}">
+  <div class="timer-display">
+    <div class="timer-block">
+      <span id="days{{ product.id }}" class="timer-block__num js-timer-days-header">00</span>
+      <span class="timer-block__unit">{{ 'general.drawers.days' | t }}</span>
+    </div>
+    <div class="timer-block">
+      <span id="hours{{ product.id }}" class="timer-block__num js-timer-hours-header">00</span>
+      <span class="timer-block__unit">{{ 'general.drawers.hours' | t }}</span>
+    </div>
+    <div class="timer-block">
+      <span id="minutes{{ product.id }}" class="timer-block__num js-timer-minutes-header">00</span>
+      <span class="timer-block__unit">{{ 'general.drawers.minutes' | t }}</span>
+    </div>
+    <div class="timer-block">
+      <span id="seconds{{ product.id }}" class="timer-block__num js-timer-seconds-header">00</span>
+      <span class="timer-block__unit">{{ 'general.drawers.seconds' | t }}</span>
+    </div>
+  </div>
+</div>
+<div class="timer-message">
+  <div id="content-timer-legal">
+    {{ product.message_expired_timer_legal }}
+  </div>
+</div>
+
+<script type="text/javascript">
+  var timer = document.getElementById("timer");
+  var second = 1000,
+      minute = second * 60,
+      hour = minute * 60,
+      day = hour * 24;
+  let birthday{{ product.id }} = "{{ settings.legal_timer_month }} {{ settings.legal_timer_days }}, {{ settings.legal_timer_year }} {{ settings.legal_timer_time }}",
+  countDown{{ product.id }} = new Date(birthday{{ product.id }}).getTime(),
+      x{{ product.id }} = setInterval(function() {
+      var now{{ product.id }} = new Date().getTime(),
+        distance{{ product.id }} = countDown{{ product.id }} - now{{ product.id }};
+    document.getElementById("days{{ product.id }}").innerText = Math.floor(distance{{ product.id }} / (day)),
+      document.getElementById("hours{{ product.id }}").innerText = Math.floor((distance{{ product.id }} % (day)) / (hour)),
+      document.getElementById("minutes{{ product.id }}").innerText = Math.floor((distance{{ product.id }} % (hour)) / (minute)),
+        document.getElementById("seconds{{ product.id }}").innerText = Math.floor((distance{{ product.id }} % (minute)) / second);
+  //do something later when date is reached
+    if (distance{{ product.id }} < 0) {
+
+        let countdown{{ product.id }} = document.querySelector('.timer'),
+          content{{ product.id }} = document.getElementById("content-timer-legal");
+
+          countdown{{ product.id }}.style.display = "none";
+        content{{ product.id }}.style.display = "block";
+      
+      {% if settings.redirection_timer_legal %}
+        setTimeout(function() { window.location.href = timer.dataset.link; }, 5000);
+      {% endif %}
+      
+        clearInterval(x{{ product.id }});
+      }
+      //seconds
+    }, 0)
+</script>

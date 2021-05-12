@@ -1,0 +1,501 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-top">
+  <style>.dividers-svg path, .dividers-svg polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="collection-slider--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg_select contains 'shade' %}class="wrapper-color"{% endif %}>
+
+  <style>
+    {% if section.settings.color_bg_select contains 'fix' %}
+    #collection-slider--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #collection-slider--{{ section.id }} p, #collection-slider--{{ section.id }} .h3, #collection-slider--{{ section.id }} i, #collection-slider--{{ section.id }} span, #collection-slider--{{ section.id }} .btn-grid {
+      color: {{ section.settings.color_text_fix }}; 
+    }
+    #collection-slider--{{ section.id }} .btn-grid {
+      border-color: {{ section.settings.color_text_fix }};
+    }
+    {% endif %}
+    {% unless section.settings.color_bg_select contains 'none' %}#collection-slider--{{ section.id }} .btn-grid { background: transparent; }{% endunless %}
+  </style>
+  <div id="CollectionSection" data-section-id="{{ section.id }}" data-section-type="collection-template" data-grid-type="{{ section.settings.collection_products_grid }}">
+    <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}">
+
+      {% if section.settings.show_all and section.settings.title_section != blank %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="section-header header_collection_slider">
+        <h2 class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.title_section }}</h2>
+        <a href="{{ collections[section.settings.home_featured_products].url }}">{{ section.settings.text_show_all }}</a>
+      </div>
+      {% else %}
+      {% if section.settings.title_section != blank %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="section-header text-center">
+        <h2 class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.title_section }}</h2>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <div class="grid-uniform recommendations collection-slider">
+
+        {% comment %}
+        Loop through products in your Frontpage collection.
+        This collection is created by default, but you must add products to it.
+        See the snippet 'snippets/product-grid-collage.liquid'.
+
+        `is_reverse_row_product`, `three_row_index_product`, `collection_product_count_product`, and `divisible_by_three_product` are
+        all used by 'snippets/product-grid-collage.liquid'
+        {% endcomment %}
+        {% assign grid_item_width = 'one-whole' %}
+
+        {% if section.settings.home_featured_products == blank or collections[section.settings.home_featured_products] == empty or collections[section.settings.home_featured_products].products_count == 0 %}
+
+        {% comment %}
+        For onboarding new users to your theme, we add some default products and onboarding tutorials to help populate their store
+        {% endcomment %}
+        {% unless emptyState %}
+        {% assign emptyState = true %}
+        {% endunless %}
+        {% include 'onboarding-featured-products' %}
+
+        {% else %}
+
+        <div class="swiper-container swiper-featured-products">
+          <div class="swiper-wrapper swiper-wrapper-featured-products">
+            {% for product in collections[section.settings.home_featured_products].products limit: section.settings.limit_number %}
+            <div class="swiper-slide swiper-slide-featured-products">
+              {% include 'product-grid-item' %}
+            </div>
+            {% endfor %}
+          </div>
+
+          {% if section.settings.choix_pagination == "scrollbar" %}<div class="swiper-scrollbar featured-products-scrollbar"></div>{% endif %}
+          {% if section.settings.show_button %}<div class="swiper-button-next swiper-button-next-featured-products"></div>
+          <div class="swiper-button-prev swiper-button-prev-featured-products"></div>{% endif %}
+          {% if section.settings.choix_pagination == "pagination" %}<div class="swiper-pagination swiper-pagination-featured-products"></div>{% endif %}
+
+        </div>
+
+        <script>
+          var featuredProductsSlider = new Swiper('.swiper-featured-products', {
+            loop: false,
+            slidesPerView: 2,
+            spaceBetween: 0,
+            {% if section.settings.choix_pagination == "pagination" %}
+            pagination: {
+              el: '.swiper-pagination-featured-products',
+              type: 'bullets',
+            },{% endif %}
+            {% if section.settings.show_button %}
+            navigation: {
+              nextEl: '.swiper-button-next-featured-products',
+              prevEl: '.swiper-button-prev-featured-products',
+            },{% endif %}
+            {% if section.settings.choix_pagination == "scrollbar" %}
+            scrollbar: {
+              el: '.featured-products-scrollbar',
+              draggable: true,
+            },{% endif %}
+            {% if section.settings.choix_pagination == "scrollbar" %}freeMode: true,{% endif %}
+            breakpoints: {
+              590: {
+                slidesPerView: 3,
+              },
+              768: {
+                slidesPerView: 4,
+              }
+            },
+            {% if section.settings.active_autoplay %}
+            autoplay: {
+              delay: {{ section.settings.speed_slider }},
+            }
+            {% endif %}
+          });
+        </script>
+
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_all and section.settings.title_section == blank %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="section-header text-center">
+        <a class="show_all_collection_slider" href="{{ collections[section.settings.home_featured_products].url }}">{{ section.settings.text_show_all }}</a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-bottom">
+  <style>.dividers-svg path, .dividers-svg polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Collection Slider",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Collection Slider"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la section"
+},
+{
+"type": "text",
+"id": "title_section",
+"label": {
+"da": "Overskrift",
+"de": "Überschrift",
+"en": "Heading",
+"es": "Título",
+"fi": "Otsake",
+"fr": "Titre",
+"hi": "शीर्षक",
+"it": "Heading",
+"ja": "見出し",
+"ko": "제목",
+"nb": "Overskrift",
+"nl": "Kop",
+"pt-BR": "Título",
+"pt-PT": "Título",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标题",
+"zh-TW": "標題"
+},
+"default": "Collection Slider"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--3",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "collection",
+"id": "home_featured_products",
+"label": {
+"da": "Kollektion",
+"de": "Kategorie",
+"en": "Collection",
+"es": "Colección",
+"fi": "Kokoelma",
+"fr": "Collection",
+"hi": "कलेक्शन",
+"it": "Collezione",
+"ja": "コレクション",
+"ko": "컬렉션",
+"nb": "Samling",
+"nl": "Collectie",
+"pt-BR": "Coleção",
+"pt-PT": "Coleção",
+"sv": "Produktserie",
+"th": "คอลเลกชัน",
+"zh-CN": "收藏",
+"zh-TW": "商品系列"
+}
+},
+{
+"type":      "range",
+"id":        "limit_number",
+"min":       2,
+"max":        16,
+"step":       1,
+"unit":       "nb",
+"label":     "Nombre de produits à afficher",
+"default":   6
+},
+{
+"type": "checkbox",
+"id": "show_desc",
+"label": "Afficher un extrait de la description",
+"default": false
+},
+{
+"type": "checkbox",
+"id": "show_all",
+"label": "Afficher un lien 'Voir tout' qui redirige sur la collection",
+"default": true,
+"info": "Si la section a un titre, le lien sera affiché à droite du titre sur ordinateur. Sinon il sera affiché sur tous les appareils en-dessous du slider."
+},
+{
+"type": "text",
+"id": "text_show_all",
+"label": "Texte du lien 'Voir tout'",
+"default": "Voir tous les produits"
+},
+{
+"type": "header",
+"content": "Configuration du slider"
+},
+{
+"type": "select",
+"id": "choix_pagination",
+"label": "Style de la pagination",
+"default": "scrollbar",
+"options": [
+{ "value": "scrollbar", "label": "Scrollbar" },
+{ "value": "pagination", "label": "Points" },
+{ "value": "Aucun", "label": "Aucun" }
+]
+},
+{
+"type": "checkbox",
+"id": "show_button",
+"label": "Afficher les boutons de navigation à gauche et à droite",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "active_autoplay",
+"label": "Activer les slides automatiques",
+"default": true
+},
+{
+"type":      "range",
+"id":        "speed_slider",
+"min":       500,
+"max":        5000,
+"step":       100,
+"unit":       "ms",
+"label":     "Vitesse du carousel",
+"default":   2000
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg_select",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_text",
+"label": "Animation des éléments",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"presets": [
+{
+"name": "Collection Slider",
+"category": {
+"da": "Kollektion",
+"de": "Kategorie",
+"en": "Collection",
+"es": "Colección",
+"fi": "Kokoelma",
+"fr": "Collection",
+"hi": "कलेक्शन",
+"it": "Collezione",
+"ja": "コレクション",
+"ko": "컬렉션",
+"nb": "Samling",
+"nl": "Collectie",
+"pt-BR": "Coleção",
+"pt-PT": "Coleção",
+"sv": "Produktserie",
+"th": "คอลเลกชัน",
+"zh-CN": "收藏",
+"zh-TW": "商品系列"
+}
+}
+],
+"blocks": []
+}
+{% endschema %}

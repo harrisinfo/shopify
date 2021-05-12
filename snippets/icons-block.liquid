@@ -1,0 +1,41 @@
+<div class="logo-section icons_block-wrapper">
+  <div class="logo-list">
+    
+    <div class="logo_group text-center small--one-half one-quarter">
+      <div class="icons_block">
+        <img src="{% if block.settings.icon1svg == blank %}{{ block.settings.icon1 | img_url: '300x' }}{% else %}{{ block.settings.icon1svg }}{% endif %}">
+      </div>
+      {% if block.settings.subtext1 != blank %}
+      <p class="icons_subtext subtext-{{ block.id }}">{{ block.settings.subtext1 }}</p>
+      {% endif %}
+    </div>
+    
+    <div class="logo_group text-center small--one-half one-quarter">
+      <div class="icons_block">
+        <img src="{% if block.settings.icon2svg == blank %}{{ block.settings.icon2 | img_url: '300x' }}{% else %}{{ block.settings.icon2svg }}{% endif %}">
+      </div>
+      {% if block.settings.subtext2 != blank %}
+      <p class="icons_subtext subtext-{{ block.id }}">{{ block.settings.subtext2 }}</p>
+      {% endif %}
+    </div>
+    
+    <div class="logo_group text-center small--one-half one-quarter">
+      <div class="icons_block">
+        <img src="{% if block.settings.icon3svg == blank %}{{ block.settings.icon3 | img_url: '300x' }}{% else %}{{ block.settings.icon3svg }}{% endif %}">
+      </div>
+      {% if block.settings.subtext3 != blank %}
+      <p class="icons_subtext subtext-{{ block.id }}">{{ block.settings.subtext3 }}</p>
+      {% endif %}
+    </div>
+    
+    <div class="logo_group text-center small--one-half one-quarter">
+      <div class="icons_block">
+        <img src="{% if block.settings.icon4svg == blank %}{{ block.settings.icon4 | img_url: '300x' }}{% else %}{{ block.settings.icon4svg }}{% endif %}">
+      </div>
+      {% if block.settings.subtext4 != blank %}
+      <p class="icons_subtext subtext-{{ block.id }}">{{ block.settings.subtext4 }}</p>
+      {% endif %}
+    </div>
+    
+  </div>
+</div>

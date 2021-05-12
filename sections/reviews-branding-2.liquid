@@ -1,0 +1,468 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="reviews-branding-2--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>
+
+  <style>
+    {% if section.settings.color_bg contains 'fix' %}
+    #reviews-branding-2--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #reviews-branding-2--{{ section.id }} p, #reviews-branding-2--{{ section.id }} b, #reviews-branding-2--{{ section.id }} i, #reviews-branding-2--{{ section.id }} span:not(.span-title-reviews) {
+      color: {{ section.settings.color_text_fix }}!important; 
+    }
+    #reviews-branding-2--{{ section.id }} div.text-reviews { background-color: {{ section.settings.div_bg_fix }}!important; }
+    #reviews-branding-2--{{ section.id }} span.span-title-reviews { background-color: {{ section.settings.span_bg_fix }}!important; }
+    {% endif %}
+    .carousel-ig-text-reviews { background-color: {{ section.settings.color_bg_text_reviews }}; }
+    .carousel-ig-img { height: {{ section.settings.height_image }}px; }
+    @media screen and (max-width: 589px) { .carousel-ig-img { height: {{ section.settings.height_image_sm }}px; } }
+  </style>  
+  <div id="{{ section.settings.title }}" class="reviews-branding {{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width_full_width">
+    {% if section.settings.title_section != blank %}
+    <div class="section-header text-{{ section.settings.alignement_text }}">
+      <h2 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} style="color: {{ section.settings.color_title }};" class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.title_section }}</h2>
+    </div>
+    {% endif %}
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="reviews-branding-2-{{ section.id }} swiper-container-reviews instagram">
+      <button type="button" data-role="none" class="slick-prev slick-arrow" aria-label="Previous" role="button" style="display: block;">Previous</button>
+      {% for block in section.blocks %}
+      <div class="review_wrapper">
+        <div class="carousel-ig-img image-reviews one-whole"
+             style="background: center / cover no-repeat url({{ block.settings.img | img_url: 'master' }});">
+        </div>
+        <div class="carousel-ig-text-reviews">
+          <div class="text-header">
+            <p class="title-reviews"><b>{{ block.settings.title }}</b><span class="span-title-reviews">{{ 'general.reviews.verify' | t }}</span></p>
+          </div>
+          <div class="rte desc-reviews">
+            {{ block.settings.text }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <button type="button" data-role="none" class="slick-next slick-arrow" aria-label="Next" role="button" style="display: block;">Next</button>
+    </div>
+
+    <script>
+      $(document).ready(function(){
+        $('.reviews-branding-2-{{ section.id }}').slick({
+          infinite: true,
+          dots: false,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          {% if section.settings.active_autoplay %}
+          autoplay: true,
+          autoplaySpeed: {{ section.settings.speed_slider }},
+          {% endif %}
+          arrows: true,
+          asNavFor: null,
+          centerMode: true,
+          centerPadding: '15%',
+          responsive: [{
+          breakpoint: 991,
+          settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1
+          }
+          }, {
+          breakpoint: 769,
+          settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1
+          }
+          }, {
+          breakpoint: 551,
+          settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+          }
+          }]
+          });
+      });
+    </script>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Avis (carousel)",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Carousel Avis - Instagram"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la collection"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du titre",
+"default": "center",
+"options": [
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "textarea",
+"id": "title_section",
+"label": "Titre",
+"default": "97% de clients satisfaits"
+},
+{
+"type": "color",
+"id": "color_title",
+"label": "Couleur du titre",
+"default": "#000"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--2",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "header",
+"content": "Styles des avis"
+},
+{
+"type":      "range",
+"id":        "height_image",
+"min":       200,
+"max":        800,
+"step":       50,
+"unit":       "px",
+"label":     "Hauteur des images sur ordinateur",
+"default":   400
+},
+{
+"type":      "range",
+"id":        "height_image_sm",
+"min":       100,
+"max":        500,
+"step":       50,
+"unit":       "px",
+"label":     "Hauteur des images sur téléphone",
+"default":   300
+},
+{
+"type": "color",
+"id": "color_bg_text_reviews",
+"label": "Couleur de l'arrière-plan des avis",
+"default": "#F5F5F5"
+},
+{
+"type": "header",
+"content": "Styles du carousel"
+},
+{
+"type": "checkbox",
+"id": "active_autoplay",
+"label": "Activer les slides automatiques",
+"default": true
+},
+{
+"type":      "range",
+"id":        "speed_slider",
+"min":       500,
+"max":        5000,
+"step":       100,
+"unit":       "ms",
+"label":     "Vitesse du carousel",
+"default":   2000
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation des éléments",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "review",
+"name": "Avis",
+"settings": [
+{
+"id": "img",
+"type": "image_picker",
+"label": "Image"
+},
+{
+"type": "text",
+"id": "title",
+"label": "Pseudo / Nom client",
+"default": "Jean"
+},
+{
+"type": "richtext",
+"id": "text",
+"label": "Texte",
+"default": "<p>Au début j'hésitais à me procurer ce produit. Je me disais qu'il n'allait pas forcément m'être utile par exemple. Au fur et à mesure que j'ai utilisé ce produit, je l'ai adopté ! Aujourd'hui, je ne plus m'en passer. Je le recommande les yeux fermés !</p>"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Avis (carousel) - Instagram",
+"category": {
+"da": "Avanceret layout",
+"de": "Komplizierteres Layout",
+"en": "Advanced layout",
+"es": "Diseño avanzado",
+"fi": "Monimutkaisempi layout",
+"fr": "Mise en page avancée",
+"hi": "उन्नत लेआउट",
+"it": "Layout avanzato",
+"ja": "高度なレイアウト",
+"ko": "고급 레이아웃",
+"nb": "Avansert oppsett",
+"nl": "Geavanceerde opmaak",
+"pt-BR": "Layout avançado",
+"pt-PT": "Esquema avançado",
+"sv": "Avancerad layout",
+"th": "เลย์เอาท์ขั้นสูง",
+"zh-CN": "高级布局",
+"zh-TW": "進階版面配置"
+},
+"blocks":[
+{
+"type": "review"
+},
+{
+"type": "review"
+},
+{
+"type": "review"
+},
+{
+"type": "review"
+},
+{
+"type": "review"
+}
+]
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

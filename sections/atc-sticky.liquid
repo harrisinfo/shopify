@@ -1,0 +1,111 @@
+{% if template == 'index' %}
+{%- assign product = all_products[section.settings.product] -%}
+{% endif %}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+{% case settings.atc_bar_style %}
+{% when 'style1' %}
+{% include 'atc-sticky-style1' %}
+{% when 'style2' %}
+{% include 'atc-sticky-style2' %}
+{% endcase %}
+
+{% schema %}
+{
+"name": "Barre d'ajout panier",
+"settings": [
+{
+"type": "paragraph",
+"content": "Vérifiez que la case 'Activer la barre d'ajout panier rapide' est bien cochée dans les paramètres de thème généraux."
+},
+{
+"type": "checkbox",
+"id": "color_bg",
+"label": "Appliquer la couleur d'arrière-plan",
+"info": "Configurable dans les paramètres de thème"
+},
+{
+"type":      "product",
+"id":        "product",
+"label":     "Produit à afficher sur la page d'accueil",
+"info":      "Sur les pages produit, le produit changera automatiquement."
+},
+{
+"type": "checkbox",
+"id": "show_price",
+"label": "Afficher le prix du produit/des variantes",
+"default": true
+},
+{
+"type":      "checkbox",
+"id":        "star_rating",
+"label":     "Afficher la notation",
+"default": true,
+"info":      "Pour afficher automatiquement le nombre d'étoiles du produit (provenant de Loox ou autres applications d'avis), il faut modifier le code. Nous pouvons le faire pour vous en [cliquant ici](https://membres.new-story-ecom.fr/personnalisation-barre-atc-avis)"
+},
+{
+"type":      "text",
+"id":        "star_rating_note",
+"label":     "Note /5",
+"default":   "4.7",
+"info":      "Fonctionne avec le style 'moderne' de la barre d'ajout rapide au panier."
+},
+{
+"type": "select",
+"id": "icon_cart",
+"label": "Type d'icône sur le bouton d'ajout panier",
+"options": [
+{
+"value": "",
+"label": "Aucune"
+},
+{
+"value": "<i class='fad fa-lock-alt'></i>",
+"label": "Cadenas sécurisé"
+},
+{
+"value": "<i class='fas fa-plus'></i>",
+"label": "Signe +"
+},
+{
+"value": "<i class='fad fa-cart-plus'></i>",
+"label": "Caddis avec signe +"
+},
+{
+"value": "<i class='fad fa-shield-check'></i>",
+"label": "Signe vérifié et sécurisé"
+}
+],
+"default": "<i class='fad fa-lock-alt'></i>"
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton d'ajout au panier",
+"default": "btn--1"
+},
+{
+"type": "checkbox",
+"id": "effect_shaker",
+"label": "Activer l'animation sur le bouton d'ajout panier",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "direct_checkout",
+"label": "Rediriger au checkout (sauter l'étape du panier)"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

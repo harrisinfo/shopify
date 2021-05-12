@@ -1,0 +1,72 @@
+{% if end_date != blank %}
+  <div class="timer">
+    <div class="timer-display">
+      <div class="timer-block">
+        <span class="timer-block__num js-timer-days-{{ section.id }}">00</span>
+        <span class="timer-block__unit">{{ 'general.drawers.days' | t }}</span>
+      </div>
+      <div class="timer-block">
+        <span class="timer-block__num js-timer-hours-{{ section.id }}">00</span>
+        <span class="timer-block__unit">{{ 'general.drawers.hours' | t }}</span>
+      </div>
+      <div class="timer-block">
+        <span class="timer-block__num js-timer-minutes-{{ section.id }}">00</span>
+        <span class="timer-block__unit">{{ 'general.drawers.minutes' | t }}</span>
+      </div>
+      <div class="timer-block">
+        <span class="timer-block__num js-timer-seconds-{{ section.id }}">00</span>
+        <span class="timer-block__unit">{{ 'general.drawers.seconds' | t }}</span>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var second = 1000,
+      minute = second * 60,
+      hour = minute * 60,
+      day = hour * 24;
+    {%- if reset_in != blank -%}
+      var shopifyExplorerCustomUnits = {
+        ms: 1/1000,
+        m: 60,
+        min: 60, mins: 60,
+        minute: 60, minutes: 60,
+        h: 60*60,
+        hr: 60*60, hrs: 60*60,
+        hour: 60*60, hours: 60*60,
+        d: 60*60*24,
+        day: 60*60*24, days: 60*60*24,
+      };
+      Date.shopifyExplorerParseInterval = function(interval) {
+        var seconds = 0;
+        interval.replace(/(\d+(?:\.\d*)?)\s*([a-z]+)?/ig, function($0, number, unit) {
+          if (unit) {
+            number *= shopifyExplorerCustomUnits[unit.toLowerCase()] || 1;
+          }
+          seconds += +number;
+        });
+        return seconds * 1000;
+      };
+      function shopifyExplorerTimesUntilDefinedTime(time) {
+        var midnight = new Date(time);
+        midnight.setHours( 24 );
+        midnight.setMinutes( 0 );
+        midnight.setSeconds( 0 );
+        midnight.setMilliseconds( 0 );
+        return midnight.getTime();
+      }
+      var current = new Date();
+      var compareTime = current.getTime() + Date.shopifyExplorerParseInterval('{{- reset_in -}}');
+      var countDown = shopifyExplorerTimesUntilDefinedTime(compareTime);
+    {%- elsif end_date != blank-%}
+      var countDown = new Date('{{- end_date -}}').getTime();
+    {%- endif -%}
+    var x = setInterval(function() {
+      var now = new Date().getTime(),
+        distance = countDown - now;
+        document.querySelector('.js-timer-days-{{ section.id }}').innerText = Math.floor(distance / (day)),
+        document.querySelector('.js-timer-hours-{{ section.id }}').innerText = Math.floor((distance % (day)) / (hour)),
+        document.querySelector('.js-timer-minutes-{{ section.id }}').innerText = Math.floor((distance % (hour)) / (minute)),
+        document.querySelector('.js-timer-seconds-{{ section.id }}').innerText = Math.floor((distance % (minute)) / second);
+    }, second)
+  </script>
+{% endif %}

@@ -1,0 +1,572 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="featured-hotspot--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>
+
+  <style>
+    {% if section.settings.color_bg contains 'fix' %}
+    #featured-hotspot--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    {% endif %}
+  </style>
+
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}{% if section.settings.no_margin %} no_margin{% endif %}">
+
+    {% if section.settings.title_section != blank %}
+    <div class="section-header text-{{ section.settings.alignement_text }}">
+      <h2 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} style="color: {{ section.settings.color_title_section }};" class="{{ section.settings.choix_title }} section-header__title h1 text-center">{{ section.settings.title_section }}</h2>
+    </div>
+    {% endif %}
+    
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="hotspot-wrapper">
+      <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.image.alt }}" class="img-pop desktop_only" style="margin: 0 auto;" />
+      <img src="{{ section.settings.image_sm | img_url: 'master' }}" alt="{{ section.settings.image.alt }}" class="img-pop mobile_only" style="margin: 0 auto;" />
+
+      {% for block in section.blocks %}
+      {% if block.type == 'pop' %}
+
+      <div class="toggle">
+        <div class="toggle-title {{ block.settings.choix_style_bouton }}" id="pop-{{ block.id }}"></div>
+        <div class="toggle-inner div-{{ block.id }}">
+          <div class=" hotspot_container hotspot-{{ block.id }}">
+            <p class="card-title" style="color: {{ block.settings.title_color }}"><b>{{ block.settings.title }}</b></p>
+            <p class="card-text" style="color: {{ block.settings.text_color }}">{{ block.settings.text }}</p>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        .div-{{ block.id }} {
+          position: absolute;
+          top: {{ block.settings.cord_y_div }}%;
+          left: {{ block.settings.cord_x_div }}%;
+          max-width: 300px;
+          box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.4);
+          z-index: 9;
+          box-shadow: none;
+        }
+        .div-{{ block.id }} .hotspot-{{ block.id }} {
+          border: {{ block.settings.border_bg_blocktext }}px solid {{ block.settings.colorborder_bg_blocktext }};
+          background-color: {{ block.settings.color_bg_section }};
+          padding: 12px;
+        }
+        #pop-{{ block.id }} {
+          position: absolute;
+          top: {{ block.settings.cord_y }}%;
+          left: {{ block.settings.cord_x }}%;
+          width: 50px;
+          height: 50px;
+          padding: 0!important;
+          transition: 500ms ease;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          -webkit-justify-content: center;
+          justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          -webkit-align-items: center;
+          align-items: center;
+        }
+        @media screen and (max-width: 795px) {
+          #pop-{{ block.id }} {
+            top: {{ block.settings.cord_y_sm }}%;
+            left: {{ block.settings.cord_x_sm }}%;
+            width: 50px;
+            height: 50px;
+          }
+          .div-{{ block.id }} {
+            top: {{ block.settings.cord_y_sm_div }}%;
+            left: 4%;
+            right: 4%;
+            max-width: 100%;
+          }
+        }
+      </style>
+      {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+
+{% schema %}
+{
+"name": "Image HotSpot",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "HotSpot"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la section"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du titre",
+"default": "center",
+"options": [
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "text",
+"id": "title_section",
+"label": "Titre",
+"default": "Promouvoir un bénéfice"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "color",
+"id": "color_title_section",
+"label": "Couleur du titre",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Image et style"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image sur ordinateur"
+},
+{
+"type": "image_picker",
+"id": "image_sm",
+"label": "Image sur téléphone"
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "checkbox",
+"id": "no_margin",
+"label": "Supprimer les espacements latéraux",
+"info": "Pour un rendu en mosaïque"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation des éléments",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "pop",
+"name": "HotSpot",
+"settings": [
+{
+"type": "header",
+"content": "Position sur ordinateur du bouton"
+},
+{
+"type":      "range",
+"id":        "cord_x",
+"min":       0,
+"max":       100,
+"step":       1,
+"unit":       "%",
+"label":     "Position X sur l'image",
+"default":   30
+},
+{
+"type":      "range",
+"id":        "cord_y",
+"min":       0,
+"max":       100,
+"step":       1,
+"unit":       "%",
+"label":     "Position Y sur l'image",
+"default":   50
+},
+{
+"type": "header",
+"content": "Position sur ordinateur de la fenêtre"
+},
+{
+"type":      "range",
+"id":        "cord_x_div",
+"min":       0,
+"max":       100,
+"step":       1,
+"unit":       "%",
+"label":     "Position X sur l'image",
+"default":   35,
+"info": "Il est conseillé de mettre environ 5% de plus que la position du bouton."
+},
+{
+"type":      "range",
+"id":        "cord_y_div",
+"min":       0,
+"max":       100,
+"step":       1,
+"unit":       "%",
+"label":     "Position Y sur l'image",
+"default":   55,
+"info": "Il est conseillé de mettre environ 5% de plus que la position du bouton."
+},
+{
+"type": "header",
+"content": "Position sur téléphone du bouton"
+},
+{
+"type":      "range",
+"id":        "cord_x_sm",
+"min":       0,
+"max":       100,
+"step":       1,
+"unit":       "%",
+"label":     "Position X sur l'image (téléphone)",
+"default":   30
+},
+{
+"type":      "range",
+"id":        "cord_y_sm",
+"min":       0,
+"max":       100,
+"step":       1,
+"unit":       "%",
+"label":     "Position Y sur l'image (téléphone)",
+"default":   50
+},
+{
+"type": "header",
+"content": "Position sur téléphone de la fenêtre"
+},
+{
+"type":      "range",
+"id":        "cord_y_sm_div",
+"min":       0,
+"max":       100,
+"step":       1,
+"unit":       "%",
+"label":     "Position Y sur l'image",
+"default":   55,
+"info": "Il est conseillé de mettre environ 5% à 20% de plus que la position du bouton. La position X prend automatiquement toute la largeur sur téléphone."
+},
+{
+"type":      "text",
+"id":        "title",
+"label":     "Titre",
+"default":   "Technologie 360° SLIMMER",
+"info": "Pour savoir comment ajouter une icône, [cliquez ici](https://youtu.be/d_db__aUazc). /// Pour accéder à la bibliothèque d'icônes, [cliquez ici](https://fontawesome.com/icons?d=gallery)."
+},
+{
+"type": "color",
+"id": "title_color",
+"label": "Couleur du texte",
+"default": "#000"
+},
+{
+"type":      "textarea",
+"id":        "text",
+"label":     "Texte",
+"default":   "Montrer un bénéfice accompagné d'une fonction. Par exemple : 'Un effet immédiat grâce à la technologie à 360° de SYLYS™'"
+},
+{
+"type": "color",
+"id": "text_color",
+"label": "Couleur du texte",
+"default": "#010101"
+},
+{
+"type": "header",
+"content": "Styles du HotSpot"
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton HotSpot",
+"default": "btn--3",
+"info": "Ce sont les mêmes styles que les styles des boutons."
+},
+{
+"type": "color",
+"id": "color_bg_section",
+"label": "Couleur de l'arrière plan du block",
+"default": "#f6f6f6"
+},
+{
+"type":      "range",
+"id":        "border_bg_blocktext",
+"min":       0,
+"max":        30,
+"step":       1,
+"unit":       "px",
+"label":     "Épaisseur des bordures",
+"default":   0
+},
+{
+"type":      "color",
+"id":        "colorborder_bg_blocktext",
+"label":     "Couleurs des bordures",
+"default":   "#000"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Image HotSpot",
+"category": {
+"da": "Billede",
+"de": "Foto",
+"en": "Image",
+"es": "Imagen",
+"fi": "Kuva",
+"fr": "Image",
+"hi": "इमेज",
+"it": "Immagine",
+"ja": "画像",
+"ko": "이미지",
+"nb": "Bilde",
+"nl": "Afbeelding",
+"pt-BR": "Imagem",
+"pt-PT": "Imagem",
+"sv": "Bild",
+"th": "รูปภาพ",
+"zh-CN": "图片",
+"zh-TW": "圖片"
+}
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

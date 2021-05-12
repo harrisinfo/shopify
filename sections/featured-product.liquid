@@ -1,0 +1,1551 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+{%- assign product = all_products[section.settings.featured_product] -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<style>
+  #FeaturedProductSection--{{ section.id }} .single-option-radio input[type='radio']:checked + label span { background-color: {{ section.settings.variant_color }}; }
+  {% if section.settings.active_border_variant_selected %}
+  #FeaturedProductSection--{{ section.id }} .single-option-radio label { border: 1px solid #F2F2F2; padding: 3px; }
+  #FeaturedProductSection--{{ section.id }} .single-option-radio input[type='radio']:checked + label { border-color: {{ section.settings.variant_color }}; }
+  {% endif %}
+</style>
+
+{%- if product == empty -%}
+{%- assign section_onboarding = true -%}
+{%- assign vendor = 'home_page.onboarding.product_vendor' | t -%}
+{%- assign title = 'home_page.onboarding.product_title' | t -%}
+{%- assign compare_at_price = 2999 -%}
+{%- assign price = 1999 -%}
+{%- else -%}
+{%- assign section_onboarding = false -%}
+{%- assign vendor = product.vendor -%}
+{%- assign title = product.title -%}
+{%- assign compare_at_price = current_variant.compare_at_price -%}
+{%- assign price = current_variant.price -%}
+{%- endif -%}
+
+{%- assign first_3d_model = product.media | where: "media_type", "model" | first -%}
+<div itemscope itemtype="http://schema.org/Product" id="FeaturedProductSection--{{ section.id }}"
+     data-section-id="{{ section.id }}"
+     data-section-type="product-template"
+     data-enable-history-state="false"
+     data-featured-product="true"
+     {% if first_3d_model %}data-has-model="true"{% endif %}>
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
+
+  {% assign featured_media = current_variant.featured_media | default: product.featured_media %}
+
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} wrapper-product{% if section.settings.full_width %}_full_width{% endif %}">
+
+    <div class="grid product-single">
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="{% unless section.settings.full_width_img %}product-single__img_padding_sm {% endunless %}grid__item large--six-twelfths medium--six-twelfths text-center">
+        <div id="ProductMediaGroup-{{ section.id }}" class="product-single__media-group-wrapper" data-product-single-media-group-wrapper>
+          <div class="product-single__media-group product-single__media-group--single-xr" data-product-single-media-group>
+            {%- assign enable_image_zoom = section.settings.enable_image_zoom -%}
+            {% assign height = 850 %}
+            {% assign width = 575 %}
+            {%- assign first_3d_model = product.media | where: "media_type", "model" | first -%}
+            {% comment %}
+            Display product images
+            {% endcomment %}
+            {%- for media in product.media -%}
+            {%- assign featured = false -%}
+            {%- if media == featured_media -%}
+            {%- assign featured = true -%}
+            {%- endif -%}
+
+            {%- capture thumbnail_alt -%}
+            {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+            {{ 'products.product.video_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+            {%- elsif media.media_type == 'model' -%}
+            {{ 'products.product.model_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+            {%- else -%}
+            {{ 'products.product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+            {%- endif -%}
+            {%- endcapture -%}
+
+            <div class="product-single__media-flex-wrapper" data-slick-media-label="{{ thumbnail_alt }}" data-product-single-media-flex-wrapper>
+              <div class="product-single__media-flex">
+                {%- include 'media' with media, enable_image_zoom: enable_image_zoom, featured: featured, width: width, height: height -%}
+              </div>
+            </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if first_3d_model -%}
+          {%- include 'xr-button' with model_id: first_3d_model.id, multi: false -%}
+          {%- endif -%}
+
+          <ul class="product-single__thumbnails small--hide grid-uniform" data-product-thumbnails>
+            {% for media in product.media %}
+            {% if product.media.size > 1 %}
+            <li class="grid__item one-sixth">
+              {%- capture thumbnail_alt -%}
+              {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+              {{ 'products.product.video_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+              {%- elsif media.media_type == 'model' -%}
+              {{ 'products.product.model_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+              {%- else -%}
+              {{ 'products.product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}
+              {%- endif -%}
+              {%- endcapture -%}
+
+              <a href="{{ media | img_url: 'grande' }}" class="product-single__thumbnail{% if media == featured_media %} active-thumb{% endif %}" data-media-id="{{ section.id }}-{{ media.id }}" data-product-thumbnail>
+                <img class="product-single__thumb" src="{{ media | img_url: '150x' }}" alt="{{ thumbnail_alt }}">
+                {%- if media.media_type == 'video' or media.media_type == 'external_video' or media.media_type == 'model' -%}
+                <div class="product-single__thumbnail-badge">
+                  {% include 'svg-definitions' with media.media_type %}
+                </div>
+                {%- endif -%}
+              </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+          <div class="slick__controls slick-slider">
+            <button class="slick__arrow slick__arrow--previous" aria-label="{{ 'home_page.slideshow.previous_slide' | t }}" data-slick-previous>
+              <span class="icon icon-slide-prev" aria-hidden="true"></span>
+            </button>
+            <button class="slick__arrow slick__arrow--next" aria-label="{{ 'home_page.slideshow.next_slide' | t }}" data-slick-next>
+              <span class="icon icon-slide-next" aria-hidden="true"></span>
+            </button>
+            {% if section.settings.show_dots_slider %}<div class="slick__dots-wrapper" data-slick-dots></div>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="grid__item product-single__meta--wrapper product-single__meta medium--six-twelfths large--six-twelfths">
+
+        {% if section.settings.text_subtitle != blank %}<div class="subtitle_offer_text{% if section.settings.text_subtitle_anim %} opacity_animation{% endif %}">{{ section.settings.text_subtitle }}</div>{% endif %}
+        <h1 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="{{ section.settings.choix_title }} product-single__title" itemprop="name">{{ title }}</h1>
+        {% if section.settings.fake_reviews_phrase != blank %}
+        <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="product-single__stars"><span class="star-font"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span> {{ section.settings.fake_reviews_phrase }}</div>
+        {% endif %}
+        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          {% comment %}
+          Optionally show the 'compare at' or original price of the product.
+          {% endcomment %}
+          {% include 'product-price', variant: current_variant %}
+
+          <style>
+            .product-single__desc p{% if section.settings.color_usp_icon %} i{% endif %}, .product-single__desc_under p{% if section.settings.color_usp_icon %} i{% endif %} {
+              color: {{ section.settings.color_usp }};
+            }
+            .timer_wrapper { background: {{ section.settings.bg_timer_wrapper }}; } .testi-container { background: {{ section.settings.bg_testi }}; }
+          </style>
+
+          {% capture usp %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="product-single__desc{% if section.settings.position_usp == 'under' %}_under{% endif %}">
+            {% include 'usp' %}
+          </div>
+          {% endcapture %}
+          {% if section.settings.position_usp == 'above' %}
+          {{ usp }}
+          {% endif %}
+
+          {% include 'size_guide' %}
+
+          <meta itemprop="priceCurrency" content="{{ cart.currency.iso_code }}">
+          <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+
+          {% if section_onboarding %}
+          <div class="product-single__add-to-cart default-product">
+            <button type="submit" name="add" id="AddToCart--{{ section.id }}" class="{{ section.settings.choix_style_bouton }} btn--add-to-cart" disabled="disabled">
+              <span class="btn__text">
+                {{ 'products.product.sold_out' | t }}
+              </span>
+            </button>
+          </div>
+          {% else %}
+          {% capture "form_classes" %}
+          product-single__form{% if product.has_only_default_variant and section.settings.position_usp != 'above' %} product-single__form--no-variants{% endif %}
+          {%- endcapture %}
+
+          {% capture "form_id" %}AddToCartForm--{{ section.id }}{%- endcapture %}
+
+          {% form 'product', product, class:form_classes, id:form_id, data-product-form: '' %}
+          {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="radio-wrapper js product-form__item">
+            <label class="single-option-radio__label{% if section.settings.show_variant_labels == false %} hidden-label{% endif %}"
+                   for="ProductSelect--{{ section.id }}-option-{{ forloop.index0 }}">
+              {{ option.name | escape }}
+            </label>
+            {% if section.settings.product_selector == 'radio' %}
+            <fieldset class="single-option-radio"
+                      id="ProductSelect--{{ section.id }}-option-{{ forloop.index0 }}">
+              {% assign option_index = forloop.index %}
+              {% for value in option.values %}
+              {% assign variant_label_state = true %}
+              {% if product.options.size == 1 %}
+              {% unless product.variants[forloop.index0].available  %}
+              {% assign variant_label_state = false %}
+              {% endunless %}
+              {% endif %}
+
+              <style>
+                {% for block in section.blocks %}{% if block.type == "variant" %}
+                .variant_match_trigger-{{ block.id }} span {
+                  height: {{ block.settings.width }}px!important; width: {{ block.settings.width }}px!important; overflow: hidden; color: transparent!important;
+                  border-radius: {% if settings.border_radius == "big" %}50%{% elsif settings.border_radius == "little" %}5px{% else %}0px{% endif %};
+                }
+                .trigger_color-{{ block.id }} span { background: {{ block.settings.color }}!important; }
+                .trigger_image-{{ block.id }} span { background: center / cover no-repeat url({{ block.settings.image | img_url: "master" }})!important; }
+                {% endif %}{% endfor %}
+              </style>
+
+              <input type="radio"
+                     {% if option.selected_value == value %} checked="checked"{% endif %}
+                     {% unless variant_label_state %} disabled="disabled"{% endunless %}
+                     value="{{ value | escape }}"
+                     data-index="option{{ option_index }}"
+                     name="option{{ option.position }}"
+                     class="single-option-selector__radio{% unless variant_label_state %} disabled{% endunless %}"
+                     id="ProductSelect--{{ section.id }}-option-{{ option.name | handleize }}-{{ value | escape }}">
+              <label for="ProductSelect--{{ section.id }}-option-{{ option.name | handleize }}-{{ value | escape }}"
+                     class="home {% if section.settings.shadowanimboost %}shadowanimboost{% endif %}{% unless variant_label_state %} disabled{% endunless %}
+                            {% for block in section.blocks %}{% if block.type == "variant" %}
+                            {% if value == block.settings.trigger %}
+                            variant_match_trigger-{{ block.id }} variant_with_trigger
+                            {% if block.settings.variant_type == "color" %}
+                            trigger_color-{{ block.id }}
+                            {% else %}
+                            trigger_image-{{ block.id }}
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}{% endfor %}">
+                <span>{{ value | escape }}</span>
+              </label>
+              {% endfor %}
+            </fieldset>
+            {% else %}
+            <select class="single-option-selector__radio single-option-selector-{{ section.id }} product-form__input" id="SingleOptionSelector-{{ forloop.index0 }}" data-index="option{{ forloop.index }}">
+              {% for value in option.values %}
+              <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value | escape }}</option>
+              {% endfor %}
+            </select>
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% endunless %}
+
+          <select name="id" id="ProductSelect--{{ section.id }}" class="product-single__variants no-js">
+            {% for variant in product.variants %}
+            {% if variant.available %}
+            <option {% if variant == product.selected_or_first_available_variant %}
+                    selected="selected" {% endif %}
+                    data-sku="{{ variant.sku }}"
+                    value="{{ variant.id }}">
+              {{ variant.title }} - {{ variant.price | money_with_currency }}
+            </option>
+            {% else %}
+            <option disabled="disabled">
+              {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+            </option>
+            {% endif %}
+            {% endfor %}
+          </select>
+
+          {% if section.settings.quantity_enabled %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="product-single__quantity">
+            <label for="Quantity" class="product-single__quantity-label js-quantity-selector">{{ 'products.product.quantity' | t }}</label>
+            <input type="number" hidden="hidden" id="Quantity" name="quantity" value="1" min="1" class="js-quantity-selector">
+          </div>
+          {% endif %}
+
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="product-single__add-to-cart product-single__add-to-cart--full-width">
+
+            {% if section.settings.direct_checkout %}
+            <input type="hidden" name="return_to" value="/checkout/" />
+            {% endif %}
+
+            <button type="submit" onClick="snaptr('track', 'ADD_CART', {currency:'{{shop.currency}}', description:'{{ product.title }}', price:'{{ product.price_min | money_without_currency | replace: ',', '.' }}' });" name="add" id="AddToCart{% unless section.settings.direct_checkout %}-{% endunless %}-{{ section.id }}" 
+                    class="{{ section.settings.choix_style_bouton }} {% if section.settings.effect_shaker %}effect_shaker {% endif %}btn--add-to-cart"{% unless current_variant.available %} disabled="disabled"{% endunless %}>
+              {{ section.settings.icon_cart }}<span class="btn__text">
+              {% if current_variant.available %}
+              {{ 'products.product.add_to_cart' | t }}
+              {% else %}
+              {{ 'products.product.sold_out' | t }}
+              {% endif %}
+              </span>
+            </button>
+
+            {% if section.settings.enable_payment_button %}
+            {{ form | payment_button }}
+            {% endif %}
+          </div>
+          {% endform %}
+          {% endif %}
+
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="under_cta_atc">
+            {% if section.settings.cart_subtext != blank %}
+            <div class="cart_subtext" style="color: {{ section.settings.color_cart_subtext }};">{{ section.settings.cart_subicon }}{{ section.settings.cart_subtext }}</div>
+            {% endif %}{% if section.settings.active_logos_payment %}
+            {%- if settings.payment_icons_types == "auto" -%}
+            {%- unless shop.enabled_payment_types == empty -%}
+            <span class="visually-hidden">{{ 'general.payment.method' | t }}</span>
+            <ul class="inline-list payment-icons ajaxcart__payment-icons">
+              {%- for type in shop.enabled_payment_types -%}
+              <li>
+                {{ type | payment_type_svg_tag: class: 'icon' }}
+              </li>
+              {%- endfor -%}
+            </ul>
+            {%- endunless -%}
+            {%- elsif settings.payment_icons_types == "manual" -%}
+            {% if settings.payment_icon_manual_svg == blank %}<img style="width: {{ settings.payment_icon_width }}px;" src="{{ settings.payment_icon_manual | img_url: "master" }}" />
+            {% else %}<img style="width: {{ settings.payment_icon_width }}px;" src="{{ settings.payment_icon_manual_svg }}" />
+            {% endif %}
+            {%- endif -%}{% endif %}
+          </div>
+
+          {% include 'image_offer' %}
+
+          {% if section.settings.position_usp == 'under' %}
+          {{ usp }}
+          {% endif %}
+
+          {% if section.settings.timer_active or section.settings.stock_active %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="timer_wrapper">
+            {% if section.settings.timer_active %}
+            {% if settings.choice_timer == 'legal' %}
+            {% include 'timer-true-product' %}
+            {% else %}
+            {% if settings.false_timer_type == "short" %}
+            {% include 'timer', reset_in: "3 hours", end_date: "Sep 30, 2018" %}
+            {% elsif settings.false_timer_type == "middle" %}
+            {% include 'timer', reset_in: "2 days", end_date: "Sep 30, 2018" %}
+            {% else %}
+            {% include 'timer', reset_in: "10 days", end_date: "Sep 30, 2018" %}
+            {% endif %}
+            {% endif %}
+            <p class="phrase_timer">{{ section.settings.timer_phrase_before }}{% if section.settings.timer_active_price %}
+              <span id="ComparePriceTimer" class="price_before">{{ current_variant.compare_at_price | money }}</span>
+              {% endif %}{{ section.settings.timer_phrase_after }}</p>
+            {% endif %}
+            {% if section.settings.stock_active %}
+            {% include 'remain-stock' %}
+            {% endif %}
+          </div>
+          {% endif %}
+
+          {% capture faq_product %}
+          <div class="product_faq-accordion rte">
+            {% include 'faq-style' %}
+          </div>
+          {% endcapture %}
+
+          {% if section.settings.position_faq == 'before' %}
+          {{ faq_product }}
+          {% endif %}
+
+          {% if section.settings.show_testi_products %}
+          {% include 'testimonials_product' %}
+          {% endif %}
+
+          {% capture description %}
+          {% unless section.settings.show_desc_extract contains 'hide' %}
+          {% if product.description != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="product-featured__description{% if section.settings.show_desc_extract == 'extract' %}_extract{% endif %}{% if section.settings.center_desc %} centered_description_featured_product{% endif %}">
+            {{ product.description }}
+          </div>
+          {% if section.settings.show_link_redirection and section.settings.text_redirection %}
+          {% if section.settings.show_desc_extract == 'extract' %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="product-single__link_redirection">
+            <a href="{{ product.url }}">{{ section.settings.text_redirection }}</a> <span class="icon icon-arrow-right" aria-hidden="true"></span>
+          </div>
+          {% endif %}{% endif %}
+          {% endif %}
+          {% endunless %}
+          {% endcapture %}
+
+          {% unless section.settings.center_desc %}
+          {{ description }}
+          {% endunless %}
+
+          {% if section.settings.position_faq == 'after' %}
+          {{ faq_product }}
+          {% endif %}
+
+        </div>
+
+        {% if section.settings.show_share_buttons %}
+        {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product.featured_media %}
+        {% endif %}
+      </div>
+      {% if section.settings.center_desc %}
+      {{ description }}
+      {% endif %}
+    </div>
+
+    {% if collection %}
+    <hr class="hr--clear">
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="text-center">
+      <a href="{{ collection.url }}" class="return-link">&larr; {{ 'products.general.collection_return' | t: collection: collection.title }}</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% unless product.empty == empty %}
+<script type="application/json" id="ProductJson-{{ section.id }}">
+    {{ product | json }}
+</script>
+<script type="application/json" id="ModelJson-{{ section.id }}">
+    {{ product.media | where: 'media_type', 'model' | json }}
+</script>
+{% endunless %}
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": {
+"da": "Fremhævet produkt",
+"de": "Vorgestelltes Produkt",
+"en": "Featured product",
+"es": "Producto destacado",
+"fi": "Esittelyssä oleva tuote",
+"fr": "Produit en vedette",
+"hi": "विशेष रुप से प्रदर्शित उत्पाद",
+"it": "Prodotto in primo piano",
+"ja": "おすすめ商品",
+"ko": "특별 상품",
+"nb": "Utvalgt produkt",
+"nl": "Uitgelicht product",
+"pt-BR": "Produto em destaque",
+"pt-PT": "Produto em destaque",
+"sv": "Utvald produkt",
+"th": "สินค้าที่แนะนำ",
+"zh-CN": "特色产品",
+"zh-TW": "精選產品"
+},
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Produit vedette"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "paragraph",
+"content": "Certaines fonctionnalités doivent être enregistrées pour aperçevoir le résultat final."
+},
+{
+"type": "product",
+"id": "featured_product",
+"label": {
+"da": "Produkt",
+"de": "Produkt",
+"en": "Product",
+"es": "Producto",
+"fi": "Tuote",
+"fr": "Produit",
+"hi": "उत्पाद",
+"it": "Prodotto",
+"ja": "商品",
+"ko": "제품",
+"nb": "Produkt",
+"nl": "Product",
+"pt-BR": "Produto",
+"pt-PT": "Produto",
+"sv": "Produkt",
+"th": "สินค้า",
+"zh-CN": "产品",
+"zh-TW": "產品"
+}
+},
+{
+"type": "checkbox",
+"id": "full_width_img",
+"label": "Afficher les images produits sur toute la largeur sur téléphone",
+"default": true
+},
+{
+"type": "richtext",
+"id": "text_subtitle",
+"label": "Texte à mettre en avant",
+"default": "<p>Meilleure Vente</p>"
+},
+{
+"type": "checkbox",
+"id": "text_subtitle_anim",
+"label": "Activer l'animation de fondu sur le texte à mettre en avant",
+"default": true
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre du produit",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "color",
+"id": "color_sale_price",
+"label": "Couleur du prix en réduction et de l'arrière plan du texte de l'offre",
+"default": "#000"
+},
+{
+"type": "textarea",
+"id": "fake_reviews_phrase",
+"label": "Texte des faux avis",
+"default": "4.7/5 (Basé sur 629 avis)",
+"info": "Pour enlever les faux avis, laisser cette case vide."
+},
+{
+"type": "textarea",
+"id": "text__offer",
+"label": "Texte de l'offre",
+"default": "Offre de lancement",
+"info": "Ne s'affiche qu'en cas de promotion sur le produit"
+},
+{
+"type": "textarea",
+"id": "textsavings",
+"label": "Texte des économies",
+"default": "En commandant aujourd'hui, vous économisez",
+"info": "Ne s'affiche qu'en cas de promotion sur le produit. Pour désactiver les économies, laisser cette case vide."
+},
+{
+"type": "header",
+"content": "Formulaire d'options du produit"
+},
+{
+"type": "checkbox",
+"id": "show_variant_labels",
+"label": {
+"da": "Vis variantlabels",
+"de": "Variantenbezeichnungen anzeigen",
+"en": "Show variant labels",
+"es": "Mostrar etiquetas variantes",
+"fi": "Näytä tarravaihtoehdot",
+"fr": "Afficher les étiquettes de variantes",
+"hi": "वेरिएंट लेबल दिखाएं",
+"it": "Mostra etichette varianti",
+"ja": "バリエーションのラベルを表示する",
+"ko": "이형 상품 레이블 표시",
+"nb": "Vis variantetiketter",
+"nl": "Variantlabels weergeven",
+"pt-BR": "Exibir etiquetas de variantes",
+"pt-PT": "Mostrar etiquetas de variantes",
+"sv": "Visa variantetiketter",
+"th": "แสดงป้ายกำกับตัวเลือกสินค้า",
+"zh-CN": "显示多属性标签",
+"zh-TW": "顯示子類選項標籤"
+},
+"default": true
+},
+{
+"type": "select",
+"id": "product_selector",
+"label": {
+"da": "Vælgertype",
+"de": "Auswahlart",
+"en": "Picker type",
+"es": "Tipo de selector",
+"fi": "Valitsintyyppi",
+"fr": "Type de sélecteur",
+"hi": "पिकर के प्रकार",
+"it": "Tipo di selettore",
+"ja": "ピッカーの種類",
+"ko": "선택기 유형",
+"nb": "Velgertype",
+"nl": "Soort kiezer",
+"pt-BR": "Tipo de seletor",
+"pt-PT": "Tipo de seletor",
+"sv": "Väljartyp",
+"th": "ประเภทของเครื่องมือเลือก",
+"zh-CN": "选择器类型",
+"zh-TW": "選擇器類型"
+},
+"options": [
+{
+"value": "radio",
+"label": {
+"da": "Knap",
+"de": "Schaltfläche",
+"en": "Button",
+"es": "Botón",
+"fi": "Painike",
+"fr": "Bouton",
+"hi": "बटन",
+"it": "Pulsante",
+"ja": "ボタン",
+"ko": "버튼",
+"nb": "Knapp",
+"nl": "Knop",
+"pt-BR": "Botão",
+"pt-PT": "Botão",
+"sv": "Knapp",
+"th": "ปุ่ม",
+"zh-CN": "按钮",
+"zh-TW": "按鈕"
+}
+},
+{
+"value": "select",
+"label": {
+"da": "Rullemenu",
+"de": "Dropdown",
+"en": "Dropdown",
+"es": "Desplegable",
+"fi": "Pudotusvalikko",
+"fr": "Menu déroulant",
+"hi": "ड्रॉप डाउन",
+"it": "Menu a tendina",
+"ja": "ドロップダウン",
+"ko": "드롭다운",
+"nb": "Rullegardin",
+"nl": "Vervolgkeuzemenu",
+"pt-BR": "Menu suspenso",
+"pt-PT": "Menu pendente",
+"sv": "Rullgardinsmeny",
+"th": "ดรอปดาวน์",
+"zh-CN": "下拉菜单",
+"zh-TW": "下拉式選單"
+}
+}
+]
+},
+{
+"type": "checkbox",
+"id": "shadowanimboost",
+"label": "Activer l'animation ombrée sur la variante sélectionnée",
+"default": false
+},
+{
+"type": "checkbox",
+"id": "active_border_variant_selected",
+"label": "Activer la bordure autour de la variante sélectionnée",
+"default": false
+},
+{
+"type": "color",
+"id": "variant_color",
+"label": "Couleur dominante de la variante sélectionnée",
+"default": "#000000"
+},
+{
+"type": "header",
+"content": "Fonctionnalités"
+},
+{
+"type": "checkbox",
+"id": "enable_payment_button",
+"label": {
+"da": "Vis dynamisk betalingsknap",
+"de": "Dynamischen Checkout-Button anzeigen",
+"en": "Show dynamic checkout button",
+"es": "Mostrar botón de pago dinámico",
+"fi": "Näytä dynaaminen kassapainike",
+"fr": "Afficher le bouton de paiement dynamique",
+"hi": "डायनेमिक चेकआउट बटन दिखाएं",
+"it": "Mostra pulsante di check-out dinamico",
+"ja": "動的チェックアウトボタンを表示する",
+"ko": "동적 결제 버튼 표시",
+"nb": "Vis dynamisk knapp for å gå til kassen",
+"nl": "Dynamische betaalknop weergeven",
+"pt-BR": "Exibir botão de checkout dinâmico",
+"pt-PT": "Mostrar o botão dinâmico de finalização da compra",
+"sv": "Visa dynamiska utcheckningsknappar",
+"th": "แสดงปุ่มชำระเงินแบบไดนามิก",
+"zh-CN": "显示动态结账按钮",
+"zh-TW": "顯示動態結帳按鈕"
+},
+"info": {
+"da": "Den enkelte kunde vil se sin foretrukne betalingsmetode blandt dem, der er tilgængelige i din butik, f.eks. PayPal eller Apple Pay. [Få mere at vide](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"de": "Jeder Kunde sieht seine bevorzugte Zahlungsmethode aus den in deinem Shop verfügbaren Zahlungsmethoden wie PayPal oder Apple Pay. [Mehr Informationen](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"en": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"es": "Cada cliente verá su forma de pago preferida entre las disponibles en tu tienda, como PayPal o Apple Pay. [Más información](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"fi": "Kukin asiakas näkee ensisijaisen valintansa kauppasi tarjoamista maksutavoista, esim. PayPal tai Apple Pay. [Lisätietoja](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"fr": "Chaque client verra son moyen de paiement préféré parmi ceux qui sont proposés sur votre boutique, tels que PayPal ou Apple Pay. [En savoir plus](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"hi": "प्रत्येक ग्राहक आपके स्टोर पर उपलब्ध अपनी पसंदीदा भुगतान की विधि देखेंगे जैसे PayPal या Apple Pay. [अधिक जानें](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"it": "Ogni cliente vedrà il suo metodo di pagamento preferito tra quelli disponibili nel tuo negozio, come PayPal o Apple Pay. [Maggiori informazioni](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"ja": "PayPalやApple Payなど、ストアで利用可能な希望の決済方法がお客様に表示されます。[詳しくはこちら](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"ko": "각 고객은 PayPal 또는 Apple Pay와 같이 스토어에서 사용 가능한 지불 방법을 확인할 수 있습니다. [자세히 알아보기](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"nb": "Hver enkelt kunde vil se sin foretrukne betalingsmåte blant de som er tilgjengelig i butikken din, som PayPal eller Apple Pay. [Finn ut mer](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"nl": "Elke klant ziet zijn of haar beschikbare voorkeursmethode om af te rekenen, zoals PayPal of Apple Pay. [Meer informatie](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"pt-BR": "Cada cliente verá a forma de pagamento preferencial dele dentre as disponíveis na loja, como PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"pt-PT": "Cada cliente irá ver o seu método de pagamento preferido entre os disponíveis na loja, como o PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"sv": "Varje kund kommer att se den föredragna betalningsmetoden från de som finns tillgängliga i din butik, till exempel PayPal eller Apple Pay. [Läs mer](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"th": "ลูกค้าแต่ละรายจะเห็นวิธีการชำระเงินที่ต้องการจากวิธีที่ใช้ได้ในร้านค้าของคุณ เช่น PayPal หรือ Apple Pay [ดูข้อมูลเพิ่มเติม](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"zh-CN": "每位客户都可在您商店提供的付款方式中看到他们的首选付款方式，例如 PayPal 或 Apple Pay。[了解详细信息](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+"zh-TW": "每位顧客都可以在您商店內開放使用的付款方式中看見他們偏好使用的方式，如 PayPal、Apple Pay 等。[深入瞭解](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+},
+"default": false
+},
+{
+"type": "checkbox",
+"id": "quantity_enabled",
+"label": {
+"da": "Vis antalsvælger",
+"de": "Mengenauswahl anzeigen",
+"en": "Show quantity picker",
+"es": "Mostrar selector de cantidad",
+"fi": "Näytä määrän valintatyökalu",
+"fr": "Afficher le sélecteur de quantité",
+"hi": "मात्रा पिकर दिखाएं",
+"it": "Mostra selettore di quantità",
+"ja": "数量ピッカーを表示する",
+"ko": "수량 선택기 표시",
+"nb": "Vis mengdevelger",
+"nl": "Hoeveelheidskiezer weergeven",
+"pt-BR": "Exibir seletor de quantidade",
+"pt-PT": "Mostrar seletor de quantidade",
+"sv": "Visa kvantitetsväljaren",
+"th": "แสดงเครื่องมือเลือกจำนวน",
+"zh-CN": "显示数量选择器",
+"zh-TW": "顯示數量選擇器"
+},
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_share_buttons",
+"label": {
+"da": "Vis knapper til deling på sociale medier",
+"de": "Social-Sharing-Schaltflächen anzeigen",
+"en": "Show social sharing buttons",
+"es": "Mostrar botones para compartir en redes sociales",
+"fi": "Näytä sosiaalisen median jakamispainikkeet",
+"fr": "Afficher les boutons de partage social",
+"hi": "सोशल शेयरिंग बटन दिखाएं",
+"it": "Mostra i pulsanti per la condivisione sui social",
+"ja": "ソーシャルメディアでの共有ボタンを表示する",
+"ko": "소셜 공유 버튼 표시",
+"nb": "Vis knapper for deling på sosiale medier",
+"nl": "Knoppen voor sociaal delen weergeven",
+"pt-BR": "Exibir botões de compartilhamento em redes sociais",
+"pt-PT": "Mostrar botões de partilha nas redes sociais",
+"sv": "Visa knappar för delning i sociala medier",
+"th": "แสดงปุ่มสำหรับแชร์ลงโซเชียล",
+"zh-CN": "显示社交分享按钮",
+"zh-TW": "顯示社群分享按鈕"
+},
+"default": false,
+"info": {
+"da": "Rediger SoMe-konti i Generelle indstillinger",
+"de": "Bearbeite Social-Media-Konten in den allgemeinen Einstellungen",
+"en": "Edit social accounts in General settings",
+"es": "Editar cuentas de las redes sociales en la configuración General",
+"fi": "Muokkaa sosiaalisen median tilejä kohdassa Yleiset asetukset",
+"fr": "Modifier les comptes sociaux dans les paramètres généraux",
+"hi": "सामान्य सेटिंग में सोशल अकाउंट संपादित करें",
+"it": "Modifica gli account social nelle Impostazioni generali",
+"ja": "一般設定でソーシャルアカウントを編集する",
+"ko": "일반 설정에서 소셜 계정 수정",
+"nb": "Rediger sosiale kontoer i Generelle innstillinger",
+"nl": "Socialmedia-accounts in Algemene instellingen bewerken",
+"pt-BR": "Edite as contas de redes sociais nas configurações gerais",
+"pt-PT": "Editar as contas de redes sociais nas definições gerais",
+"sv": "Redigera sociala konton i Allmänna inställningar",
+"th": "แก้ไขบัญชีผู้ใช้โซเชียลมีเดียในการตั้งค่าทั่วไป",
+"zh-CN": "在“通用”设置中编辑社媒账户",
+"zh-TW": "前往「一般」設定編輯社群帳戶"
+}
+},
+{
+"type": "checkbox",
+"id": "direct_checkout",
+"label": "Rediriger au Checkout directement (sauter l'étape du panier)",
+"default": false
+},
+{
+"type": "select",
+"id": "icon_cart",
+"label": "Type d'icône sur le bouton d'ajout panier",
+"options": [
+{
+"value": "",
+"label": "Aucune"
+},
+{
+"value": "<i class='fad fa-lock-alt'></i>",
+"label": "Cadenas sécurisé"
+},
+{
+"value": "<i class='fas fa-plus'></i>",
+"label": "Signe +"
+},
+{
+"value": "<i class='fad fa-cart-plus'></i>",
+"label": "Caddis avec signe +"
+},
+{
+"value": "<i class='fad fa-shield-check'></i>",
+"label": "Signe vérifié et sécurisé"
+}
+],
+"default": "<i class='fad fa-lock-alt'></i>"
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton d'ajout au panier",
+"default": "btn--1"
+},
+{
+"type": "checkbox",
+"id": "effect_shaker",
+"label": "Activer l'animation sur le bouton d'ajout panier",
+"default": true
+},
+{
+"type": "header",
+"content": "Sous le bouton d'ajout panier"
+},
+{
+"type": "textarea",
+"id": "cart_subtext",
+"label": "Texte - Appel à l'action",
+"default": "87% de nos clients décident d'en commander 3 et de profiter de l'offre 2+1 offert (code TRIO lors du paiement)."
+},
+{
+"type": "select",
+"id": "cart_subicon",
+"options": [
+{
+"value": "<i class='fas fa-check'><\/i>",
+"label": "Check"
+},
+{
+"value": "<i class='fas fa-lock'><\/i>",
+"label": "Cadenas"
+},
+{
+"value": "<i class='fas fa-arrow-right'><\/i>",
+"label": "Flèche"
+},
+{
+"value": "<i class='fas fa-credit-card'><\/i>",
+"label": "Carte"
+},
+{
+"value": "<i class='fas fa-money-bill-wave'><\/i>",
+"label": "Billet"
+},
+{
+"value": "",
+"label": "Aucun"
+}
+],
+"label": "Icône à afficher à gauche du texte d'appel à l'action",
+"default": "<i class='fas fa-check'><\/i>"
+},
+{
+"type": "color",
+"id": "color_cart_subtext",
+"label": "Couleur du texte appel à l'action",
+"default": "#999"
+},
+{
+"type": "checkbox",
+"id": "active_logos_payment",
+"label": "Afficher les badges de paiement",
+"info": "Les badges de paiement sont personnalisables dans les paramètres du thème.",
+"default": false
+},
+{
+"type": "header",
+"content": "Bénéfices / Arguments marketing"
+},
+{
+"type":      "range",
+"id":        "speed_slider",
+"min":       500,
+"max":        5000,
+"step":       100,
+"unit":       "ms",
+"label":     "Vitesse des slides",
+"default":   2000
+},
+{
+"type": "select",
+"id": "position_usp",
+"label": "Position des blocks 'Bénéfices'",
+"options": [
+{
+"value": "above",
+"label": "Sous le prix du produit"
+},
+{
+"value": "under",
+"label": "Après le bouton d'ajout panier"
+}
+],
+"default": "under"
+},
+{
+"type": "color",
+"id": "color_usp",
+"label": "Couleur des phrases 'bénéfices'",
+"default": "#000"
+},
+{
+"type": "checkbox",
+"id": "color_usp_icon",
+"label": "Appliquer la couleur uniquement aux icônes",
+"default": true
+},
+{
+"type": "header",
+"content": "Timer"
+},
+{
+"type": "checkbox",
+"id": "timer_active",
+"label": "Afficher le timer",
+"default": true
+},
+{
+"type": "color",
+"id": "bg_timer_wrapper",
+"label": "Arrière-plan du block timer et barre de stock",
+"default": "#f6f6f6"
+},
+{
+"type": "textarea",
+"id": "timer_phrase_before",
+"label": "Texte urgence 1",
+"default": "Attention, à la fin du compte à rebours, le prix va repasser à"
+},
+{
+"type": "checkbox",
+"id": "timer_active_price",
+"label": "Afficher le prix barré",
+"default": true
+},
+{
+"type": "textarea",
+"id": "timer_phrase_after",
+"label": "Texte urgence 2",
+"default": "alors commandez dès maintenant pour profiter de notre offre de lancement !"
+},
+{
+"type": "header",
+"content": "Barre de stocks"
+},
+{
+"type": "checkbox",
+"id": "stock_active",
+"label": "Afficher la barre de stock dynamique",
+"default": false,
+"info": "Vivement conseillé d'activer soit le compte à rebours, soit la barre de stock dynamique. Les deux en même temps provoque un surplus de marketing qui fait fuir le client dans la majorité des cas."
+},
+{
+"type": "color",
+"id": "color_stock_principale",
+"label": "Couleur de la barre",
+"default": "#000",
+"info": "Vivement conseillé de mettre la couleur principale (brandée) de votre site."
+},
+{
+"type": "color",
+"id": "color_stock_principale_count",
+"label": "Couleur du compteur",
+"default": "#000"
+},
+{
+"type": "textarea",
+"id": "phrase1_stock",
+"label": "Texte avant la quantité restante",
+"default": "Attention ! Il ne reste plus que"
+},
+{
+"type": "textarea",
+"id": "phrase2_stock",
+"label": "Texte après la quantité restante",
+"default": "articles en stock. Commandez maintenant."
+},
+{
+"type": "header",
+"content": "Slider témoignages clients"
+},
+{
+"type": "checkbox",
+"id": "show_testi_products",
+"label": "Afficher le slider",
+"default": true
+},
+{
+"type": "header",
+"content": "Description"
+},
+{
+"type": "select",
+"id": "position_faq",
+"label": "Position des blocks 'FAQ'",
+"options": [
+{
+"value": "before",
+"label": "Avant la description"
+},
+{
+"value": "after",
+"label": "Après la description"
+}
+],
+"default": "before"
+},
+{
+"type": "select",
+"id": "show_desc_extract",
+"label": "Affichage de la description",
+"options": [
+{
+"value": "hide",
+"label": "Masquer la description"
+},
+{
+"value": "extract",
+"label": "Afficher un extrait"
+},
+{
+"value": "entire",
+"label": "Afficher la description entière"
+}
+],
+"default": "extract"
+},
+{
+"type": "checkbox",
+"id": "center_desc",
+"label": "Aligner la description sur toute la largeur",
+"default": false
+},
+{
+"type": "checkbox",
+"id": "show_link_redirection",
+"label": "Ajouter un lien de redirection vers la page produit",
+"default": true,
+"info": "Ne fonctionne que si la description s'affiche sous forme d'extrait."
+},
+{
+"type": "text",
+"id": "text_redirection",
+"label": "Texte du lien de redirection vers la page produit",
+"default": "Voir le produit"
+},
+{
+"type": "color",
+"id": "bg_testi",
+"label": "Arrière-plan des avis clients",
+"default": "#f6f6f6"
+},
+{
+"type": "header",
+"content": {
+"da": "Medie",
+"de": "Medien",
+"en": "Media",
+"es": "Elementos multimedia",
+"fi": "Media",
+"fr": "Médias",
+"hi": "मीडिया",
+"it": "Media",
+"ja": "メディア",
+"ko": "미디어",
+"nb": "Medier",
+"nl": "Media",
+"pt-BR": "Mídia",
+"pt-PT": "Multimédia",
+"sv": "Media",
+"th": "สื่อ",
+"zh-CN": "媒体",
+"zh-TW": "媒體"
+}
+},
+{
+"type": "checkbox",
+"id": "show_dots_slider",
+"label": "Afficher les points sur le slider des images produits sur mobile",
+"info": "Attention ! Fonctionne correctement uniquement avec une seule section 'Produit vedette' sur une même page !",
+"default": false
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_text",
+"label": "Animation de la partie gauche",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de la partie droite",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "accordion",
+"name": "FAQ",
+"settings": [
+{
+"type": "textarea",
+"id": "title",
+"label": "Titre",
+"default": "Informations de livraison"
+},
+{
+"type": "richtext",
+"id": "text",
+"label": "Description",
+"default": "<p>Suite aux circonstances actuelles, nos délais de livraison sont de 7 à 10 jours ouvrés. Si vous avez une question, accédez à notre FAQ ou contactez-nous directement.</p>"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image",
+"info": "Vous pouvez inclure une image ici."
+},
+{
+"type":      "range",
+"id":        "width_image",
+"min":       10,
+"max":        100,
+"step":       5,
+"unit":       "%",
+"label":     "Largeur des images sur pc",
+"default":   50
+},
+{
+"type":      "range",
+"id":        "width_image_sm",
+"min":       10,
+"max":        100,
+"step":       5,
+"unit":       "%",
+"label":     "Largeur des images sur mobile",
+"default":   100
+}
+]
+},
+{
+"type": "advantage",
+"name": "Bénéfice",
+"settings": [
+{
+"type": "textarea",
+"id": "title",
+"label": "Bénéfice",
+"default": "Simple et efficace"
+},
+{
+"type": "select",
+"id": "usp_icon",
+"options": [
+{ "value": "", "label": "Aucune"},
+{ "value": "<i class='fas fa-check-double'></i>", "label": "Simple et efficace"},
+{ "value": "<i class='fas fa-medal'></i>", "label": "Numéro 1 en Europe"},
+{ "value": "<i class='fas fa-user-md'></i>", "label": "Approuvé par les médecins"},
+{ "value": "<i class='fas fa-truck'></i>", "label": "Livraison gratuite"},
+{ "value": "<i class='fas fa-lock-alt'></i>", "label": "Paiement sécurisé"},
+{ "value": "<i class='fas fa-thumbs-up'></i>", "label": "Adapté à tout le monde"},
+{ "value": "<i class='fas fa-stars'></i>", "label": "Utilisé par les influenceurs"}
+],
+"label": "Icône",
+"default": "<i class='fas fa-check-double'></i>",
+"info": "Le nom de chaque icône est une inspiration pour le texte du bénéfice (à remplir juste au-dessus)."
+}
+]
+},
+{
+"type": "image_offer",
+"name": "Image de l'offre",
+"limit": 1,
+"settings": [
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image de l'offre (JPG ou PNG)"
+},
+{
+"type": "paragraph",
+"content": "Si votre image est un GIF, vous pouvez l'inclure ci-dessus mais c'est déconseillé. À la place, transformez votre GIF en vidéo MP4 et téléchargez-là dans les fichiers de votre compte Shopify. Collez ensuite le lien de la vidéo ci-dessous."
+},
+{
+"type": "text",
+"id": "video_url",
+"label": "Vidéo de l'offre (MP4)",
+"info": "Si une vidéo au format valide est insérée ici, elle prendra automatiquement la place de l'image de l'offre."
+},
+{
+"type":      "range",
+"id":        "width_image",
+"min":       20,
+"max":        100,
+"step":       5,
+"unit":       "%",
+"label":     "Taille de l'image (ou de la vidéo) sur pc",
+"default":   90
+},
+{
+"type":      "range",
+"id":        "width_sm_image",
+"min":       20,
+"max":        100,
+"step":       5,
+"unit":       "%",
+"label":     "Taille de l'image (ou de la vidéo) sur mobile",
+"default":   80
+}
+]
+},
+{
+"type": "size_guide",
+"name": "Guide des tailles (popup)",
+"limit": 1,
+"settings": [
+{
+"type": "textarea",
+"id": "title",
+"label": "Texte du lien",
+"default": "Guide des tailles"
+},
+{
+"type": "richtext",
+"id": "title_modal",
+"label": "Titre",
+"default": "<p>Référez-vous à ce tableau pour trouver votre taille. Si vous avez du mal à comprendre, nous sommes là pour vous aider. Contactez-nous dès maintenant.</p>"
+},
+{
+"type": "color",
+"id": "color",
+"label": "Couleur du titre",
+"default": "#000"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image du tableau de tailles"
+},
+{
+"type": "color",
+"id": "color_bg",
+"label": "Couleur de l'arrière-plan",
+"default": "#f6f6f6"
+},
+{
+"type": "range",
+"id": "radius",
+"min": 0,
+"max": 50,
+"step": 2,
+"unit": "%",
+"label": "Bordures arrondies de la fenêtre",
+"default": 4
+}
+]
+},
+{
+"type": "testi",
+"name": "Témoignages",
+"settings": [
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image du client"
+},
+{
+"type": "text",
+"id": "title",
+"label": "Prénom/Nom",
+"default": "Jean"
+},
+{
+"type": "range",
+"id": "star_rating",
+"min": 3,
+"max": 5,
+"step": 1,
+"unit": "/5",
+"label": "Nombre d'étoiles sur 5",
+"default": 5
+},
+{
+"type": "textarea",
+"id": "title_testi",
+"label": "Titre",
+"default": "Ça m'a convaincu."
+},
+{
+"type": "richtext",
+"id": "text_testi",
+"label": "Avis",
+"default": "<p>Au début j'étais assez sceptique quant à ce produit. Je me demandais si ça allait marcher. Au final, ça m'a convaincu.</p>"
+}
+]
+},
+{
+"type": "variant",
+"name": "Variante",
+"settings": [
+{
+"type": "text",
+"id": "trigger",
+"label": "Nom de la variante à styllisé",
+"default": "Noir"
+},
+{
+"type": "select",
+"id": "variant_type",
+"options": [
+{ "value": "color", "label": "Couleur"},
+{ "value": "image", "label": "Image"}
+],
+"label": "Style de la variante",
+"default": "color"
+},
+{
+"type": "range",
+"id": "width",
+"min": 20,
+"max": 150,
+"step": 5,
+"unit": "px",
+"label": "Largeur et hauteur des variantes styllisées",
+"default": 35
+},
+{
+"type": "header",
+"content": "Style 'Couleur'"
+},
+{
+"type": "color",
+"id": "color",
+"label": "Couleur de la variante",
+"default": "#000000"
+},
+{
+"type": "header",
+"content": "Style 'Image'"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image de la variante"
+}
+]
+}
+],
+"presets": [
+{
+"name": {
+"da": "Fremhævet produkt",
+"de": "Vorgestelltes Produkt",
+"en": "Featured product",
+"es": "Producto destacado",
+"fi": "Esittelyssä oleva tuote",
+"fr": "Produit en vedette",
+"hi": "विशेष रुप से प्रदर्शित उत्पाद",
+"it": "Prodotto in primo piano",
+"ja": "おすすめ商品",
+"ko": "특별 상품",
+"nb": "Utvalgt produkt",
+"nl": "Uitgelicht product",
+"pt-BR": "Produto em destaque",
+"pt-PT": "Produto em destaque",
+"sv": "Utvald produkt",
+"th": "สินค้าที่แนะนำ",
+"zh-CN": "特色产品",
+"zh-TW": "精選產品"
+},
+"category": {
+"da": "Produkt",
+"de": "Produkt",
+"en": "Product",
+"es": "Producto",
+"fi": "Tuote",
+"fr": "Produit",
+"hi": "उत्पाद",
+"it": "Prodotto",
+"ja": "商品",
+"ko": "제품",
+"nb": "Produkt",
+"nl": "Product",
+"pt-BR": "Produto",
+"pt-PT": "Produto",
+"sv": "Produkt",
+"th": "สินค้า",
+"zh-CN": "产品",
+"zh-TW": "產品"
+}
+}
+]
+}
+{% endschema %}

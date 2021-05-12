@@ -1,0 +1,51 @@
+<div class="logo-section icons_block-wrapper desktop_only">
+  <div class="logo-list">
+
+    {% for block in section.blocks %}
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="logo_group text-center one-quarter">
+      <div class="icons_block">
+        <img src="{% if block.settings.iconsvg == blank %}{{ block.settings.icon | img_url: '300x' }}{% else %}{{ block.settings.iconsvg }}{% endif %}">
+      </div>
+      {% if block.settings.subtext != blank %}
+      <p class="icons_subtext">{{ block.settings.subtext }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="logo-section icons_block-wrapper mobile_only">
+  <div class="swiper-container logo-list icons-featured">
+    <div class="swiper-wrapper">
+
+      {% for block in section.blocks %}
+      <div class="swiper-slide">
+        <div class="logo_group text-center">
+          <div class="icons_block">
+            <img src="{% if block.settings.iconsvg == blank %}{{ block.settings.icon | img_url: '300x' }}{% else %}{{ block.settings.iconsvg }}{% endif %}">
+          </div>
+          {% if block.settings.subtext != blank %}
+          <p class="icons_subtext">{{ block.settings.subtext }}</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+
+  <script>
+    var iconsFeatured = new Swiper('.icons-featured', {
+      loop: true,
+      centeredSlides: true,
+      slidesPerView: 2,
+      spaceBetween: 10,
+      {% if section.settings.active_autoplay %}
+    autoplay: {
+      delay: {{ section.settings.speed_slider }},
+    }
+    {% endif %}
+    });
+  </script>
+</div>

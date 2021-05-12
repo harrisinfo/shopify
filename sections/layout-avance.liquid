@@ -1,0 +1,1451 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+{% unless section.settings.color_bg contains 'none' %}<div {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>{% endunless %}
+<style>
+  {% if section.settings.color_bg contains 'fix' %}
+  #layout-avance-{{ section.id }} {
+    background-color: {{ section.settings.color_bg_fix }}; 
+    max-width: 100%;
+  }{% endif %}
+  {% if section.settings.flex_invert_row %}
+  @media screen and (max-width: 589px) {
+    #layout-avance-{{ section.id }} .layout-avance {
+      flex-flow: wrap-reverse;
+    }
+  }
+  {% endif %}
+</style>
+<div id="layout-avance-{{ section.id }}" style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}">
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}{% if section.settings.no_margin %} no_margin{% endif %}">
+    <div class="page-width layout-avance feature-row" style="justify-content: {{ section.settings.justify }}">
+
+      {% for block in section.blocks %}
+      {% case block.settings.width %}
+      {% when '10%' %}
+      {%- assign block_width = 'one-tenth' -%}
+      {% when '17%' %}
+      {%- assign block_width = 'one-sixth' -%}
+      {% when '25%' %}
+      {%- assign block_width = 'one-quarter' -%}
+      {% when '33%' %}
+      {%- assign block_width = 'one-third' -%}
+      {% when '50%' %}
+      {%- assign block_width = 'one-half' -%}
+      {% when '66%' %}
+      {%- assign block_width = 'two-thirds' -%}
+      {% when '75%' %}
+      {%- assign block_width = 'three-quarters' -%}
+      {% when '83%' %}
+      {%- assign block_width = 'five-sixths' -%}
+      {% when '90%' %}
+      {%- assign block_width = 'nine-tenths' -%}
+      {% when '100%' %}
+      {%- assign block_width = 'one-whole' -%}
+      {% endcase %}
+
+      {% case block.settings.width_sm %}
+      {% when '33%' %}
+      {%- assign block_width_sm = 'small--one-third' -%}
+      {% when '50%' %}
+      {%- assign block_width_sm = 'small--one-half' -%}
+      {% when '100%' %}
+      {%- assign block_width_sm = 'small--one-whole' -%}
+      {% endcase %}
+
+      {% if block.type == 'text' %}
+
+      <style>
+        .image--{{ block.id }} { 
+          width: {{ block.settings.width_image }}%; display: block;
+        }
+        @media screen and (max-width: 589px) {
+          .image--{{ block.id }} { 
+            width: {{ block.settings.width_sm_image }}%; 
+          }
+        }
+        .layout-item__text{{ block.id }} .featured-row__subtext {
+          color: {{ block.settings.color_desc }};
+        }
+      </style>
+      {% capture block_image_text %}
+      {% if block.settings.image != blank %}
+      <noscript>
+        {{ block.settings.image | img_url: '600x600' | img_tag: block.settings.image.alt, 'feature-row__image-no-js' }}
+      </noscript>
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="feature-row__image-wrapper layout-avance-text-block-image">
+        {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+        <img class="text-block-image-style lazyload image--{{ block.id }}"
+             src="{{ block.settings.image | img_url: '300x300' }}"
+             data-src="{{ img_url }}"
+             data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+             data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+             data-sizes="auto"
+             alt="{{ block.settings.image.alt | escape }}">
+      </div>
+      {% endif %}
+      {% endcapture %}
+
+      <div class="layout-item layout-item__text{{ block.id }} {{ block_width }} {{ block_width_sm }} align--{{ block.settings.self_alignement }} {{ block.settings.alignement }}">
+        <div class="layout-item-text">
+          {% if block.settings.position_image contains 'top' %}
+          {{ block_image_text }}
+          {% endif %}
+          {% if block.settings.title != blank %}
+          <h2 {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="{{ block.settings.choix_title }}" style="color: {{ block.settings.color_title }};">{{ block.settings.title }}</h2>
+          {% endif %}
+          {% if block.settings.text != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="rte-setting featured-row__subtext {{ block.settings.alignement }}"><p>{{ block.settings.text }}</p></div>
+          {% endif %}
+          {% if block.settings.position_image contains 'bottom' %}
+          {{ block_image_text }}
+          {% endif %}
+          {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %}>
+            <a href="{{ block.settings.button_link }}" class="{{ block.settings.choix_style_bouton }}">
+              {{ block.settings.button_label }}
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% endif %}
+
+      {% if block.type == 'image' %}
+      <div class="layout-item {{ block_width }} {{ block_width_sm }} align--{{ block.settings.self_alignement }}">
+        {% if block.settings.image_sm_choose %}<div class="desktop_only">{% endif %}
+        {% if block.settings.image != blank %}
+        <noscript>
+          {{ block.settings.image | img_url: '600x600' | img_tag: block.settings.image.alt, 'feature-row__image-no-js' }}
+        </noscript>
+        <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="feature-row__image-wrapper" style="padding-top:{{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100}}%;">
+          {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="feature-row__image lazyload"
+               src="{{ block.settings.image | img_url: '300x300' }}"
+               data-src="{{ img_url }}"
+               data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+               data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ block.settings.image.alt | escape }}">
+        </div>
+        {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+        {% if block.settings.image_sm_choose %}
+        </div>
+        <div class="mobile_only">
+          {% if block.settings.image_sm != blank %}
+          <noscript>
+            {{ block.settings.image_sm | img_url: '600x600' | img_tag: block.settings.image_sm.alt, 'feature-row__image-no-js' }}
+          </noscript>
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="feature-row__image-wrapper" style="padding-top:{{ 1 | divided_by: block.settings.image_sm.aspect_ratio | times: 100}}%;">
+            {% assign img_url_sm = block.settings.image_sm | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+            <img class="feature-row__image lazyload"
+                 src="{{ block.settings.image_sm | img_url: '300x300' }}"
+                 data-src="{{ img_url_sm }}"
+                 data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                 data-aspectratio="{{ block.settings.image_sm.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ block.settings.image_sm.alt | escape }}">
+          </div>
+          {% else %}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if block.type == 'icon' %}
+      <style>.subtext-{{ block.id }} { color: {{ block.settings.color_subtext }};{% if block.settings.subtext_bolder %}font-weight: bold;{% endif %} }</style>
+      <div id="{{ block.id }}" class="layout-item {{ block_width }} small--one-whole align--{{ block.settings.self_alignement }} {{ block.settings.alignement }}">
+        <div class="layout-item-text">
+          {% if block.settings.title != blank %}
+          <h2 {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="{{ block.settings.choix_title }}" style="color: {{ block.settings.color_title }};">{{ block.settings.title }}</h2>
+          {% endif %}
+          {% if block.settings.text != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="rte-setting featured-row__subtext" style="color: {{ block.settings.color_desc }};"><p>{{ block.settings.text }}</p></div>
+          {% endif %}
+          {% include 'icons-block' %}
+          {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %}>
+            <a href="{{ block.settings.button_link }}" class="{{ block.settings.choix_style_bouton }}">
+              {{ block.settings.button_label }}
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if block.type == 'before_after' %}
+      <div class="layout-item {{ block_width }} {{ block_width_sm }} align--{{ block.settings.self_alignement }}">
+        <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="cocoen">
+          <img src="{{ block.settings.image_before | img_url: 'master' }}" alt="{{ block.settings.image_before.alt | escape }}">
+          <img src="{{ block.settings.image_after | img_url: 'master' }}" alt="{{ block.settings.image_after.alt | escape }}">
+        </div>
+      </div>
+      {% endif %}
+
+      {% if block.type == 'video' %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="layout-item {{ block_width }} {{ block_width_sm }} align--{{ block.settings.self_alignement }}">
+        <div class="video-wrapper{% if block.settings.image_sm_choose %} desktop_only{% endif %}">
+          {% if block.settings.video_url == blank %}
+          <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% else %}
+          {% if block.settings.video_url.type == "youtube" %}
+          <iframe src="//www.youtube.com/embed/{{ block.settings.video_url.id }}?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% if block.settings.video_url.type == "vimeo" %}
+          <iframe src="//player.vimeo.com/video/{{ block.settings.video_url.id }}?color={{ settings.color_secondary | remove: "#" }}&byline=0&portrait=0&badge=0" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% endif %}
+        </div>
+        {% if block.settings.image_sm_choose %}
+        <div class="video-wrapper mobile_only">
+          {% if block.settings.video_url_sm == blank %}
+          <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% else %}
+          {% if block.settings.video_url_sm.type == "youtube" %}
+          <iframe src="//www.youtube.com/embed/{{ block.settings.video_url_sm.id }}?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% if block.settings.video_url_sm.type == "vimeo" %}
+          <iframe src="//player.vimeo.com/video/{{ block.settings.video_url_sm.id }}?color={{ settings.color_secondary | remove: "#" }}&byline=0&portrait=0&badge=0" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+          {% endif %}
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if block.type == 'video_custom' %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ block.settings.animation_img }}"{% endif %} class="layout-item {{ block_width }} {{ block_width_sm }} align--{{ block.settings.self_alignement }}">
+        {% if block.settings.image_sm_choose %}<div class="desktop_only">{% endif %}
+        {% if block.settings.video_url != blank %}
+        <video class="layout-item-video" poster="{{ block.settings.image | img_url: '1000x' }}" autoplay muted loop playsinline>
+          <source src="{{ block.settings.video_url }}" type="video/mp4">
+        </video>
+        {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+        {% if block.settings.image_sm_choose %}
+        </div>
+        <div class="mobile_only">
+          {% if block.settings.video_url_sm != blank %}
+          <video class="layout-item-video" poster="{{ block.settings.image_sm | img_url: '600x' }}" autoplay muted loop playsinline>
+            <source src="{{ block.settings.video_url_sm }}" type="video/mp4">
+          </video>
+          {% else %}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% unless section.settings.color_bg contains 'none' %}</div>{% endunless %}
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Layout Avancé",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Layout avancé"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "select",
+"id": "justify",
+"options": [
+{ "value": "center", "label": "Centrer"},
+{ "value": "space-around", "label": "Équilibrer"},
+{ "value": "between", "label": "Coller sur les côtés"},
+{ "value": "flex-end", "label": "Coller à droite"},
+{ "value": "flex-start", "label": "Coller à gauche"}
+],
+"label": "Alignement des blocs",
+"default": "between",
+"info": "Visible quand 2 blocs (ou plus) sur une même ligne ne forment pas 100%. Par exemple un texte à 25% et une image à 66% : la ligne n'est pas complète et vous pouvez modifier l'espacement entre les différents blocs."
+},
+{
+"type": "checkbox",
+"id": "flex_invert_row",
+"label": "Inverser le sens de la ligne sur mobile",
+"default": false
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "checkbox",
+"id": "no_margin",
+"label": "Supprimer les espacements latéraux",
+"info": "Pour un rendu en mosaïque"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "text",
+"name": "Texte",
+"settings": [
+{
+"type": "select",
+"id": "alignement",
+"options": [
+{ "value": "text-left", "label": "Gauche"},
+{ "value": "text-center", "label": "Centrer"},
+{ "value": "text-right", "label": "Droite"}
+],
+"label": "Alignement des éléments du bloc",
+"default": "text-left"
+},
+{
+"type": "text",
+"id": "title",
+"label": "Titre",
+"default": "Layout Avancé - Bloc Texte"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "color",
+"id": "color_title",
+"label": "Couleur du titre",
+"default": "#000"
+},
+{
+"type": "textarea",
+"id": "text",
+"label": "Texte",
+"default": "Associez un texte de grande taille à une image pour mettre en relief le produit, la collection ou l'article de blog de votre choix. Ajoutez des informations sur la disponibilité ou le style. Vous pouvez même fournir un avis."
+},
+{
+"type": "color",
+"id": "color_desc",
+"label": "Couleur de la description",
+"default": "#000"
+},
+{
+"type": "text",
+"id": "button_label",
+"label": "Texte du bouton"
+},
+{
+"type": "url",
+"id": "button_link",
+"label": "Lien du bouton"
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton",
+"default": "btn--1"
+},
+{
+"type": "header",
+"content": "Image intégrée"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},
+{
+"type":      "range",
+"id":        "width_image",
+"min":       20,
+"max":        100,
+"step":       5,
+"unit":       "%",
+"label":     "Taille de l'image sur pc",
+"default":   90
+},
+{
+"type":      "range",
+"id":        "width_sm_image",
+"min":       20,
+"max":        100,
+"step":       5,
+"unit":       "%",
+"label":     "Taille de l'image sur mobile",
+"default":   80
+},
+{
+"type": "select",
+"id": "position_image",
+"options": [
+{ "value": "top", "label": "En-haut"},
+{ "value": "bottom", "label": "En-bas"}
+],
+"label": "Position de l'image",
+"default": "bottom"
+},
+{
+"type": "header",
+"content": "Styles du bloc"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur de l'image sur pc",
+"default": "50%",
+"options": [
+{
+"value": "10%",
+"label": "10%"
+},
+{
+"value": "17%",
+"label": "17%"
+},
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "83%",
+"label": "83%"
+},
+{
+"value": "90%",
+"label": "90%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "self_alignement",
+"options": [
+{ "value": "top-middle", "label": "En-haut"},
+{ "value": "center", "label": "Centrer"},
+{ "value": "bottom-middle", "label": "En-bas"}
+],
+"label": "Alignement du bloc sur la hauteur",
+"default": "center"
+},
+{
+"type": "select",
+"id": "width_sm",
+"label": "Largeur de l'image sur mobile",
+"default": "100%",
+"options": [
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+}
+]
+},
+{
+"type": "icon",
+"name": "Icônes",
+"settings": [
+{
+"type": "select",
+"id": "alignement",
+"options": [
+{ "value": "text-left", "label": "Gauche"},
+{ "value": "text-center", "label": "Centrer"},
+{ "value": "text-right", "label": "Droite"}
+],
+"label": "Alignement des éléments du bloc",
+"default": "text-left"
+},
+{
+"type": "header",
+"content": "Icône"
+},
+{
+"type": "color",
+"id": "color_subtext",
+"label": "Couleur des sous-titres des icônes",
+"default": "#000"
+},
+{
+"type": "checkbox",
+"id": "subtext_bolder",
+"label": "Mettre en gras les sous-titres des icônes",
+"default": true
+},
+{
+"type": "image_picker",
+"id": "icon1",
+"label": "Icône 1 (JPG, PNG, GIF)"
+},
+{
+"type": "text",
+"id": "icon1svg",
+"label": "Icône 1 (SVG, recommandé)"
+},
+{
+"type": "text",
+"id": "subtext1",
+"label": "Sous-titre icône 1",
+"default": "Promouvoir un bénéfice"
+},
+{
+"type": "image_picker",
+"id": "icon2",
+"label": "Icône 2 (JPG, PNG, GIF)"
+},
+{
+"type": "text",
+"id": "icon2svg",
+"label": "Icône 2 (SVG, recommandé)"
+},
+{
+"type": "text",
+"id": "subtext2",
+"label": "Sous-titre icône 2",
+"default": "Promouvoir un bénéfice"
+},
+{
+"type": "image_picker",
+"id": "icon3",
+"label": "Icône 3 (JPG, PNG, GIF)"
+},
+{
+"type": "text",
+"id": "icon3svg",
+"label": "Icône 3 (SVG, recommandé)"
+},
+{
+"type": "text",
+"id": "subtext3",
+"label": "Sous-titre icône 3",
+"default": "Promouvoir un bénéfice"
+},
+{
+"type": "image_picker",
+"id": "icon4",
+"label": "Icône 4 (JPG, PNG, GIF)"
+},
+{
+"type": "text",
+"id": "icon4svg",
+"label": "Icône 4 (SVG, recommandé)"
+},
+{
+"type": "text",
+"id": "subtext4",
+"label": "Sous-titre icône 4",
+"default": "Promouvoir un bénéfice"
+},
+{
+"type": "header",
+"content": "Textes"
+},
+{
+"type": "text",
+"id": "title",
+"label": "Titre",
+"default": "Layout Avancé - Bloc Icônes"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "color",
+"id": "color_title",
+"label": "Couleur du titre",
+"default": "#000"
+},
+{
+"type": "textarea",
+"id": "text",
+"label": "Texte",
+"default": "Associez un texte de grande taille à une image pour mettre en relief le produit, la collection ou l'article de blog de votre choix. Ajoutez des informations sur la disponibilité ou le style. Vous pouvez même fournir un avis."
+},
+{
+"type": "color",
+"id": "color_desc",
+"label": "Couleur du texte",
+"default": "#000"
+},
+{
+"type": "text",
+"id": "button_label",
+"label": "Texte du bouton"
+},
+{
+"type": "url",
+"id": "button_link",
+"label": "Lien du bouton"
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton",
+"default": "btn--1"
+},
+{
+"type": "header",
+"content": "Styles du bloc"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur de l'image sur pc",
+"default": "50%",
+"options": [
+{
+"value": "10%",
+"label": "10%"
+},
+{
+"value": "17%",
+"label": "17%"
+},
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "83%",
+"label": "83%"
+},
+{
+"value": "90%",
+"label": "90%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "self_alignement",
+"options": [
+{ "value": "top-middle", "label": "En-haut"},
+{ "value": "center", "label": "Centrer"},
+{ "value": "bottom-middle", "label": "En-bas"}
+],
+"label": "Alignement du bloc sur la hauteur",
+"default": "center"
+},
+{
+"type": "paragraph",
+"content": "Sur mobile, le block 'icônes' prendra toujours 100% de largeur."
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+}
+]
+},
+{
+"type": "image",
+"name": "Image",
+"settings": [
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},
+{
+"type": "checkbox",
+"id": "image_sm_choose",
+"label": "Afficher une image différente sur mobile",
+"default": false
+},
+{
+"type": "image_picker",
+"id": "image_sm",
+"label": "Image sur mobile",
+"info": "Fonctionne seulement si la case ci-dessus est cochée."
+},
+{
+"type": "header",
+"content": "Styles du bloc"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur de l'image sur pc",
+"default": "50%",
+"options": [
+{
+"value": "10%",
+"label": "10%"
+},
+{
+"value": "17%",
+"label": "17%"
+},
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "83%",
+"label": "83%"
+},
+{
+"value": "90%",
+"label": "90%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "self_alignement",
+"options": [
+{ "value": "top-middle", "label": "En-haut"},
+{ "value": "center", "label": "Centrer"},
+{ "value": "bottom-middle", "label": "En-bas"}
+],
+"label": "Alignement du bloc sur la hauteur",
+"default": "center"
+},
+{
+"type": "select",
+"id": "width_sm",
+"label": "Largeur de l'image sur mobile",
+"default": "100%",
+"options": [
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+}
+]
+},
+{
+"type": "video",
+"name": "Vidéo YouTube/Vimeo",
+"settings": [
+{
+"type": "video_url",
+"id": "video_url",
+"label": "Lien de la vidéo",
+"accept": [
+"youtube",
+"vimeo"
+]
+},
+{
+"type": "checkbox",
+"id": "image_sm_choose",
+"label": "Afficher une vidéo différente sur mobile",
+"default": false
+},
+{
+"type": "video_url",
+"id": "video_url_sm",
+"label": "Lien de la vidéo qui va s'afficher sur mobile",
+"accept": [
+"youtube",
+"vimeo"
+]
+},
+{
+"type": "header",
+"content": "Styles du bloc"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur du bloc sur pc",
+"default": "50%",
+"options": [
+{
+"value": "10%",
+"label": "10%"
+},
+{
+"value": "17%",
+"label": "17%"
+},
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "83%",
+"label": "83%"
+},
+{
+"value": "90%",
+"label": "90%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "self_alignement",
+"options": [
+{ "value": "top-middle", "label": "En-haut"},
+{ "value": "center", "label": "Centrer"},
+{ "value": "bottom-middle", "label": "En-bas"}
+],
+"label": "Alignement du bloc sur la hauteur",
+"default": "center"
+},
+{
+"type": "select",
+"id": "width_sm",
+"label": "Largeur de l'image sur mobile",
+"default": "100%",
+"options": [
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+}
+]
+},
+{
+"type": "before_after",
+"name": "Slider avant/après",
+"settings": [
+{
+"type": "image_picker",
+"id": "image_before",
+"label": "Image avant"
+},
+{
+"type": "image_picker",
+"id": "image_after",
+"label": "Image après"
+},
+{
+"type": "header",
+"content": "Styles du bloc"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur du bloc sur pc",
+"default": "50%",
+"options": [
+{
+"value": "10%",
+"label": "10%"
+},
+{
+"value": "17%",
+"label": "17%"
+},
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "83%",
+"label": "83%"
+},
+{
+"value": "90%",
+"label": "90%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "self_alignement",
+"options": [
+{ "value": "top-middle", "label": "En-haut"},
+{ "value": "center", "label": "Centrer"},
+{ "value": "bottom-middle", "label": "En-bas"}
+],
+"label": "Alignement du bloc sur la hauteur",
+"default": "center"
+},
+{
+"type": "select",
+"id": "width_sm",
+"label": "Largeur de l'image sur mobile",
+"default": "100%",
+"options": [
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+}
+]
+},
+{
+"type": "video_custom",
+"name": "Vidéo personnalisée",
+"settings": [
+{
+"type": "paragraph",
+"content": "Cette section vous permet de mettre en boucle une vidéo. C'est jusqu'à 10x moins lourd qu'un GIF alors préférez les vidéos aux GIFs. Uploadez la vidéo dans les fichiers de votre compte Shopify, puis collez le lien ci-dessous."
+},
+{
+"type": "text",
+"id": "video_url",
+"label": "Lien de la vidéo"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Miniature de la vidéo sur pc",
+"info": "Cette image s'affichera lors du chargement de la vidéo. Nous vous conseillons de prendre une capture d'écran de la première seconde de la vidéo pour que le rendu soit fluide."
+},
+{
+"type": "checkbox",
+"id": "image_sm_choose",
+"label": "Afficher une vidéo différente sur mobile",
+"default": false
+},
+{
+"type": "text",
+"id": "video_url_sm",
+"label": "Lien de la vidéo qui va s'afficher sur mobile"
+},
+{
+"type": "image_picker",
+"id": "image_sm",
+"label": "Miniature de la vidéo sur mobile",
+"info": "Cette image s'affichera lors du chargement de la vidéo. Nous vous conseillons de prendre une capture d'écran de la première seconde de la vidéo pour que le rendu soit fluide."
+},
+{
+"type": "header",
+"content": "Styles du bloc"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur du bloc sur pc",
+"default": "50%",
+"options": [
+{
+"value": "10%",
+"label": "10%"
+},
+{
+"value": "17%",
+"label": "17%"
+},
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "83%",
+"label": "83%"
+},
+{
+"value": "90%",
+"label": "90%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "self_alignement",
+"options": [
+{ "value": "top-middle", "label": "En-haut"},
+{ "value": "center", "label": "Centrer"},
+{ "value": "bottom-middle", "label": "En-bas"}
+],
+"label": "Alignement du bloc sur la hauteur",
+"default": "center"
+},
+{
+"type": "select",
+"id": "width_sm",
+"label": "Largeur de l'image sur mobile",
+"default": "100%",
+"options": [
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+}
+]
+}
+],
+"presets": [
+{
+"name": "Layout Avancé",
+"category": {
+"da": "Avanceret layout",
+"de": "Komplizierteres Layout",
+"en": "Advanced layout",
+"es": "Diseño avanzado",
+"fi": "Monimutkaisempi layout",
+"fr": "Mise en page avancée",
+"hi": "उन्नत लेआउट",
+"it": "Layout avanzato",
+"ja": "高度なレイアウト",
+"ko": "고급 레이아웃",
+"nb": "Avansert oppsett",
+"nl": "Geavanceerde opmaak",
+"pt-BR": "Layout avançado",
+"pt-PT": "Esquema avançado",
+"sv": "Avancerad layout",
+"th": "เลย์เอาท์ขั้นสูง",
+"zh-CN": "高级布局",
+"zh-TW": "進階版面配置"
+},
+"blocks": [
+{ "type": "text" },
+{ "type": "image" }
+]
+}
+]
+}
+{% endschema %}

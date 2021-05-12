@@ -1,0 +1,59 @@
+{%- if settings.theme_licence_email != '' and  settings.theme_licence_key != '' -%}
+<script>
+  var action = "connect_theme";
+  var email = "{{settings.theme_licence_email}}";
+  var licence_key = "{{settings.theme_licence_key}}";
+  var url = document.domain;
+
+  jQuery.ajax({
+    url: "https://webdevelopment111.com/story-theme/test_index.php",
+    type: "POST",
+    data: {
+      action: action,
+      email: email,
+      licence_key: licence_key,
+      url:url
+    },
+    success: function (data, textStatus, jqXHR) {
+
+      
+      if(data == "VALID"){
+        var flag_display_status =localStorage.getItem('flag_display_status');
+        if(flag_display_status == "true"){
+
+        }
+        else
+        {
+          var URL = jQuery(location).attr("href");              
+          var test ="design_theme_id"; 
+
+          if(URL.indexOf(test) != -1){
+            setTimeout(function(){
+              alert("Votre licence a été activée avec succès. Sauvegarder votre thème maintenant.");	
+            }, 1000);
+          }
+
+          localStorage.setItem('flag_display_status', "true");
+        }
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert("Somthing is wrong Please try again");
+      jQuery('.theme-status').show();
+      jQuery('.theme').remove();
+      jQuery('body').hide();
+      console.log(jqXHR);
+      console.log(textStatus);
+      console.log(errorThrown);
+      e.preventDefault();
+      optionTarget = e.target;  
+    }
+  });
+
+</script>
+
+{%- else -%}
+
+
+
+{%- endif -%}

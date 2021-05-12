@@ -1,0 +1,564 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="logo-trust-{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>
+  <style>
+    {% if section.settings.color_bg contains 'fix' %}
+    #logo-trust-{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }}; 
+      max-width: 100%;
+    }{% endif %}
+    .trust_title--{{ section.id }} {
+      color: {{ section.settings.color_title }}!important;
+    }
+    #logo-trust-{{ section.id }} svg path {
+      fill: {{ section.settings.color_svg }}!important;
+    }
+    #logo-trust-{{ section.id }} .h4 {
+      color: {{ section.settings.color_text }}!important;
+    }
+    {% if section.settings.append_dots %}
+    #logo-trust-{{ section.id }} .slick-dots li button:before, #logo-trust-{{ section.id }} .slick-dots li a:before { border-color: {{ section.settings.color_dots }}!important; background: transparent; }
+    #logo-trust-{{ section.id }} .slick-dots li.slick-active button:before, #logo-trust-{{ section.id }} .slick-dots li.slick-active a:before { background: {{ section.settings.color_dots }}!important; border-color: {{ section.settings.color_dots }}!important; }
+    {% endif %}
+  </style>
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %} small--no_padding">
+    {% if section.settings.title_section != blank %}
+    <div class="section-header text-{{ section.settings.alignement_text }}">
+      <h2 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="{{ section.settings.choix_title }} h1 section-header__title trust_title--{{ section.id }}">{{ section.settings.title_section }}</h2>
+    </div>
+    {% endif %}
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="logo-section desktop_only">
+      <div class="logo-list" style="align-items: center; justify-content: center;">
+        {% for block in section.blocks %}
+        {% case block.settings.width %}
+        {% when '25%' %}
+        {%- assign block_width = 'one-quarter' -%}
+        {% when '33%' %}
+        {%- assign block_width = 'one-third' -%}
+        {% when '50%' %}
+        {%- assign block_width = 'one-half' -%}
+        {% when '66%' %}
+        {%- assign block_width = 'two-thirds' -%}
+        {% when '75%' %}
+        {%- assign block_width = 'three-quarters' -%}
+        {% when '100%' %}
+        {%- assign block_width = 'one-whole' -%}
+        {% endcase %}
+        <div class="logo_group {{ block_width }} align--{{ block.settings.alignment }}" {{ block.shopify_attributes }}>
+          <div class="logo--image">
+            {% case block.settings.icon %}
+            {% when 'refund' %}
+            {% include 'icon-refund' %}
+            {% when 'support' %}
+            {% include 'icon-support' %}
+            {% when 'truck' %}
+            {% include 'icon-truck' %}
+            {% when 'secure-payment' %}
+            {% include 'icon-secure-payment' %}
+            {% when 'customers' %}
+            {% include 'icon-customers' %}
+            {% when 'numero-un' %}
+            {% include 'icon-numero-un' %}
+            {% when 'livraison' %}
+            {% include 'icon-livraison' %}
+            {% when 'bon' %}
+            {% include 'icon-bon' %}
+            {% when 'custom' %}
+            <img src="{{ block.settings.customsvg }}" class="logo--image">
+            {% endcase %}
+          </div>
+          {% if block.settings.title != blank %}<p class="title-logo_list h4"><b>{{ block.settings.title }}</b></p>{% endif %}
+          {% if block.settings.text != blank %}<p class="title-logo_text">{{ block.settings.text }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="logo-section logo-section-{{ section.id }} mobile_only">
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="logo-carousel logo-trust-footer-{{ section.id }} logo-list">
+        {% for block in section.blocks %}
+        <div class="logo_group align--{{ block.settings.alignment }}" {{ block.shopify_attributes }}>
+          <div class="logo--image">
+            {% case block.settings.icon %}
+            {% when 'refund' %}
+            {% include 'icon-refund' %}
+            {% when 'support' %}
+            {% include 'icon-support' %}
+            {% when 'truck' %}
+            {% include 'icon-truck' %}
+            {% when 'secure-payment' %}
+            {% include 'icon-secure-payment' %}
+            {% when 'customers' %}
+            {% include 'icon-customers' %}
+            {% when 'numero-un' %}
+            {% include 'icon-numero-un' %}
+            {% when 'livraison' %}
+            {% include 'icon-livraison' %}
+            {% when 'bon' %}
+            {% include 'icon-bon' %}
+            {% when 'custom' %}
+            <img src="{{ block.settings.customsvg }}" class="logo--image">
+            {% endcase %}
+          </div>
+          {% if block.settings.title != blank %}<p class="title-logo_list h4"><b>{{ block.settings.title }}</b></p>{% endif %}
+          {% if block.settings.text != blank %}<p class="title-logo_text">{{ block.settings.text }}</p>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <script>
+        $(document).ready(function(){
+          $('.logo-trust-footer-{{ section.id }}').slick({
+            {% if section.settings.append_dots %}
+            dots: true,
+            {% endif %}
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            {% if section.settings.active_autoplay %}
+            autoplay: true,
+            autoplaySpeed: {{ section.settings.speed_slider }},
+            {% endif %}
+            arrows: false,
+            asNavFor: null,
+            focusOnSelect: false,
+            centerMode: true,
+            centerPadding: '20%',
+          });
+        });
+      </script>
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  {% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  {% include 'dividers-wave' %}
+  {% when 'straight' %}
+  {% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  {% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  {% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  {% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  {% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  {% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Trust Badge Footer",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Logo de confiance"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Textes"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du titre",
+"default": "center",
+"options": [
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "text",
+"id": "title_section",
+"label": "Titre",
+"default": "Pourquoi nous faire confiance ?"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "color",
+"id": "color_title",
+"label": "Couleur du titre",
+"default": "#000"
+},
+{
+"type": "color",
+"id": "color_svg",
+"label": "Couleur des icônes",
+"default": "#000"
+},
+{
+"type": "color",
+"id": "color_text",
+"label": "Couleur des sous-titres des icônes",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Styles du carousel"
+},
+{
+"type": "checkbox",
+"id": "active_autoplay",
+"label": "Activer les slides automatiques",
+"default": true
+},
+{
+"type":      "range",
+"id":        "speed_slider",
+"min":       500,
+"max":        5000,
+"step":       100,
+"unit":       "ms",
+"label":     "Vitesse du carousel",
+"default":   2000
+},
+{
+"type": "checkbox",
+"id": "append_dots",
+"label": "Afficher la pagination",
+"default": true
+},
+{
+"type": "color",
+"id": "color_dots",
+"label": "Couleur de la pagination",
+"default": "#777777"
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation des éléments",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "logo",
+"name": "Logo",
+"settings": [
+{
+"type": "textarea",
+"id": "title",
+"label": "Titre",
+"default": "Avantage 1"
+},
+{
+"type": "textarea",
+"id": "text",
+"label": "Texte",
+"default": "Décrivez un avantage pour permettre au visiteur d'avoir confiance en votre site."
+},
+{
+"type": "select",
+"id": "icon",
+"label": "Icône",
+"default": "support",
+"options": [
+{
+"value": "refund",
+"label": "Garantie"
+},
+{
+"value": "support",
+"label": "SAV"
+},
+{
+"value": "truck",
+"label": "Livraison sécurisée"
+},
+{
+"value": "secure-payment",
+"label": "Paiements sécurisés"
+},
+{
+"value": "customers",
+"label": "Satisfaction client"
+},
+{
+"value": "numero-un",
+"label": "Numéro 1"
+},
+{
+"value": "livraison",
+"label": "Expédition en 48h"
+},
+{
+"value": "bon",
+"label": "Recommandé"
+},
+{
+"value": "custom",
+"label": "Icône personnalisée"
+}
+]
+},
+{
+"type": "textarea",
+"id": "customsvg",
+"label": "Icône personnalisée",
+"info": "Cliquez ici pour personnaliser vos icônes gratuitement (format SVG uniquement) : [cliquez ici](https://flaticon.com)"
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur du conteneur (pc)",
+"default": "25%",
+"options": [
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "alignment",
+"label": "Alignement",
+"default": "top-middle",
+"options": [
+{
+"value": "top-left",
+"label": "Gauche"
+},
+{
+"value": "top-middle",
+"label": "Au milieu"
+},
+{
+"value": "top-right",
+"label": "Droite"
+}
+]
+}
+]
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

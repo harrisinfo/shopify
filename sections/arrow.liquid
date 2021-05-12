@@ -1,0 +1,321 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<style>
+  .arrow-style svg {
+    width: {{ section.settings.height_arrow }}px;
+    height: {{ section.settings.height_arrow }}px;
+  }
+  .arrow-style svg path {
+    fill: {{ section.settings.color_arrow }};
+  }
+  @media screen and (max-width: 589px) {
+          .arrow-style svg {
+    width: {{ section.settings.height_arrow_sm }}px;
+    height: {{ section.settings.height_arrow_sm }}px;
+  }
+        }
+</style>
+
+<div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width">
+  <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}" {% endif %} class="arrow-container">
+    <div class="{% if section.settings.choice_double %}one-half arrow-left{% else %}one-whole{% endif %}">
+      <div class="arrow-style">
+        {% case section.settings.arrow_type %}
+        {% when '1' %}
+        {% include 'arrow-style-1' %}
+        {% when '2' %}
+        {% include 'arrow-style-2' %}
+        {% when '3' %}
+        {% include 'arrow-style-3' %}
+        {% when '4' %}
+        {% include 'arrow-style-4' %}
+        {% when '5' %}
+        {% include 'arrow-style-5' %}
+        {% endcase %}
+      </div>
+
+    </div>
+    {% if section.settings.choice_double %}
+    <div class="one-half arrow-right">
+      <div class="arrow-style">
+        {% case section.settings.arrow_type %}
+        {% when '1' %}
+        {% include 'arrow-style-1' %}
+        {% when '2' %}
+        {% include 'arrow-style-2' %}
+        {% when '3' %}
+        {% include 'arrow-style-3' %}
+        {% when '4' %}
+        {% include 'arrow-style-4' %}
+        {% when '5' %}
+        {% include 'arrow-style-5' %}
+        {% endcase %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Flèche",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Flèche"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "select",
+"id": "arrow_type",
+"label": "Type de flèche",
+"default": "1",
+"options": [
+{
+"value": "1",
+"label": "Style 1"
+},
+{
+"value": "2",
+"label": "Style 2"
+},
+{
+"value": "3",
+"label": "Style 3"
+},
+{
+"value": "4",
+"label": "Style 4"
+},
+{
+"value": "5",
+"label": "Style 5"
+}
+]
+},
+{
+"type":      "range",
+"id":        "height_arrow",
+"min":       30,
+"max":        200,
+"step":       10,
+"unit":       "px",
+"label":     "Taille des flèches sur pc",
+"default":   100
+},
+{
+"type":      "range",
+"id":        "height_arrow_sm",
+"min":       20,
+"max":        100,
+"step":       10,
+"unit":       "px",
+"label":     "Taille des flèches sur mobile",
+"default":   40
+},
+{
+"type": "color",
+"id": "color_arrow",
+"label": "Couleur des flèche",
+"default": "#000"
+},
+{
+"type": "checkbox",
+"id": "choice_double",
+"label": "Avoir 2 flèches de chaque côté",
+"default": true
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de la flèche",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"presets": [
+{
+"name": "Flèche",
+"category": {
+"da": "Billede",
+"de": "Foto",
+"en": "Image",
+"es": "Imagen",
+"fi": "Kuva",
+"fr": "Image",
+"hi": "इमेज",
+"it": "Immagine",
+"ja": "画像",
+"ko": "이미지",
+"nb": "Bilde",
+"nl": "Afbeelding",
+"pt-BR": "Imagem",
+"pt-PT": "Imagem",
+"sv": "Bild",
+"th": "รูปภาพ",
+"zh-CN": "图片",
+"zh-TW": "圖片"
+}
+}
+]
+}
+{% endschema %}

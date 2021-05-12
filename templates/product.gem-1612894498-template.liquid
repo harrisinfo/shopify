@@ -1,0 +1,19 @@
+<!-- /templates/product.liquid -->
+{% comment %}
+  The contents of the product.liquid template can be found in /sections/product-template.liquid
+{% endcomment %}
+
+
+{% section 'product-template' %}
+{% section 'product-recommendations' %}
+{% if settings.active_faq_product_page %}{% section 'faq-full-page' %}{% endif %}
+{% if settings.active_carousel_branding_product_page %}{% section 'reviews-branding' %}{% endif %}
+
+
+{% if collection %}
+  <hr class="hr--clear">
+  <div class="text-center">
+    <a href="{{ collection.url }}" class="return-link">&larr; {{ 'products.general.collection_return' | t: collection: collection.title }}</a>
+  </div>
+{% endif %}
+					

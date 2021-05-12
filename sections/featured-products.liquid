@@ -1,0 +1,561 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="featured-products--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg_select contains 'shade' %}class="wrapper-color"{% endif %}>
+
+  <style>
+    {% if section.settings.color_bg_select contains 'fix' %}
+    #featured-products--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #featured-products--{{ section.id }} p, #featured-products--{{ section.id }} .h3, #featured-products--{{ section.id }} i, #featured-products--{{ section.id }} span, #featured-products--{{ section.id }} .btn-grid {
+      color: {{ section.settings.color_text_fix }}; 
+    }
+    #featured-products--{{ section.id }} .btn-grid {
+      border-color: {{ section.settings.color_text_fix }};
+    }
+    {% endif %}
+    {% unless section.settings.color_bg_select contains 'none' %}#featured-products--{{ section.id }} .btn-grid { background: transparent; }{% endunless %}
+  </style>
+  <div id="CollectionSection" data-section-id="{{ section.id }}" data-section-type="collection-template" data-grid-type="{{ section.settings.collection_products_grid }}">
+    <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}">
+      
+      {% if section.settings.show_all and section.settings.title_section != blank %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="section-header header_collection_slider">
+        <h2 class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.title_section }}</h2>
+        <a href="{{ collections[section.settings.home_featured_products].url }}">{{ section.settings.text_show_all }}</a>
+      </div>
+      {% else %}
+      {% if section.settings.title_section != blank %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="section-header text-{{ section.settings.alignement_text }}">
+        <h2 class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.title_section }}</h2>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <div class="grid-uniform recommendations">
+
+        {% comment %}
+        Loop through products in your Frontpage collection.
+        This collection is created by default, but you must add products to it.
+        See the snippet 'snippets/product-grid-collage.liquid'.
+
+        `is_reverse_row_product`, `three_row_index_product`, `collection_product_count_product`, and `divisible_by_three_product` are
+        all used by 'snippets/product-grid-collage.liquid'
+        {% endcomment %}
+        
+        {% case section.settings.width_sm %}
+        {% when '50%' %}
+        {% assign grid_item_width_sm = 'small--one-half ' %}
+        {% when '100%' %}
+        {% assign grid_item_width_sm = 'small--one-whole ' %}
+        {% endcase %}
+
+        {% case section.settings.width_md %}
+        {% when '20%' %}
+        {% assign grid_item_width_md = 'medium--one-fifth' %}
+        {% when '25%' %}
+        {% assign grid_item_width_md = 'medium--one-quarter' %}
+        {% when '33%' %}
+        {% assign grid_item_width_md = 'medium--one-third' %}
+        {% when '50%' %}
+        {% assign grid_item_width_md = 'medium--one-half' %}
+        {% when '100%' %}
+        {% assign grid_item_width_md = 'medium--one-whole' %}
+        {% endcase %}
+
+        {% case section.settings.width_lg %}
+        {% when '20%' %}
+        {% assign grid_item_width = 'large--one-fifth' %}
+        {% when '25%' %}
+        {% assign grid_item_width = 'large--one-quarter' %}
+        {% when '33%' %}
+        {% assign grid_item_width = 'large--one-third' %}
+        {% when '50%' %}
+        {% assign grid_item_width = 'large--one-half' %}
+        {% when '100%' %}
+        {% assign grid_item_width = 'large--one-whole' %}
+        {% endcase %}
+
+        {% if section.settings.home_featured_products == blank or collections[section.settings.home_featured_products] == empty or collections[section.settings.home_featured_products].products_count == 0 %}
+
+        {% comment %}
+        For onboarding new users to your theme, we add some default products and onboarding tutorials to help populate their store
+        {% endcomment %}
+        {% unless emptyState %}
+        {% assign emptyState = true %}
+        {% endunless %}
+        {% include 'onboarding-featured-products' %}
+
+        {% else %}
+
+        {% for product in collections[section.settings.home_featured_products].products limit: section.settings.limit_number %}
+        {% include 'product-grid-item' %}
+        {% endfor %}
+
+        {% endif %}
+      </div>
+      
+      {% if section.settings.show_all and section.settings.title_section == blank %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="section-header text-center">
+        <a class="show_all_collection_slider" href="{{ collections[section.settings.home_featured_products].url }}">{{ section.settings.text_show_all }}</a>
+      </div>
+      {% endif %}
+      
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": {
+"da": "Udvalgt kollektion",
+"de": "Vorgestellte Kategorie",
+"en": "Featured collection",
+"es": "colección destacada",
+"fi": "Esittelyssä oleva kokoelma",
+"fr": "Collection en vedette",
+"hi": "फ़ीचर्ड कलेक्शन",
+"it": "Collezione in evidenza",
+"ja": "特集コレクション",
+"ko": "추천 컬렉션",
+"nb": "Utvalgt samling",
+"nl": "Uitgelichte collectie",
+"pt-BR": "Coleção em destaque",
+"pt-PT": "Coleção em destaque",
+"sv": "Utvald kollektion",
+"th": "คอลเลกชันแนะนำ",
+"zh-CN": "特色产品系列",
+"zh-TW": "精選商品系列"
+},
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Collection vedette"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la section"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du titre",
+"default": "center",
+"options": [
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "text",
+"id": "title_section",
+"label": {
+"da": "Overskrift",
+"de": "Überschrift",
+"en": "Heading",
+"es": "Título",
+"fi": "Otsake",
+"fr": "Titre",
+"hi": "शीर्षक",
+"it": "Heading",
+"ja": "見出し",
+"ko": "제목",
+"nb": "Overskrift",
+"nl": "Kop",
+"pt-BR": "Título",
+"pt-PT": "Título",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标题",
+"zh-TW": "標題"
+},
+"default": {
+"da": "Udvalgt kollektion",
+"de": "Vorgestellte Kategorie",
+"en": "Featured collection",
+"es": "colección destacada",
+"fi": "Esittelyssä oleva kokoelma",
+"fr": "Collection en vedette",
+"hi": "फ़ीचर्ड कलेक्शन",
+"it": "Collezione in evidenza",
+"ja": "特集コレクション",
+"ko": "추천 컬렉션",
+"nb": "Fremhevet samling",
+"nl": "Uitgelichte collectie",
+"pt-BR": "Coleção em destaque",
+"pt-PT": "Coleção em destaque",
+"sv": "Utvald kollektion",
+"th": "คอลเลกชันแนะนำ",
+"zh-CN": "特色产品系列",
+"zh-TW": "精選商品系列"
+}
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "collection",
+"id": "home_featured_products",
+"label": {
+"da": "Kollektion",
+"de": "Kategorie",
+"en": "Collection",
+"es": "Colección",
+"fi": "Kokoelma",
+"fr": "Collection",
+"hi": "कलेक्शन",
+"it": "Collezione",
+"ja": "コレクション",
+"ko": "컬렉션",
+"nb": "Samling",
+"nl": "Collectie",
+"pt-BR": "Coleção",
+"pt-PT": "Coleção",
+"sv": "Produktserie",
+"th": "คอลเลกชัน",
+"zh-CN": "收藏",
+"zh-TW": "商品系列"
+}
+},
+{
+"type":      "range",
+"id":        "limit_number",
+"min":       2,
+"max":        16,
+"step":       1,
+"unit":       "nb",
+"label":     "Nombre de produits à afficher",
+"default":   6
+},
+{
+"type": "checkbox",
+"id": "show_desc",
+"label": "Afficher un extrait de la description",
+"default": false
+},
+{
+"type": "checkbox",
+"id": "show_all",
+"label": "Afficher un lien 'Voir tout' qui redirige sur la collection",
+"default": true,
+"info": "Si la section a un titre, le lien sera affiché à droite du titre sur ordinateur. Sinon il sera affiché sur tous les appareils en-dessous du slider."
+},
+{
+"type": "text",
+"id": "text_show_all",
+"label": "Texte du lien 'Voir tout'",
+"default": "Voir tous les produits"
+},
+{
+"type": "header",
+"content": "Nombre de produits à afficher"
+},
+{
+"type": "select",
+"id": "width_sm",
+"label": "Nombre de produits par ligne sur téléphone",
+"default": "50%",
+"options": [
+{ "value": "50%", "label": "2" },
+{ "value": "100%", "label": "1" }
+]
+},
+{
+"type": "select",
+"id": "width_md",
+"label": "Nombre de produits par ligne sur tablette",
+"default": "25%",
+"options": [
+{ "value": "20%", "label": "5" },
+{ "value": "25%", "label": "4" },
+{ "value": "33%", "label": "3" },
+{ "value": "50%", "label": "2" },
+{ "value": "100%", "label": "1" }
+]
+},
+{
+"type": "select",
+"id": "width_lg",
+"label": "Nombre de produits par ligne sur ordinateur",
+"default": "20%",
+"options": [
+{ "value": "20%", "label": "5" },
+{ "value": "25%", "label": "4" },
+{ "value": "33%", "label": "3" },
+{ "value": "50%", "label": "2" },
+{ "value": "100%", "label": "1" }
+]
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg_select",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{ "value": "shade", "label": "Dégradé" },
+{ "value": "fix", "label": "Couleur unie" },
+{ "value": "none", "label": "Pas de couleur" }
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_text",
+"label": "Animation des éléments",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"presets": [
+{
+"name": {
+"da": "Udvalgt kollektion",
+"de": "Vorgestellte Kategorie",
+"en": "Featured collection",
+"es": "colección destacada",
+"fi": "Esittelyssä oleva kokoelma",
+"fr": "Collection en vedette",
+"hi": "फ़ीचर्ड कलेक्शन",
+"it": "Collezione in evidenza",
+"ja": "特集コレクション",
+"ko": "추천 컬렉션",
+"nb": "Utvalgt samling",
+"nl": "Uitgelichte collectie",
+"pt-BR": "Coleção em destaque",
+"pt-PT": "Coleção em destaque",
+"sv": "Utvald kollektion",
+"th": "คอลเลกชันแนะนำ",
+"zh-CN": "特色产品系列",
+"zh-TW": "精選商品系列"
+},
+"category": {
+"da": "Kollektion",
+"de": "Kategorie",
+"en": "Collection",
+"es": "Colección",
+"fi": "Kokoelma",
+"fr": "Collection",
+"hi": "कलेक्शन",
+"it": "Collezione",
+"ja": "コレクション",
+"ko": "컬렉션",
+"nb": "Samling",
+"nl": "Collectie",
+"pt-BR": "Coleção",
+"pt-PT": "Coleção",
+"sv": "Produktserie",
+"th": "คอลเลกชัน",
+"zh-CN": "收藏",
+"zh-TW": "商品系列"
+}
+}
+],
+"blocks": []
+}
+{% endschema %}

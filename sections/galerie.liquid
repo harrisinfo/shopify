@@ -1,0 +1,489 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div data-section-id="{{ section.id }}" data-section-type="galerie">
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width{% if section.settings.full_width %}_full_width{% endif %}{% if section.settings.no_margin %} no_margin{% endif %}">
+    {% if section.settings.title_section != blank %}
+    <div class="section-header text-{{ section.settings.alignement_text }}">
+      <h2 class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.title_section }}</h2>
+    </div>
+    {% endif %}
+
+    <div class="galerie-container">
+      {% for block in section.blocks %}
+      {% case block.settings.width %}
+      {% when '10%' %}
+      {%- assign block_width = 'one-tenth' -%}
+      {% when '17%' %}
+      {%- assign block_width = 'one-sixth' -%}
+      {% when '25%' %}
+      {%- assign block_width = 'one-quarter' -%}
+      {% when '33%' %}
+      {%- assign block_width = 'one-third' -%}
+      {% when '50%' %}
+      {%- assign block_width = 'one-half' -%}
+      {% when '66%' %}
+      {%- assign block_width = 'two-thirds' -%}
+      {% when '75%' %}
+      {%- assign block_width = 'three-quarters' -%}
+      {% when '83%' %}
+      {%- assign block_width = 'five-sixths' -%}
+      {% when '90%' %}
+      {%- assign block_width = 'nine-tenths' -%}
+      {% when '100%' %}
+      {%- assign block_width = 'one-whole' -%}
+      {% endcase %}
+
+      {% case block.settings.width_sm %}
+      {% when '50%' %}
+      {%- assign block_width_sm = 'small--one-half' -%}
+      {% when '100%' %}
+      {%- assign block_width_sm = 'small--one-whole' -%}
+      {% endcase %}
+
+      <style>
+        .galerie-image-container-{{ block.id }} {
+          width: 100%;
+          display: block;
+          overflow: hidden;
+          height: {{ section.settings.height_image }}px;
+          background-image: url({{ block.settings.image | img_url: 'master' }});
+          background-repeat: no-repeat;
+          background-position: {{ block.settings.bg_position }};
+          background-size: cover;
+        }
+
+        @media screen and (max-width: 589px) {
+          .galerie-image-container-{{ block.id }} {
+            height: {{ section.settings.height_image_sm }}px;
+          }
+        }
+      </style>
+
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="galerie-item {{ block_width_sm }} {{ block_width }}" {{ block.shopify_attributes }}>
+        <div data-section-id="{{ section.id }}" data-section-type="galerie-section">
+          {% if block.settings.image != blank %}
+          <noscript>
+            {{ block.settings.image | img_url: '600x600' | img_tag: block.settings.image.alt, 'feature-row__image-no-js' }}
+          </noscript>
+          <div class="galerie-image-container-{{ block.id }}">
+          </div>
+          {% else %}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      {% if section.blocks.size == 0 %}
+      <div class="wrapper">
+        <div class="grid">
+          <div class="grid__item">
+            <div class="rte text-center">
+              {{ 'home_page.onboarding.no_content' | t }}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Galerie",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Galerie"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Textes"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du titre",
+"default": "center",
+"options": [
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "text",
+"id": "title_section",
+"label": {
+"da": "Overskrift",
+"de": "Überschrift",
+"en": "Heading",
+"es": "Título",
+"fi": "Otsake",
+"fr": "Titre",
+"hi": "शीर्षक",
+"it": "Heading",
+"ja": "見出し",
+"ko": "제목",
+"nb": "Overskrift",
+"nl": "Kop",
+"pt-BR": "Título",
+"pt-PT": "Título",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标题",
+"zh-TW": "標題"
+},
+"default": "Galerie"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "header",
+"content": "Taille des images"
+},
+{
+"type":      "range",
+"id":        "height_image",
+"min":       100,
+"max":        1000,
+"step":       50,
+"unit":       "px",
+"label":     "Hauteur des images sur pc",
+"default":   500
+},
+{
+"type":      "range",
+"id":        "height_image_sm",
+"min":       50,
+"max":        800,
+"step":       50,
+"unit":       "px",
+"label":     "Hauteur des images sur mobile",
+"default":   400
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "checkbox",
+"id": "full_width",
+"label": "Prendre toute la largeur"
+},
+{
+"type": "checkbox",
+"id": "no_margin",
+"label": "Supprimer les espacements latéraux",
+"info": "Pour un rendu en mosaïque"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation des éléments",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"blocks": [
+{
+"type": "image",
+"name": "Image",
+"settings": [
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},
+{
+"type": "select",
+"id": "bg_position",
+"label": "Position de l'image",
+"default": "center",
+"options": [
+{
+"value": "top",
+"label": "En-haut"
+},
+{
+"value": "center",
+"label": "Centrer"
+},
+{
+"value": "bottom",
+"label": "En-bas"
+}
+]
+},
+{
+"type": "select",
+"id": "width",
+"label": "Largeur de l'image sur pc",
+"default": "50%",
+"options": [
+{
+"value": "10%",
+"label": "10%"
+},
+{
+"value": "17%",
+"label": "17%"
+},
+{
+"value": "25%",
+"label": "25%"
+},
+{
+"value": "33%",
+"label": "33%"
+},
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "66%",
+"label": "66%"
+},
+{
+"value": "75%",
+"label": "75%"
+},
+{
+"value": "83%",
+"label": "83%"
+},
+{
+"value": "90%",
+"label": "90%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+},
+{
+"type": "select",
+"id": "width_sm",
+"label": "Largeur de l'image sur mobile",
+"default": "50%",
+"options": [
+{
+"value": "50%",
+"label": "50%"
+},
+{
+"value": "100%",
+"label": "100%"
+}
+]
+}
+]
+}
+],
+"presets": [
+{
+"name": "Galerie",
+"category": {
+"da": "Billede",
+"de": "Foto",
+"en": "Image",
+"es": "Imagen",
+"fi": "Kuva",
+"fr": "Image",
+"hi": "इमेज",
+"it": "Immagine",
+"ja": "画像",
+"ko": "이미지",
+"nb": "Bilde",
+"nl": "Afbeelding",
+"pt-BR": "Imagem",
+"pt-PT": "Imagem",
+"sv": "Bild",
+"th": "รูปภาพ",
+"zh-CN": "图片",
+"zh-TW": "圖片"
+},
+"blocks": [
+{
+"type": "image"
+},
+{
+"type": "image"
+},
+{
+"type": "image"
+}
+]
+}
+]
+}
+{% endschema %}

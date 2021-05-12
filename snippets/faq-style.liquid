@@ -1,0 +1,49 @@
+<div class="container">
+  {% for block in section.blocks %}
+  {% if block.type == 'accordion' %}
+  <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="toggle">
+    <div class="toggle-title ">
+      <p>
+        <span class="title-name">{{ block.settings.title }}</span>
+      </p>
+    </div>
+    <div class="toggle-inner">
+      <p>{{ block.settings.text }}</p>
+      {% if block.settings.image != blank %}
+      <noscript>
+        {{ block.settings.image | img_url: '600x600' | img_tag: block.settings.image.alt, 'feature-row__image-no-js' }}
+      </noscript>
+      <div class="feature-row__image-wrapper desktop_only" style="margin: 0 auto; width: {{ block.settings.width_image }}%;">
+        {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+        <img class="feature-row__image-style one-whole lazyload"
+             src="{{ block.settings.image | img_url: '300x300' }}"
+             data-src="{{ img_url }}"
+             data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+             data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+             data-sizes="auto"
+             alt="{{ block.settings.image.alt | escape }}">
+      </div>
+      <div class="feature-row__image-wrapper mobile_only" style="margin: 0 auto; width: {{ block.settings.width_image_sm }}%;">
+        {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+        <img class="feature-row__image-style one-whole lazyload"
+             src="{{ block.settings.image | img_url: '300x300' }}"
+             data-src="{{ img_url }}"
+             data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+             data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+             data-sizes="auto"
+             alt="{{ block.settings.image.alt | escape }}">
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+  {% if block.type == 'title' %}
+  <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="section-header text-center">
+    <h2 class="{{ block.settings.choix_title }} section-header__title h1">{{ block.settings.title }}</h2>
+  </div>
+  {% if block.settings.text != blank %}
+  <div class="rte-setting subtext_faq_full_page text-center large--two-thirds medium--two-thirds small--one-whole">{{ block.settings.text }}</div>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+</div>

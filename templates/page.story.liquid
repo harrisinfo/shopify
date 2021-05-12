@@ -1,0 +1,3 @@
+<style>.main-content { padding: 0!important; }</style>
+{% if settings.timeline_order == "layout-timeline-cta" %}{% section 'layout-timeline' %}{% section 'timeline' %}{% section 'cta' %}{% endif %}
+{% if settings.timeline_order == "timeline-layout-cta" %}{% section 'timeline' %}{% section 'layout-timeline' %}{% section 'cta' %}{% endif %}

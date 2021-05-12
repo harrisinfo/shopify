@@ -1,0 +1,869 @@
+{%- style -%}
+{%- assign logo_max_width = section.settings.logo_max_width -%}
+{%- assign logo_max_width_sm = section.settings.logo_max_width_sm -%}
+{%- assign header_color = section.settings.header_color -%}
+{%- assign header_bg_color = section.settings.header_bg_color -%}
+
+{%- if settings.menu_transparent and request.page_type == "index" -%}
+{%- assign header_transparent_color = section.settings.header_transparent_color -%}
+
+.site-header-transparent,
+.header-wrapper .site-nav__link,
+.header-wrapper .site-header__logo a,
+.header-wrapper .site-nav__dropdown-link,
+.header-wrapper .site-nav--has-dropdown > a.nav-focus,
+.header-wrapper .site-nav--has-dropdown.nav-hover > a,
+.header-wrapper .site-nav--has-dropdown:hover > a { 
+background: transparent!important; 
+color: {{ header_transparent_color }}!important;
+}
+.header-wrapper .burger-icon,
+.header-wrapper .site-nav--has-dropdown:hover > a:before,
+.header-wrapper .site-nav--has-dropdown > a.nav-focus:before,
+.header-wrapper .site-nav--has-dropdown.nav-hover > a:before {
+background: {{ header_transparent_color }}!important;
+}
+{%- if settings.menu_on_scroll -%}
+.nav-is-stuck .site-header-transparent,
+.nav-is-stuck .header-wrapper .site-nav__link,
+.nav-is-stuck .header-wrapper .site-header__logo a,
+.nav-is-stuck .header-wrapper .site-nav__dropdown-link,
+.nav-is-stuck .header-wrapper .site-nav--has-dropdown > a.nav-focus,
+.nav-is-stuck .header-wrapper .site-nav--has-dropdown.nav-hover > a,
+.nav-is-stuck .header-wrapper .site-nav--has-dropdown:hover > a { 
+color: {{ header_color }}!important;
+background-color: {{ header_bg_color }}!important;
+}
+.nav-is-stuck .header-wrapper .burger-icon,
+.nav-is-stuck .header-wrapper .site-nav--has-dropdown:hover > a:before,
+.nav-is-stuck .header-wrapper .site-nav--has-dropdown > a.nav-focus:before,
+.nav-is-stuck .header-wrapper .site-nav--has-dropdown.nav-hover > a:before {
+background: {{ header_color }}!important;
+}
+{%- endif -%}
+{%- endif -%}
+
+.site-header {
+{%- if section.settings.border_top_bottom -%}border-top: 1px solid {{ section.settings.color_border }};border-bottom: 1px solid {{ section.settings.color_border }};{%- endif -%}
+}
+
+.site-header,
+.site-nav__dropdown,
+.header-wrapper .site-nav__link,
+.header-wrapper .site-header__logo a,
+.header-wrapper .site-nav__dropdown-link,
+.header-wrapper .site-nav--has-dropdown > a.nav-focus,
+.header-wrapper .site-nav--has-dropdown.nav-hover > a,
+.header-wrapper .site-nav--has-dropdown:hover > a {
+color: {{ header_color }};
+background-color: {{ header_bg_color }};
+}
+
+.site-header,
+.header-wrapper .site-header__logo a:hover,
+.header-wrapper .site-header__logo a:focus,
+.header-wrapper .site-nav__link:hover,
+.header-wrapper .site-nav__link:focus,
+.header-wrapper .site-nav--has-dropdown a:hover,
+.header-wrapper .site-nav--has-dropdown > a.nav-focus:hover,
+.header-wrapper .site-nav--has-dropdown > a.nav-focus:focus,
+.header-wrapper .site-nav--has-dropdown .site-nav__link:hover,
+.header-wrapper .site-nav--has-dropdown .site-nav__link:focus,
+.header-wrapper .site-nav--has-dropdown.nav-hover > a:hover,
+.header-wrapper .site-nav__dropdown a:focus {
+color: {{ header_color | color_modify: 'alpha', 0.75 }};
+background-color: {{ header_bg_color }};
+}
+
+.header-wrapper .burger-icon,
+.header-wrapper .site-nav--has-dropdown:hover > a:before,
+.header-wrapper .site-nav--has-dropdown > a.nav-focus:before,
+.header-wrapper .site-nav--has-dropdown.nav-hover > a:before {
+background: {{ header_color }};
+}
+
+.header-wrapper .site-nav__link:hover .burger-icon {
+background: {{ header_color | color_modify: 'alpha', 0.75 }};
+}
+
+.site-header__logo img, logo-transparent-desktop img {
+width: {{ logo_max_width | append: 'px' }};
+max-width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+.site-header__logo img, logo-transparent-mobile img {
+width: {{ logo_max_width_sm | append: 'px' }};
+max-width: 100%;
+}
+}
+{% if settings.menu_style == "modern" %}
+.site-nav-modern-menu {
+margin-top: 20px;
+margin-bottom: 20px;
+border-top: 1px solid;
+border-bottom: 1px solid;
+}
+.nav-is-stuck .site-nav-modern-menu {
+border-top-color: {{ section.settings.header_color }};
+border-bottom-color: {{ section.settings.header_color }};
+}
+.site-nav-modern-menu {
+border-top-color: {{ section.settings.header_transparent_color }};
+border-bottom-color: {{ section.settings.header_transparent_color }};
+}
+{% endif %}
+{%- endstyle -%}
+<div data-section-id="{{ section.id }}" data-section-type="header-section" data-template="{{ request.page_type }}">
+  <div id="NavDrawer" class="drawer drawer--left">
+    {% include 'drawer-menu' %}
+  </div>
+  <div {% if settings.menu_on_scroll %}id="header"{% endif %} 
+       class="header-container drawer__header-container{% if settings.menu_on_scroll %} main-header{% endif %}">
+    <div class="header-wrapper" data-header-wrapper>
+      {% if section.settings.show_announcement %}
+      {% if section.settings.home_page_only == false or request.page_type == 'index' %}
+      <style>
+        .announcement-bar {
+          background: {% if section.settings.bg_color_announce %}{{ section.settings.color_bg_announce }}{% else %}linear-gradient(90deg, {{ settings.color_bg_linear }} 0%, {{ settings.color_bg_linear2 }} 100%){% endif %};
+        }
+        .announcement-bar__message, .announcement-bar__timer {
+          color: {{ section.settings.color_text }};
+        }
+      </style>
+
+      {% if section.settings.link == blank %}
+      <div class="announcement-bar">
+        {% else %}
+        <a href="{{ section.settings.link }}" class="announcement-bar announcement-bar--link">
+          {% endif %}
+          <div class="announcement">
+            {% if section.settings.type_announce == 'fix' %}
+            <div class="announcement-bar__message one-whole">
+              <p>{{ section.settings.announce }}</p>
+            </div>
+            {% endif %}
+            {% if section.settings.type_announce == 'offer' %}
+            <div class="announcement-bar__message small--one-whole one-quarter">
+              <p>{{ section.settings.announce }}</p>
+            </div>
+            {% endif %}
+            {% if section.settings.type_announce == 'timer' %}
+            <div class="announcement-bar__message small--one-whole one-half message_timer_announce">
+              <p>{{ section.settings.announce }}</p>
+            </div>
+            <div class="announcement-bar__timer small--one-whole one-half">
+              {% if settings.choice_timer == 'legal' %}
+              {% include 'timer-true' %}
+              {% else %}
+              {% if settings.false_timer_type == "short" %}
+              {% include 'timer', reset_in: "3 hours", end_date: "Sep 30, 2018" %}
+              {% elsif settings.false_timer_type == "middle" %}
+              {% include 'timer', reset_in: "2 days", end_date: "Sep 30, 2018" %}
+              {% else %}
+              {% include 'timer', reset_in: "10 days", end_date: "Sep 30, 2018" %}
+              {% endif %}
+              {% endif %}
+            </div>
+            {% endif %}
+            {% if section.settings.type_announce == 'offer' %}
+            <div class="announcement-bar__message small--one-whole three-quarters">
+              {% include 'slider-header' %}
+            </div>
+            {% endif %}
+            {% if section.settings.type_announce == 'fade' %}
+            <div class="announcement-bar__message one-whole">
+              {% include 'slider-header-fade' %}
+            </div>
+            {% endif %}
+          </div>
+          {% if section.settings.link == blank %}
+          </div>
+        {% else %}
+        </a>
+      {% endif %}
+
+      {% endif %}
+      {% endif %}
+
+      <header class="site-header{% if settings.menu_transparent and request.page_type == 'index' %} site-header-transparent{% endif %}" role="banner">
+        <div class="wrapper__header">
+          <div class="grid--full grid--table">
+
+            <div class="menu-header grid__item large--hide large--one-sixth one-quarter">
+              <div class="site-nav--open site-nav--mobile">
+                <button type="button" class="icon-fallback-text site-nav__link site-nav__link--burger js-drawer-open-button-left" aria-controls="NavDrawer">
+                  <span class="burger-icon burger-icon--top"></span>
+                  <span class="burger-icon burger-icon--mid"></span>
+                  <span class="burger-icon burger-icon--bottom"></span>
+                  <span class="fallback-text">{{ 'general.drawers.navigation' | t }}</span>
+                </button>
+              </div>
+            </div>
+            <div class="logo-header grid__item large--hide medium-down--one-half">{% include "site-logo-brooklyn" %}</div>
+
+            {% case settings.menu_style %}
+            {% when "brooklyn" %}
+            <div class="logo-header grid__item large--one-third medium-down--hide">{% include "site-logo-brooklyn" %}</div>
+            <nav class="grid__item large--two-thirds large--text-right medium-down--hide" role="navigation">{% include "site-nav-brooklyn" %}</nav>
+
+            {% when "classic" %}
+            <div class="logo-header grid__item large--one-fifth medium-down--hide">{% include "site-logo-classic" %}</div>
+            <nav class="grid__item large--three-fifths text-center medium-down--hide" role="navigation">{% include "site-nav-classic" %}</nav>
+            <div class="grid__item large--one-fifth text-right medium-down--hide">
+              <ul class="site-nav">
+                {% if shop.customer_accounts_enabled %}
+                <li class="site-nav__item site-nav__expanded-item site-nav__item--compressed">
+                  <a class="site-nav__link site-nav__link--icon" href="{{ routes.account_url }}">
+                    <span class="icon-fallback-text">
+                      <span class="icon icon-customer" aria-hidden="true"></span>
+                      <span class="fallback-text">
+                        {% if customer %}
+                        {{ 'layout.customer.account' | t }}
+                        {% else %}
+                        {{ 'layout.customer.log_in' | t }}
+                        {% endif %}
+                      </span>
+                    </span>
+                  </a>
+                </li>
+                {% endif %}
+
+                {% if section.settings.search == 'page' or section.settings.search == 'modal' %}
+                {% assign search_modal = true %}
+                {% if section.settings.search == 'page' %}
+                {% assign search_modal = false %}
+                {% endif %}
+                <li class="site-nav__item site-nav__item--compressed">
+                  <a href="{{ routes.search_url }}" class="site-nav__link site-nav__link--icon{% if search_modal %} js-toggle-search-modal{% endif %}" data-mfp-src="#SearchModal">
+                    <span class="icon-fallback-text">
+                      <span class="icon icon-search" aria-hidden="true"></span>
+                      <span class="fallback-text">{{ 'general.search.title' | t }}</span>
+                    </span>
+                  </a>
+                </li>
+                {% endif %}
+
+                <li class="site-nav__item site-nav__item--compressed">
+                  <a {% unless settings.cart_type == 'drawer' %}href="{{ routes.cart_url }}" {% endunless %}class="site-nav__link site-nav__link--icon cart-link js-drawer-open-button-right" aria-controls="CartDrawer">
+                    <p class="icon_cart_header">{{ section.settings.icon_cart_header }}</p>
+                    <span class="cart-link__bubble{% if cart.item_count > 0 %} cart-link__bubble--visible{% endif %}"></span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {% when "modern" %}
+            <div class="site-nav-modern-wrapper">
+              <div class="logo-header large--one-whole medium-down--hide">{% include "site-logo-modern" %}</div>
+              <div class="site-nav-modern-menu">
+                <div class="grid__item large--one-twelfth text-right medium-down--hide">
+                  <ul class="site-nav-modern">
+                    {% if shop.customer_accounts_enabled %}
+                    <li class="site-nav__item site-nav__expanded-item site-nav__item--compressed">
+                      <a class="site-nav__link site-nav__link--icon" href="{{ routes.account_url }}">
+                        <span class="icon-fallback-text">
+                          <span class="icon icon-customer" aria-hidden="true"></span>
+                          <span class="fallback-text">
+                            {% if customer %}
+                            {{ 'layout.customer.account' | t }}
+                            {% else %}
+                            {{ 'layout.customer.log_in' | t }}
+                            {% endif %}
+                          </span>
+                        </span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </div>
+                <nav class="large--ten-twelfths large--text-center medium-down--hide" role="navigation">{% include "site-nav-modern" %}</nav>
+                <div class="grid__item large--one-twelfth text-right medium-down--hide">
+                  <ul class="site-nav-modern">
+                    {% if section.settings.search == 'page' or section.settings.search == 'modal' %}
+                    {% assign search_modal = true %}
+                    {% if section.settings.search == 'page' %}
+                    {% assign search_modal = false %}
+                    {% endif %}
+                    <li class="site-nav__item site-nav__item--compressed">
+                      <a href="{{ routes.search_url }}" class="site-nav__link site-nav__link--icon{% if search_modal %} js-toggle-search-modal{% endif %}" data-mfp-src="#SearchModal">
+                        <span class="icon-fallback-text">
+                          <span class="icon icon-search" aria-hidden="true"></span>
+                          <span class="fallback-text">{{ 'general.search.title' | t }}</span>
+                        </span>
+                      </a>
+                    </li>
+                    {% endif %}
+
+                    <li class="site-nav__item site-nav__item--compressed">
+                      <a {% unless settings.cart_type == 'drawer' %}href="{{ routes.cart_url }}" {% endunless %}class="site-nav__link site-nav__link--icon cart-link js-drawer-open-button-right" aria-controls="CartDrawer">
+                        <p class="icon_cart_header">{{ section.settings.icon_cart_header }}</p>
+                        <span class="cart-link__bubble{% if cart.item_count > 0 %} cart-link__bubble--visible{% endif %}"></span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {% endcase %}
+
+            <div class="icon-no-padding-header grid__item large--hide one-quarter">
+              <div class="site-nav--mobile text-right">
+                <a {% unless settings.cart_type == 'drawer' %}href="{{ routes.cart_url }}" {% endunless %} class="site-nav__link cart-link js-drawer-open-button-right" aria-controls="CartDrawer">
+                  <p class="icon_cart_header">{{ section.settings.icon_cart_header }}</p>
+                  <span class="cart-link__bubble{% if cart.item_count > 0 %} cart-link__bubble--visible{% endif %}"></span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </header>
+    </div>
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+"name": {
+"da": "Overskrift",
+"de": "Header",
+"en": "Header",
+"es": "Encabezado",
+"fi": "Ylätunniste",
+"fr": "En-tête",
+"hi": "हैडर",
+"it": "header",
+"ja": "ヘッダー",
+"ko": "헤더",
+"nb": "Header",
+"nl": "Koptekst",
+"pt-BR": "Cabeçalho",
+"pt-PT": "Cabeçalho",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标头",
+"zh-TW": "標頭"
+},
+"settings": [
+{
+"type": "checkbox",
+"id": "logo_letters",
+"label": "Afficher le logo de toutes lettres",
+"default": true,
+"info": "En cochant cette case, le logo sera le nom de la boutique tel qu'il est écrit dans les réglages de votre compte Shopify. Vous pouvez le modifier en [cliquant ici](/admin/settings/general)"
+},
+{
+"type": "image_picker",
+"id": "logo",
+"label": "Logo sur pc (format JPG, PNG)"
+},
+{
+"type": "text",
+"id": "logo_svg",
+"label": "Lien du logo en format SVG sur pc (conseillé)"
+},
+{
+"type": "image_picker",
+"id": "logo_sm",
+"label": "Logo sur mobile (format JPG, PNG)"
+},
+{
+"type": "text",
+"id": "logo_svg_sm",
+"label": "Lien du logo en format SVG sur mobile (conseillé)"
+},
+{
+"type": "range",
+"id": "logo_max_width",
+"label": "Largeur personnalisée du logo",
+"min": 50,
+"max": 260,
+"step": 5,
+"unit": "px",
+"default": 180
+},
+{
+"type": "range",
+"id": "logo_max_width_sm",
+"label": "Largeur personnalisée du logo sur mobile",
+"min": 50,
+"max": 260,
+"step": 5,
+"unit": "px",
+"default": 150
+},
+{
+"type": "color",
+"id": "header_color",
+"label": {
+"da": "Links og ikoner",
+"de": "Links und Symbole",
+"en": "Links and icons",
+"es": "Enlaces e íconos",
+"fi": "Linkit ja kuvakkeet",
+"fr": "Liens et icônes",
+"hi": "लिंक और आइकन",
+"it": "Link e icone",
+"ja": "リンクとアイコン",
+"ko": "링크와 아이콘",
+"nb": "Koblinger og ikoner",
+"nl": "Links en pictogrammen",
+"pt-BR": "Links e ícones",
+"pt-PT": "Ligações e ícones",
+"sv": "Länkar och ikoner",
+"th": "ลิงก์และไอคอน",
+"zh-CN": "链接和图标",
+"zh-TW": "連結與圖示"
+},
+"default": "#000000"
+},
+{
+"type": "color",
+"id": "header_bg_color",
+"label": "Couleur de l'arrière-plan du menu",
+"default": "#ffffff"
+},
+{
+"type": "checkbox",
+"id": "border_top_bottom",
+"label": "Afficher une bordure en haut et en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "select",
+"id": "icon_cart_header",
+"options": [
+{ "value": "<i class='fas fa-shopping-cart'></i>", "label": "Caddie classique" },
+{ "value": "<i class='fal fa-shopping-cart'></i>", "label": "Caddie épuré" },
+{ "value": "<i class='fas fa-shopping-bag'></i>", "label": "Sac classique" },
+{ "value": "<i class='fal fa-shopping-bag'></i>", "label": "Sac épuré" }
+],
+"default": "<i class='fal fa-shopping-cart'></i>",
+"label": "Icône du panier"
+},
+{
+"type": "header",
+"content": "Styles du menu transparent"
+},
+{
+"type": "image_picker",
+"id": "logo_transparent",
+"label": "Logo transparent sur pc (format JPG, PNG)"
+},
+{
+"type": "text",
+"id": "logo_transparent_svg",
+"label": "Lien du logo transparent en format SVG sur pc (conseillé)"
+},
+{
+"type": "image_picker",
+"id": "logo_transparent_sm",
+"label": "Logo transparent sur mobile (format JPG, PNG)"
+},
+{
+"type": "text",
+"id": "logo_transparent_svg_sm",
+"label": "Lien du logo transparent en format SVG sur mobile (conseillé)"
+},
+{
+"type": "color",
+"id": "header_transparent_color",
+"label": "Couleur des liens et icônes sur le fond transparent",
+"default": "#ffffff"
+},
+{
+"type": "header",
+"content": "Navigation"
+},
+{
+"type": "select",
+"id": "search",
+"options": [
+{
+"value": "modal",
+"label": {
+"da": "Modus",
+"de": "Modal",
+"en": "Modal",
+"es": "Modal",
+"fi": "Modaalinen",
+"fr": "Fenêtre modale",
+"hi": "मोडल",
+"it": "Modal",
+"ja": "モーダル",
+"ko": "모달",
+"nb": "Panel",
+"nl": "Modaal venster",
+"pt-BR": "Modal",
+"pt-PT": "Modal",
+"sv": "Modal",
+"th": "โมดอล",
+"zh-CN": "模式",
+"zh-TW": "互動視窗"
+}
+},
+{
+"value": "page",
+"label": {
+"da": "Side",
+"de": "Seite",
+"en": "Page",
+"es": "Página",
+"fi": "Sivu",
+"fr": "Page",
+"hi": "पेज",
+"it": "Pagina",
+"ja": "ページ",
+"ko": "페이지",
+"nb": "Side",
+"nl": "Pagina",
+"pt-BR": "Página",
+"pt-PT": "Página",
+"sv": "Sida",
+"th": "หน้า",
+"zh-CN": "页面",
+"zh-TW": "頁面"
+}
+},
+{
+"value": "none",
+"label": {
+"da": "Ingen",
+"de": "Keine",
+"en": "None",
+"es": "Ninguno",
+"fi": "Ei mitään",
+"fr": "Aucune",
+"hi": "कोई नहीं",
+"it": "Nessuno",
+"ja": "なし",
+"ko": "없음",
+"nb": "Ingen",
+"nl": "Geen",
+"pt-BR": "Nenhum",
+"pt-PT": "Nenhum",
+"sv": "Inga",
+"th": "ไม่มี",
+"zh-CN": "无",
+"zh-TW": "無"
+}
+}
+],
+"label": {
+"da": "Søgetype",
+"de": "Suchtyp",
+"en": "Search type",
+"es": "Tipo de búsqueda",
+"fi": "Hakutyyppi",
+"fr": "Type de recherche",
+"hi": "खोजें की विधि",
+"it": "Tipo di ricerca",
+"ja": "検索タイプ",
+"ko": "검색 유형",
+"nb": "Søketype",
+"nl": "Zoektype",
+"pt-BR": "Tipo de pesquisa",
+"pt-PT": "Tipo de pesquisa",
+"sv": "Söktyp",
+"th": "ประเภทของการค้นหา",
+"zh-CN": "搜索类型",
+"zh-TW": "搜尋類型"
+}
+},
+{
+"type": "link_list",
+"id": "main_menu_link_list",
+"label": {
+"da": "Menu",
+"de": "Menü",
+"en": "Menu",
+"es": "Menú",
+"fi": "Valikko",
+"fr": "Menu",
+"hi": "मेनू",
+"it": "Menu",
+"ja": "メニュー",
+"ko": "메뉴",
+"nb": "Meny",
+"nl": "Menu",
+"pt-BR": "Menu",
+"pt-PT": "Menu",
+"sv": "Meny",
+"th": "เมนู",
+"zh-CN": "菜单",
+"zh-TW": "選單"
+},
+"default": "main-menu",
+"info": {
+"da": "Menuen komprimeres til en menuknap, hvis linkene er for lange. [Få mere at vide](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"de": "Wenn Links zu lang sind, wird das Menü eingeklappt und als Menü-Schaltfläche angezeigt. [Mehr Informationen](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"en": "The menu will collapse into a menu button if links are too long. [Learn more](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"es": "El menú se contraerá en un botón de menú si los enlaces son demasiado largos. [Más información](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"fi": "Valikko kutistuu valikkopainikkeeksi, jos linkit ovat liian pitkiä. [Lisätietoja](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"fr": "Le menu sera réduit à un bouton de menu si les liens sont trop longs. [En savoir plus](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"hi": "यदि लिंक बहुत लंबे हैं, तो मेनू एक मेनू बटन में संक्षिप्त हो जाएगा. [अधिक जानें](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"it": "Il menu si ridurrà a un pulsante menu se i link sono troppo lunghi. [Maggiori informazioni](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"ja": "リンクが長すぎる場合、メニューがメニューボタンに折りたたまれます。[詳しくはこちら](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"ko": "링크가 너무 길면 메뉴가 메뉴 버튼으로 축소됩니다. [자세히 알아보기](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"nb": "Menyen slås sammen til en menyknapp hvis koblingene er for lange. [Finn ut mer](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"nl": "Het menu zal inklappen tot een menuknop als de links te lang zijn. [Meer informatie](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"pt-BR": "O menu ficará oculto em um botão de menu se os links forem longos demais. [Saiba mais](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"pt-PT": "O menu será fechado num botão de menu se as ligações forem demasiado compridas. [Saiba mais](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"sv": "Menyn kommer att kollapsa till en menyknapp om länkarna är för långa. [Läs mer](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"th": "เมนูนี้จะย่อลงเป็นปุ่มเมนูในกรณีที่ลิงก์ยาวเกินไป [ดูข้อมูลเพิ่มเติม](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"zh-CN": "如果链接过长，菜单将折叠成菜单按钮。[了解详细信息](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)",
+"zh-TW": "如果連結太長，選單會收合為選單按鈕。[深入瞭解](https://help.shopify.com/manual/using-themes/themes-by-shopify/brooklyn#navigation-tips-tips-specific)"
+}
+},
+{
+"type": "link_list",
+"id": "drawer_bottom_link_list",
+"label": {
+"da": "Sekundær sidebjælkemenu",
+"de": "Zusätzliches Menü",
+"en": "Secondary sidebar menu",
+"es": "Menú adicional",
+"fi": "Sivupalkkivalikko",
+"fr": "Menu supplémentaire",
+"hi": "माध्यमिक साइडबार मेनू",
+"it": "Menu aggiuntivo",
+"ja": "追加メニュー",
+"ko": "보조 사이드바 메뉴",
+"nb": "Sekundær meny i sidefeltet",
+"nl": "Secundair zijbalkmenu",
+"pt-BR": "Menu adicional",
+"pt-PT": "Menu lateral secundário",
+"sv": "Sekundär sidofältsmeny",
+"th": "เมนูแถบด้านข้างรอง",
+"zh-CN": "辅助侧边栏菜单",
+"zh-TW": "次要側邊欄選單"
+},
+"default": "footer"
+},
+{
+"type": "checkbox",
+"id": "drawer_search_enable",
+"label": {
+"da": "Aktivér søgning",
+"de": "Suche aktivieren",
+"en": "Enable search",
+"es": "Habilitar búsqueda",
+"fi": "Ota hakutoiminto käyttöön",
+"fr": "Activer la recherche",
+"hi": "खोज सक्षम करें",
+"it": "Abilita ricerca",
+"ja": "検索を有効にする",
+"ko": "검색 활성화",
+"nb": "Aktiver søk",
+"nl": "Zoeken inschakelen",
+"pt-BR": "Habilitar pesquisa",
+"pt-PT": "Ativar pesquisa",
+"sv": "Aktivera sökning",
+"th": "เปิดใช้การค้นหา",
+"zh-CN": "启用搜索",
+"zh-TW": "啟用搜索"
+}
+},
+{
+"type": "header",
+"content": {
+"da": "Meddelelseslinje",
+"de": "Ankündigungsleiste",
+"en": "Announcement bar",
+"es": "Barra de anuncios",
+"fi": "Ilmoituspalkki",
+"fr": "Barre d'annonces",
+"hi": "घोषणा बार",
+"it": "Barra degli annunci",
+"ja": "告知バー",
+"ko": "공지 표시줄",
+"nb": "Kunngjøringslinje",
+"nl": "Aankondigingsbalk",
+"pt-BR": "Barra de avisos",
+"pt-PT": "Barra de comunicado",
+"sv": "Meddelandefält",
+"th": "แถบประกาศ",
+"zh-CN": "公告栏",
+"zh-TW": "公告列"
+}
+},
+{
+"type": "checkbox",
+"id": "show_announcement",
+"label": {
+"da": "Vis meddelelse",
+"de": "Ankündigung anzeigen",
+"en": "Show announcement",
+"es": "Mostrar anuncio",
+"fi": "Näytä ilmoitus",
+"fr": "Afficher l'annonce",
+"hi": "घोषणा दिखाएं",
+"it": "Mostra annuncio",
+"ja": "告知を表示する",
+"ko": "공지 표시",
+"nb": "Vis kunngjøring",
+"nl": "Aankondiging weergeven",
+"pt-BR": "Exibir anúncio",
+"pt-PT": "Mostrar comunicado",
+"sv": "Visa tillkännagivande",
+"th": "แสดงประกาศ",
+"zh-CN": "显示公告",
+"zh-TW": "顯示公告"
+},
+"default": false
+},
+{
+"type": "checkbox",
+"id": "home_page_only",
+"label": {
+"da": "Kun startside",
+"de": "Nur Startseite",
+"en": "Home page only",
+"es": "Solo página de inicio",
+"fi": "Vain etusivu",
+"fr": "Page d'accueil uniquement",
+"hi": "केवल होमपेज",
+"it": "Solo home page",
+"ja": "ホームページのみ",
+"ko": "홈페이지만",
+"nb": "Kun på startsiden",
+"nl": "Alleen homepage",
+"pt-BR": "Apenas na página inicial",
+"pt-PT": "Apenas a página inicial",
+"sv": "Endast hemsida",
+"th": "หน้าแรกเท่านั้น",
+"zh-CN": "仅主页",
+"zh-TW": "僅限首頁"
+},
+"default": true
+},
+{
+"type": "select",
+"id": "type_announce",
+"options": [
+{ "value": "fix", "label": "Phrase fixe seulement" },
+{ "value": "timer", "label": "Timer" },
+{ "value": "fade", "label": "Avantages en fondu" },
+{ "value": "offer", "label": "Avantages en slide" }
+],
+"label": "Type de barre d'annonce"
+},
+{
+"type": "textarea",
+"id": "announce",
+"label": "Annonce fixe",
+"default": "EXTRA -30% | Code : ETE30"
+},
+{
+"type": "url",
+"id": "link",
+"label": {
+"da": "Link",
+"de": "Link",
+"en": "Link",
+"es": "Enlace",
+"fi": "Linkki",
+"fr": "Lien",
+"hi": "लिंक",
+"it": "Link",
+"ja": "リンク",
+"ko": "링크",
+"nb": "Kobling",
+"nl": "Link",
+"pt-BR": "Link",
+"pt-PT": "Ligação",
+"sv": "Länk",
+"th": "ลิงก์",
+"zh-CN": "链接",
+"zh-TW": "連結"
+}
+},
+{
+"type": "checkbox",
+"id": "bg_color_announce",
+"label": "Afficher une couleur fixe sur la barre d'annonce",
+"default": true
+},
+{
+"type": "color",
+"id": "color_bg_announce",
+"label": "Couleur fixe sur la barre d'annonce",
+"default": "#000"
+},
+{
+"type": "color",
+"id": "color_text",
+"label": {
+"da": "Tekst",
+"de": "Text",
+"en": "Text",
+"es": "texto",
+"fi": "Teksti",
+"fr": "Texte",
+"hi": "टेक्स्ट",
+"it": "Testo",
+"ja": "テキスト",
+"ko": "텍스트",
+"nb": "Tekst",
+"nl": "Tekst",
+"pt-BR": "Texto",
+"pt-PT": "Texto",
+"sv": "Text",
+"th": "ข้อความ",
+"zh-CN": "文本",
+"zh-TW": "文字"
+},
+"default": "#ffffff"
+},
+{
+"type": "header",
+"content": "Styles du carousel"
+},
+{
+"type": "paragraph",
+"content": "Utile seulement si le style de la barre d'annonce affiche les annonces en slide ou en fondu."
+},
+{
+"type": "checkbox",
+"id": "active_autoplay",
+"label": "Activer les slides automatiques",
+"default": true
+},
+{
+"type":      "range",
+"id":        "speed_slider",
+"min":       500,
+"max":        5000,
+"step":       100,
+"unit":       "ms",
+"label":     "Vitesse du carousel",
+"default":   2000
+}
+],
+"blocks": [
+{
+"type": "benefit",
+"name": "Annonce",
+"settings": [
+{
+"type": "textarea",
+"id": "title",
+"label": "Titre",
+"default": "Offre / Bénéfice"
+}
+]
+}
+]
+}
+{% endschema %}

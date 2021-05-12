@@ -1,0 +1,27 @@
+{% for block in section.blocks %}
+{% if block.type == 'size_guide' %}
+<style>
+  #small-dialog {
+    background-color: {{ block.settings.color_bg }};
+    border-radius: {{ block.settings.radius }}px;
+  }
+  #small-dialog p {
+    color: {{ block.settings.color }};
+  }
+</style>
+<div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="one--whole">
+  <a class="popup-with-move-anim size_guide__link size_guide__link_above" href="#small-dialog"><p>{{ block.settings.title }}</p></a>
+<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+  {{ block.settings.title_modal }}
+  {% assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+  <img class="size_guide__image lazyload"
+       src="{{ block.settings.image | img_url: '300x300' }}"
+       data-src="{{ img_url }}"
+       data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+       data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+       data-sizes="auto"
+       alt="{{ block.settings.image.alt | escape }}">
+</div>
+</div>
+{% endif %}
+{% endfor %}

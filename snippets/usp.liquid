@@ -1,0 +1,42 @@
+<div class="desktop_only">
+  <div class="usp_on_desktop">
+    {% for block in section.blocks %}
+    {% if block.type == 'advantage' %}
+    <div class="one-half">
+      <p class="text_usp">
+        {{ block.settings.usp_icon }}
+        {{ block.settings.title }}
+      </p>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Swiper -->
+<div class="swiper-container swiper-container-usp mobile_only">
+  <div class="swiper-wrapper swiper-wrapper-usp">
+    {% for block in section.blocks %}
+    {% if block.type == 'advantage' %}
+    <div class="swiper-slide swiper-slide-usp">
+      <p class="text_usp">
+        {{ block.settings.usp_icon }}
+        {{ block.settings.title }}
+      </p>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+
+<script>
+  var swiperUsp = new Swiper('.swiper-container-usp', {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    loop:true,
+    autoplay: {
+      delay: {{ section.settings.speed_slider }},
+    }
+  });
+</script>

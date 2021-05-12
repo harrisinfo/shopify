@@ -1,0 +1,148 @@
+<div class="bundle-flex-row">
+  <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="swiper-container bundle-slider small--one-whole three-quarters">
+    <div class="swiper-wrapper bundle-slider-wrapper">
+      {% for product in collection.products %}
+      {% if product.available %}
+      <div class="swiper-slide bundle-product-wrapper{% if forloop.last == true %}-last{% endif %}">
+        <div class="bundle-product-image">
+
+          {% if product.tags contains 'offert' %}
+          {% if section.settings.affichertexteupsell %}
+          <span class="bundle-product-offert btn-grid">{{ section.settings.messagetexteupsell }}</span>
+          {% endif %}
+          {% endif %}
+
+          <a href="{{ product.url }}">
+            <noscript>
+              {{ product.featured_image | img_url: '600x600' | img_tag: product.featured_image.alt, 'feature-row__image-no-js' }}
+            </noscript>
+            {% assign img_url = product.featured_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+            <img class="bundle-mob-image lazyload {% if product.tags contains 'offert' %} image-offert{% endif %}"
+                 src="{{ product.featured_image | img_url: '300x300' }}"
+                 data-src="{{ img_url }}"
+                 data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+                 data-aspectratio="{{ product.featured_image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ product.featured_image.alt | escape }}">
+          </a>
+
+          {% if section.settings.shox_plus %}
+          {% if forloop.last == false %}
+          <span class="desktop_only" 
+                style="position: absolute;
+                       top: 50%;
+                       right: -0.8rem;
+                       transform: translateY(-50%); 
+                       color: {{ section.settings.titre_color }};
+                       font-size: 40px;
+                       font-weight: bold;">+</span>
+          {% endif %}
+          {% endif %}
+        </div>
+        <div class="bundle-product-title">
+          {{ product.title }}<br>
+          {% if product.compare_at_price > product.price %}<span class="product-single__price--compare-at"><del>{{ product.compare_at_price | money }}</del></span>{% endif %}
+          <span class="product-single__price{% if product.compare_at_price > product.price %} on-sale{% endif %}">{% if product.tags contains 'offert' %}<del>{% endif %}{{ product.price | money }}{% if product.tags contains 'offert' %}</del>{% endif %}</span>
+          {% if product.tags contains 'offert' %}<span class="product-single__price on-sale">{{ section.settings.messagetexteupsell }}</span>{% endif %}
+        </div>
+        <div class="bundle-product-variant_selector"{% if product.has_only_default_variant %} style="display: none;"{% endif %}>
+          <select name="id[]">
+            {% for variant in product.variants %}
+            {% if variant.available %}
+            <option value="{{ variant.id }}" id="variant-{{ variant.id }}">    			
+              {{ variant.title | escape }}{% if section.settings.show_price_variant %}{% unless product.tags contains 'offert' %} - {{ variant.price | money }}{% endunless %}{% endif %}
+            </option>
+            {% else %}
+            <option value="{{ variant.id }}" id="variant-{{ variant.id }}" disabled="disabled" class="disabled">    			
+              {{ variant.title | escape }} &mdash; {{ 'products.product.sold_out' | t }}
+            </option>
+            {% endif %}
+            {% endfor %}
+          </select>
+          <input type="number" id="Quantity" name="quantity" value="1" min="1" class="qty-remove-defaults quantity-selector" style="display: none;">
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="swiper-scrollbar bundle-scrollbar"></div>
+    <div class="swiper-button-next swiper-button-next-bundle"></div>
+    <div class="swiper-button-prev swiper-button-prev-bundle"></div>
+  </div>
+
+  <script>
+    var bundleSlider = new Swiper('.bundle-slider', {
+      loop: false,
+      slidesPerView: 2,
+      spaceBetween: 50,
+      navigation: {
+        nextEl: '.swiper-button-next-bundle',
+        prevEl: '.swiper-button-prev-bundle',
+      },
+      scrollbar: {
+        el: '.bundle-scrollbar',
+        draggable: true,
+      },
+      freeMode: true,
+      breakpoints: {
+        1000: {
+          slidesPerView: 3,
+        }
+      }
+    });
+  </script>
+
+  <div class="form_slider_bundle form_only_on_mobile small--one-whole one-quarter">
+    {% if section.settings.title_section %}
+    <h2 {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="{{ section.settings.choix_title }} h3 section-header__title">{{ section.settings.title_section }}</h2>
+    {% endif %}
+
+    <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="bundle-form-price">
+      <div class="bundle-form-price_item">
+        {% if compare_price > price %}<span class="product-single__price--compare-at"><del>{{ compare_price | money }}</del></span>{% endif %}
+        <span class="product-single__price{% if compare_price > price %} on-sale{% endif %}">{{ price | money }}</span>
+      </div>
+    </div>
+
+    <div class="bundle-form-cta">
+      {% if section.settings.direct_checkout %}
+      <input type="hidden" name="return_to" value="/checkout/" />
+      {% endif %}
+
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %}>
+        <button onClick="fbq('track', 'AddToCart'); snaptr('track', 'ADD_CART', {currency:'{{shop.currency}}'});" type="submit" name="add" id="AddToCart--{{ section.id }}" class="{{ section.settings.choix_style_bouton }} add-to-cart btn--add-to-cart">
+          {{ section.settings.icon_cart }}<span class="btn__text">{{ section.settings.text_btn_atc }}</span>
+        </button>
+      </div>
+
+      {% if compare_price > price %}
+      {% if section.settings.show_savings %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="product-single__desc_under">
+        <span>{{ section.settings.text_before_savings }}</span>
+        <span class="product-single__price on-sale">{{ savings | money }}</span>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      {% if section.settings.timer_active or section.settings.stock_active %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="timer_wrapper">
+        {% if section.settings.timer_active %}
+        {% if settings.choice_timer == 'legal' %}
+        {% include 'timer-true' %}
+        {% else %}
+        {% if settings.false_timer_type == "short" %}
+        {% include 'timer', reset_in: "3 hours", end_date: "Sep 30, 2018" %}
+        {% elsif settings.false_timer_type == "middle" %}
+        {% include 'timer', reset_in: "2 days", end_date: "Sep 30, 2018" %}
+        {% else %}
+        {% include 'timer', reset_in: "10 days", end_date: "Sep 30, 2018" %}
+        {% endif %}
+        {% endif %}
+        <p class="phrase_timer">{{ section.settings.timer_phrase_before }}{% if section.settings.timer_active_price %}<span class="price_before"> {{ compare_price | money }} </span>{% endif %}{{ section.settings.timer_phrase_after }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>

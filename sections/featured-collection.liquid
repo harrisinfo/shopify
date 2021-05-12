@@ -1,0 +1,577 @@
+{% unless section.settings.dividers_top == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-top">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_top }}; }</style>
+  {% case section.settings.dividers_top %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+<div id="featured-collection--{{ section.id }}"
+     style="{% if section.settings.border_top %}border-top: 1px solid {{ section.settings.color_border }};{% endif %}{% if section.settings.border_bottom %}border-bottom: 1px solid {{ section.settings.color_border }};{% endif %}"
+     {% if section.settings.color_bg contains 'shade' %}class="wrapper-color"{% endif %}>
+  
+  <style>
+    {% if section.settings.color_bg contains 'fix' %}
+    #featured-collection--{{ section.id }} {
+      background-color: {{ section.settings.color_bg_fix }};
+      max-width: 100%;
+    }
+    #featured-collection--{{ section.id }} p, #featured-collection--{{ section.id }} .h3, #featured-collection--{{ section.id }} i, #featured-collection--{{ section.id }} span, #featured-collection--{{ section.id }} .btn-grid {
+      color: {{ section.settings.color_text_fix }}; 
+    }
+    #featured-collection--{{ section.id }} .btn-grid {
+      border-color: {{ section.settings.color_text_fix }};
+    }
+    {% endif %}
+    {% unless section.settings.color_bg contains 'none' %}#featured-collection--{{ section.id }} .btn-grid { background: transparent; }{% endunless %}
+  </style>
+  
+  <div id="{{ section.settings.title }}" class="{{ section.settings.spacing_top }} {{ section.settings.spacing_bottom }} {{ section.settings.spacing_top_sm }} {{ section.settings.spacing_bottom_sm }} site_width">
+    {% if section.settings.title_section != blank %}
+    <div class="section-header text-{{ section.settings.alignement_text }}">
+      <h2 class="{{ section.settings.choix_title }} h1 section-header__title">{{ section.settings.title_section }}</h2>
+    </div>
+    {% endif %}
+    <div class="page-width feature-row">
+      {% capture media_layout %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="feature-row__item{% if section.settings.image_sm_choose %} desktop_only{% endif %}">
+        {% if section.settings.image != blank %}
+        <noscript>
+          {{ section.settings.image | img_url: '600x600' | img_tag: section.settings.image.alt, 'feature-row__image-no-js' }}
+        </noscript>
+        <div class="feature-row__image-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100}}%;">
+          {% assign img_url = section.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="feature-row__image lazyload"
+               src="{{ section.settings.image | img_url: '300x300' }}"
+               data-src="{{ img_url }}"
+               data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+               data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ section.settings.image.alt | escape }}">
+        </div>
+        {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+      {% if section.settings.image_sm_choose %}
+      <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_img }}"{% endif %} class="feature-row__item mobile_only">
+        {% if section.settings.image_sm != blank %}
+        <noscript>
+          {{ section.settings.image_sm | img_url: '600x600' | img_tag: section.settings.image_sm.alt, 'feature-row__image-no-js' }}
+        </noscript>
+        <div class="feature-row__image-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image_sm.aspect_ratio | times: 100}}%;">
+          {% assign img_url = section.settings.image_sm | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <img class="feature-row__image lazyload"
+               src="{{ section.settings.image_sm | img_url: '300x300' }}"
+               data-src="{{ img_url }}"
+               data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048]"
+               data-aspectratio="{{ section.settings.image_sm.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ section.settings.image_sm.alt | escape }}">
+        </div>
+        {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+      {% endif %}
+      {% endcapture %}
+
+      <div class="feature-row">
+        {% if section.settings.layout == 'left' %}
+        {{ media_layout }}
+        {% endif %}
+
+        <div class="feature-row__item feature-row__text--{{ section.settings.layout }}">
+          {% assign grid_item_width = 'one-half' %}
+          {% if section.settings.home_featured_products == blank or collections[section.settings.home_featured_products] == empty or collections[section.settings.home_featured_products].products_count == 0 %}
+
+          {% comment %}
+          For onboarding new users to your theme, we add some default products and onboarding tutorials to help populate their store
+          {% endcomment %}
+          {% unless emptyState %}
+          {% assign emptyState = true %}
+          {% endunless %}
+          {% include 'onboarding-featured-products' %}
+
+          {% else %}
+
+          {% for product in collections[section.settings.home_featured_products].products limit:4 %}
+          {% include 'product-grid-item' %}
+          {% endfor %}
+
+          {% endif %}
+          {% if section.settings.button_label != blank %}
+          <div {% if section.settings.anim_active %}data-aos="fade-{{ section.settings.animation_text }}"{% endif %} class="text-center">
+            <a href="{{ collections[section.settings.home_featured_products].url }}" class="{{ section.settings.choix_style_bouton }}">
+              {{ section.settings.button_label }}
+            </a>
+          </div>
+          {% endif %}
+        </div>
+
+        {% if section.settings.layout == 'right' %}
+        {{ media_layout }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% unless section.settings.dividers_bottom == 'none' %}
+<div class="dividers-svg dividers-svg-{{ section.id }} dividers-bottom">
+  <style>.dividers-svg-{{ section.id }} path, .dividers-svg-{{ section.id }} polygon { fill: {{ section.settings.color_fill_svg_bottom }}; }</style>
+  {% case section.settings.dividers_bottom %}
+  {% when 'little-arrow' %}
+  	{% include 'dividers-little-arrow' %}
+  {% when 'wave' %}
+  	{% include 'dividers-wave' %}
+  {% when 'straight' %}
+  	{% include 'dividers-straight' %}
+  {% when 'straight-wave' %}
+  	{% include 'dividers-straight-wave' %}
+  {% when 'arrow' %}
+  	{% include 'dividers-arrow' %}
+  {% when 'single-wave' %}
+  	{% include 'dividers-single-wave' %}
+  {% when 'single-reverse-wave' %}
+  	{% include 'dividers-single-reverse-wave' %}
+  {% when 'straight-reverse' %}
+  	{% include 'dividers-straight-reverse' %}
+  {% endcase %}
+</div>
+{% endunless %}
+
+
+{% schema %}
+{
+"name": "Image et collection",
+"settings": [
+{
+"type": "text",
+"id": "title",
+"label": "Nom de la section",
+"default": "Image et collection"
+},
+{
+"type": "checkbox",
+"id": "anim_active",
+"label": "Activer les animations",
+"default": false,
+"info": "Désactiver cette case lorsque vous voulez personnaliser cette section."
+},
+{
+"type": "header",
+"content": "Paramètres de la section"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},
+{
+"type": "checkbox",
+"id": "image_sm_choose",
+"label": "Afficher une image différente sur mobile",
+"default": false
+},
+{
+"type": "image_picker",
+"id": "image_sm",
+"label": "Image sur mobile",
+"info": "Fonctionne seulement si la case ci-dessus est cochée."
+},
+{
+"type": "select",
+"id": "layout",
+"label": {
+"da": "Justering af billede",
+"de": "Bildausrichtung",
+"en": "Image alignment",
+"es": "Alineación de imagen",
+"fi": "Kuvan tasaus",
+"fr": "Alignement de l'image",
+"hi": "इमेज पंक्तिबद्ध करना",
+"it": "Allineamento immagine",
+"ja": "画像アラインメント",
+"ko": "이미지 정렬",
+"nb": "Bildejustering",
+"nl": "Afbeelding uitlijnen",
+"pt-BR": "Alinhamento da imagem",
+"pt-PT": "Alinhamento da imagem",
+"sv": "Bildjustering",
+"th": "การจัดวางรูปภาพ",
+"zh-CN": "图片对齐方式",
+"zh-TW": "圖片對齊"
+},
+"default": "left",
+"options": [
+{
+"value": "left",
+"label": {
+"da": "Venstre",
+"de": "Links",
+"en": "Left",
+"es": "Izquierda",
+"fi": "Vasen",
+"fr": "Gauche",
+"hi": "बाएँ",
+"it": "Sinistra",
+"ja": "左",
+"ko": "왼쪽",
+"nb": "Venstre",
+"nl": "Links",
+"pt-BR": "Esquerda",
+"pt-PT": "Esquerda",
+"sv": "Vänster",
+"th": "ด้านซ้าย",
+"zh-CN": "左侧",
+"zh-TW": "左方"
+}
+},
+{
+"value": "right",
+"label": {
+"da": "Højre",
+"de": "Rechts",
+"en": "Right",
+"es": "Derecha",
+"fi": "Oikea",
+"fr": "Droite",
+"hi": "दाएँ",
+"it": "Destra",
+"ja": "右",
+"ko": "오른쪽",
+"nb": "Høyre",
+"nl": "Rechts",
+"pt-BR": "Direita",
+"pt-PT": "Direita",
+"sv": "Höger",
+"th": "ด้านขวา",
+"zh-CN": "右侧",
+"zh-TW": "右方"
+}
+}
+]
+},
+{
+"type": "header",
+"content": "Textes"
+},
+{
+"type": "select",
+"id": "alignement_text",
+"label": "Alignement du titre",
+"default": "center",
+"options": [
+{ "value": "left", "label": "Gauche" },
+{ "value": "center", "label": "Centré" },
+{ "value": "right", "label": "Droite" }
+]
+},
+{
+"type": "text",
+"id": "title_section",
+"label": {
+"da": "Overskrift",
+"de": "Überschrift",
+"en": "Heading",
+"es": "Título",
+"fi": "Otsake",
+"fr": "Titre",
+"hi": "शीर्षक",
+"it": "Heading",
+"ja": "見出し",
+"ko": "제목",
+"nb": "Overskrift",
+"nl": "Kop",
+"pt-BR": "Título",
+"pt-PT": "Título",
+"sv": "Rubrik",
+"th": "ส่วนหัว",
+"zh-CN": "标题",
+"zh-TW": "標題"
+},
+"default": "Image with collection"
+},
+{
+"type": "select",
+"id": "choix_title",
+"label": "Style du titre",
+"default": "h2--1",
+"info": "Les styles de titre sont personnalisables dans les paramètres généraux du thème.",
+"options": [
+{ "value": "h2--1", "label": "Style 1" },
+{ "value": "h2--2", "label": "Style 2" },
+{ "value": "h2--3", "label": "Sytle 3" }
+]
+},
+{
+"type": "collection",
+"id": "home_featured_products",
+"label": {
+"da": "Kollektion",
+"de": "Kategorie",
+"en": "Collection",
+"es": "Colección",
+"fi": "Kokoelma",
+"fr": "Collection",
+"hi": "कलेक्शन",
+"it": "Collezione",
+"ja": "コレクション",
+"ko": "컬렉션",
+"nb": "Samling",
+"nl": "Collectie",
+"pt-BR": "Coleção",
+"pt-PT": "Coleção",
+"sv": "Produktserie",
+"th": "คอลเลกชัน",
+"zh-CN": "收藏",
+"zh-TW": "商品系列"
+}
+},
+{
+"type": "checkbox",
+"id": "show_desc",
+"label": "Afficher un extrait de la description",
+"default": false
+},
+{
+"type": "text",
+"id": "button_label",
+"label": {
+"da": "Knaptekst",
+"de": "Schaltflächenbezeichnung",
+"en": "Button label",
+"es": "Etiqueta de botón",
+"fi": "Tekstipainike",
+"fr": "Texte du bouton",
+"hi": "बटन लेबल",
+"it": "Etichetta pulsante",
+"ja": "ボタンのラベル",
+"ko": "버튼 레이블",
+"nb": "Knappetikett",
+"nl": "Knoplabel",
+"pt-BR": "Etiqueta de botão",
+"pt-PT": "Etiqueta do botão",
+"sv": "Knappetikett",
+"th": "ป้ายกำกับปุ่ม",
+"zh-CN": "按钮标签",
+"zh-TW": "按鈕標籤"
+},
+"info": "Ce bouton va rediriger vers la page de collection"
+},
+{
+"type": "select",
+"id": "choix_style_bouton",
+"options": [
+{ "value": "btn--1", "label": "Style 1"},
+{ "value": "btn--2", "label": "Style 2"},
+{ "value": "btn--3", "label": "Style 3"}
+],
+"label": "Style du bouton",
+"default": "btn--1"
+},
+{
+"type": "header",
+"content": "Espacements"
+},
+{
+"type": "select",
+"id": "spacing_top",
+"label": "Espacement au-dessus sur pc",
+"default": "spacing-big-top",
+"info": "Les espacements se configurent dans les paramètres généraux du thème.",
+"options": [
+{ "value": "spacing-big-top", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-top", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-top", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_top_sm",
+"label": "Espacement au-dessus sur mobile",
+"default": "spacing-big-top_sm",
+"options": [
+{ "value": "spacing-big-top_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-top_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-top_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom",
+"label": "Espacement en-dessous sur pc",
+"default": "spacing-big-bottom",
+"options": [
+{ "value": "spacing-big-bottom", "label": "Grand espacement sur pc" },
+{ "value": "spacing-little-bottom", "label": "Petit espacement sur pc" },
+{ "value": "no-spacing-bottom", "label": "Pas d'espacement sur pc" }
+]
+},
+{
+"type": "select",
+"id": "spacing_bottom_sm",
+"label": "Espacement en-dessous sur mobile",
+"default": "spacing-big-bottom_sm",
+"options": [
+{ "value": "spacing-big-bottom_sm", "label": "Grand espacement sur mobile" },
+{ "value": "spacing-little-bottom_sm", "label": "Petit espacement sur mobile" },
+{ "value": "no-spacing-bottom_sm", "label": "Pas d'espacement sur mobile" }
+]
+},
+{
+"type": "header",
+"content": "Couleurs"
+},
+{
+"type": "select",
+"id": "color_bg",
+"label": "Couleur d'arrière-plan",
+"default": "none",
+"info": "Le dégradé se configure dans les paramètres généraux du thème.",
+"options": [
+{
+"value": "shade",
+"label": "Dégradé"
+},
+{
+"value": "fix",
+"label": "Couleur unie"
+},
+{
+"value": "none",
+"label": "Pas de couleur"
+}
+]
+},
+{
+"type": "color",
+"id": "color_bg_fix",
+"label": "Couleur d'arrière-plan unie",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#f6f6f6"
+},
+{
+"type": "color",
+"id": "color_text_fix",
+"label": "Couleur du texte sur l'arrière-plan uni",
+"info": "Fonctionne si la couleur unie est sélectionnée ci-dessus.",
+"default": "#000"
+},
+{
+"type": "checkbox",
+"id": "border_top",
+"label": "Afficher une bordure en haut"
+},
+{
+"type": "checkbox",
+"id": "border_bottom",
+"label": "Afficher une bordure en bas"
+},
+{
+"type": "color",
+"id": "color_border",
+"label": "Couleur des bordures",
+"info": "Fonctionne si les bordures sont sélectionnées ci-dessus.",
+"default": "#000"
+},
+{
+"type": "header",
+"content": "Animations"
+},
+{
+"type": "select",
+"id": "animation_img",
+"label": "Animation de l'image",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "select",
+"id": "animation_text",
+"label": "Animation de la collection",
+"default": "up",
+"options": [
+{ "value": "up", "label": "Vers le haut" },
+{ "value": "right", "label": "Vers la droite" },
+{ "value": "left", "label": "Vers la gauche" },
+{ "value": "down", "label": "Vers le bas" }
+]
+},
+{
+"type": "header",
+"content": "Séparateurs"
+},
+{
+"type": "select",
+"id": "dividers_top",
+"label": "Séparateur du haut",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_top",
+"label": "Couleur du séparateur du haut",
+"default": "#f6f6f6"
+},
+{
+"type": "select",
+"id": "dividers_bottom",
+"label": "Séparateur du bas",
+"default": "none",
+"options": [
+{ "value": "none", "label": "Aucun" },
+{ "value": "wave", "label": "Vagues" },
+{ "value": "straight", "label": "Ligne droite" },
+{ "value": "straight-reverse", "label": "Ligne droite inversée" },
+{ "value": "arrow", "label": "Flèche" },
+{ "value": "little-arrow", "label": "Petite flèche" },
+{ "value": "single-wave", "label": "Courbe" },
+{ "value": "single-reverse-wave", "label": "Courbe inversée" }
+]
+},
+{
+"type": "color",
+"id": "color_fill_svg_bottom",
+"label": "Couleur du séparateur du bas",
+"default": "#f6f6f6"
+}
+],
+"presets": [
+{
+"name": "Image et collection",
+"category": "Collection"
+}
+]
+}
+{% endschema %}
